@@ -28,7 +28,7 @@ class Paths
      * This must contain the name of your "system" folder. Include
      * the path if the folder is not in the same directory as this file.
      */
-    public string $systemDirectory = __DIR__ . '../../vendor/codeigniter4/framework/system';
+    public string $systemDirectory = 'c:/xampp/htdocs/PWD/PWD_TPFinal/vendor/codeigniter4/framework/system';
 
     /**
      * ---------------------------------------------------------------
@@ -42,7 +42,7 @@ class Paths
      *
      * @see http://codeigniter.com/user_guide/general/managing_apps.html
      */
-    public string $appDirectory = __DIR__ . '/..';
+    public string $appDirectory = 'c:/xampp/htdocs/PWD/PWD_TPFinal/app';
 
     /**
      * ---------------------------------------------------------------
@@ -55,7 +55,7 @@ class Paths
      * for maximum security, keeping it out of the app and/or
      * system directories.
      */
-    public string $writableDirectory = __DIR__ . '/../../writable';
+    public string $writableDirectory = 'c:/xampp/htdocs/PWD/PWD_TPFinal/writable';
 
     /**
      * ---------------------------------------------------------------
@@ -64,7 +64,7 @@ class Paths
      *
      * This variable must contain the name of your "tests" directory.
      */
-    public string $testsDirectory = __DIR__ . '/../../tests';
+    public string $testsDirectory = 'c:/xampp/htdocs/PWD/PWD_TPFinal/tests';
 
     /**
      * ---------------------------------------------------------------
@@ -76,5 +76,5 @@ class Paths
      * default this is in `app/Views`. This value
      * is used when no value is provided to `Services::renderer()`.
      */
-    public string $viewDirectory = __DIR__ . '/../Views';
+    public string $viewDirectory = __DIR__ . 'c:/xampp/htdocs/PWD/PWD_TPFinal/app/Views';
 }
