@@ -1,5 +1,6 @@
 {
     "require": {
-        "codeigniter4/framework": "^4.5"
+        "codeigniter4/framework": "^4.5",
+        "twbs/bootstrap": "5.3.3"
     }
 }
