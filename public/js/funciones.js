@@ -2,7 +2,6 @@ $.validator.addMethod("alphanumeric",function(value,element){
     var regex =  /^[a-zA-Z0-9]+$/
     return regex.test(value);
 },"Solo se permiten letras y números");
-
 $(document).ready(function() {
     $('#login').validate({
         rules:{

@@ -12,9 +12,13 @@ $routes->get('/', 'Home::index');
 $routes->get('/products', 'Products::index');
 
 /* LOGIN */
-$routes->get('/login', 'Session::index');
-$routes->post('/login', 'Session::iniciar');
+$routes->get('/login', 'Session::login');
+$routes->post('/login', 'Session::autenticar');
+$routes->get('/logout', 'Session::cerrar');
 
 /* REGISTRO */
 $routes->get('/registro','Session::registro');
 $routes->post('/registro','Session::registrar');
+
+/* HOME PRUEBA */
+$routes->get('/home', 'Session::index');
