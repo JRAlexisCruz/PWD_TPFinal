@@ -127,10 +127,14 @@ CREATE TABLE `menurol` (
 
 CREATE TABLE `producto` (
   `idproducto` bigint(20) NOT NULL,
-  `pronombre` int(11) NOT NULL,
+  `pronombre` VARCHAR(100) NOT NULL,
+  `tipoproducto` ENUM('mate', 'bombilla') NOT NULL,
   `prodetalle` varchar(512) NOT NULL,
-  `procantstock` int(11) NOT NULL
+  `precioproducto` DECIMAL(10, 2) NOT NULL,
+  `procantstock` int(11) NOT NULL,
+  `proimagen` VARCHAR(30) NOT NULL;
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
 
 -- --------------------------------------------------------
 
