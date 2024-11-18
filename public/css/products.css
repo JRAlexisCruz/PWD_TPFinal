@@ -54,47 +54,4 @@
     color: #BAA183; /* Tu color preferido */
 }
 
-/* Button principal */
-.btn-bd-primary {
-    --bs-btn-font-weight: 600;
-    --bs-btn-color: var(--bs-white);
-    --bs-btn-bg: #426665;
-    --bs-btn-border-color: #426665;
-    --bs-btn-hover-color: var(--bs-white);
-    --bs-btn-hover-bg: #315551;
-    --bs-btn-hover-border-color: #365b56;
-    --bs-btn-focus-shadow-rgb: 66, 102, 101;
-    --bs-btn-active-color: var(--bs-btn-hover-color);
-    --bs-btn-active-bg: #2f4b48;
-    --bs-btn-active-border-color: #2f4b48;
-}
 
-/* Button secundario, por ejemplo, volver*/
-.btn-primary {
-    --bs-btn-font-weight: 600;
-    --bs-btn-color: var(--bs-white); /* Color del texto */
-    --bs-btn-bg: #697833; /* Fondo principal */
-    --bs-btn-border-color: #697833; /* Borde principal */
-    --bs-btn-hover-color: var(--bs-white); /* Color del texto al pasar el mouse */
-    --bs-btn-hover-bg: #5c6b2d; /* Fondo al pasar el mouse */
-    --bs-btn-hover-border-color: #5c6b2d; /* Borde al pasar el mouse */
-    --bs-btn-focus-shadow-rgb: 105, 120, 51; /* Sombra de enfoque */
-    --bs-btn-active-color: var(--bs-btn-hover-color); /* Color del texto al hacer clic */
-    --bs-btn-active-bg: #4f5e29; /* Fondo al hacer clic */
-    --bs-btn-active-border-color: #4f5e29; /* Borde al hacer clic */
-}
-
-/* Button para eliminar o acciones que hay que prestar atencion */
-.btn-danger {
-    --bs-btn-font-weight: 600;
-    --bs-btn-color: var(--bs-white); /* Color del texto */
-    --bs-btn-bg: #955F36; /* Fondo principal */
-    --bs-btn-border-color: #955F36; /* Borde principal */
-    --bs-btn-hover-color: var(--bs-white); /* Color del texto al pasar el mouse */
-    --bs-btn-hover-bg: #a04a2d; /* Fondo al pasar el mouse */
-    --bs-btn-hover-border-color: #a04a2d; /* Borde al pasar el mouse */
-    --bs-btn-focus-shadow-rgb: 149, 95, 54; /* Sombra de enfoque */
-    --bs-btn-active-color: var(--bs-btn-hover-color); /* Color del texto al hacer clic */
-    --bs-btn-active-bg: #734426; /* Fondo al hacer clic */
-    --bs-btn-active-border-color: #734426; /* Borde al hacer clic */
-}

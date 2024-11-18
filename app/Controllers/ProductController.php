@@ -3,6 +3,7 @@
 namespace App\Controllers;
 
 use App\Models\ProductModel;
+use CodeIgniter\CLI\Console;
 
 class ProductController extends BaseController
 {  
@@ -19,7 +20,7 @@ class ProductController extends BaseController
     public function listar()
     {
         $products = $this->productModel->findAll(); // Obtener todos los productos
-        return view('products', ['products' => $products]);
+        return view('products/products.php', ['products' => $products]);
     }
 
 
@@ -78,5 +79,24 @@ class ProductController extends BaseController
     {
         $this->productModel->delete($id);
         return redirect()->to('/products')->with('success', 'Producto eliminado exitosamente.');
+    }
+
+
+     // Método para mostrar los detalles del producto
+    public function detail($id)
+    {
+        // Crear una instancia del modelo para los productos
+        $productModel = new ProductModel();
+        
+        // Buscar el producto por el ID
+        $product = $productModel->findProductById($id); // Usamos el nuevo método
+
+        // Verificar si el producto existe
+        if (!$product) {
+            throw new \CodeIgniter\Exceptions\PageNotFoundException("Producto no encontrado");
+        }
+
+        // Pasar los datos del producto a la vista
+        return view('products/detailProduct.php', ['product' => $product]);
     }
 }

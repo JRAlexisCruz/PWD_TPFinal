@@ -75,7 +75,7 @@ $(document).ready(function () {
                 
                 <!-- Enlace "Ver detalle" en la esquina inferior izquierda -->
                 <div class="link-ver-detalle">
-                    <a href="/products/detail/${product.idproducto}" class="btn btn-link">Ver detalle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
+                    <a href="http://localhost/PWD/PWD_TPFinal/public/products/detail/${product.idproducto}" class="btn btn-link">Ver detalle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                 </div>
             </div>
         </div>
@@ -85,21 +85,8 @@ $(document).ready(function () {
                 <a href="#" class="btn btn-bd-primary w-100">Agregar al carrito
                     <i class="fa-solid fa-cart-plus"></i>
                 </a>
-        </div>
-
-         <!-- Botones de editar y eliminar -->
-            <div class="card-footer">
-                <div class="d-flex justify-content-between">
-                <a href="/products/edit/${product.idproducto}" class="btn btn-sm btn-primary">
-                    <i class="fas fa-edit"></i> Editar
-                </a>
-                <button class="btn btn-sm btn-danger" onclick="deleteProduct(${product.idproducto})">
-                    <i class="fas fa-trash-alt"></i> Eliminar
-                </button>
-            </div>
-    
+        </div>    
 </div>
-
                 `;
                 productList.append(productCard);
             });
