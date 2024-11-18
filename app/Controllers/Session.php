@@ -7,12 +7,20 @@ use App\Models\UsuarioModel;
 class Session extends BaseController{
 
     protected $helpers = ['form'];
-    public function index(): string
-    {
+    public function index(){
+        $iniciado = $this->validar();
+        if($iniciado){
+            return view('home_prueba_seguro');
+        }else{
+            return view('home_prueba_no_seguro');
+        }
+    }
+
+    public function login(){
         return view('login/index.php');
     }
 
-    public function iniciar(){
+    public function autenticar(){
         $data = $this->request->getPost(['usnombre','uspass']);
 
         $usuarioModelo = new UsuarioModel();
@@ -65,6 +73,6 @@ class Session extends BaseController{
 
     public function cerrar(){
         $this->session->destroy();
-        return redirect()->to(base_url('login'));
+        return redirect()->to(base_url('home')); //Cambiar por pagina principal
     }
 }
