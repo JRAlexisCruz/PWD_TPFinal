@@ -47,7 +47,8 @@ class Session extends BaseController{
 
     public function validar(){
         $activo = false;
-        if($this->activa() && $this->session->has('idusuario')){
+        $session = session();
+        if($session->get('idusuario') && $this->activa()){
             $activo = true;
         }
         return $activo;

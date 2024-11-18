@@ -10,5 +10,6 @@
     <form action="<?=base_url('logout')?>">
         <button>Cerrar sesion</button>
     </form>
+    <?=$_SESSION['idusuario']?>
 </body>
 </html>
