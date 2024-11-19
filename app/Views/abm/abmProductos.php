@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Administracion de Usuarios</title>
+    <title>Administracion de Productos</title>
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/themes/default/easyui.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/themes/icon.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/demo/demo.css')?>">
@@ -12,18 +12,16 @@
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
 </head>
 <body>
-    <table id="dg" title="Usuarios" class="easyui-datagrid" style="width:1000px;height:250px"
-            url="<?=base_url('admin/usuarios/listar')?>"
+    <table id="dg" title="Productos" class="easyui-datagrid" style="width:1000px;height:250px"
+            url="<?=base_url('admin/productos/listar')?>"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">
         <thead>
             <tr>
-                <th field="idusuario" width="50">ID</th>
-                <th field="usnombre" width="50">Nombre de Usuario</th>
-                <th field="uspass" width="50">Contraseña</th>
-                <th field="usmail" width="50">Email</th>
-                <th field="roles" width="50">Roles</th>
-                <th field="usdeshabilitado" width="50">Fecha Deshabilitado</th>
+                <th field="idproducto" width="50">ID</th>
+                <th field="pronombre" width="50">Nombre</th>
+                <th field="prodetalle" width="50">Detalle</th>
+                <th field="procantstock" width="50">Stock</th>
             </tr>
         </thead>
     </table>
@@ -36,18 +34,18 @@
     
     <div id="dlg-new" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons-new'">
         <form id="fm-new" method="post" style="margin:0;padding:20px 50px">
-            <h3>Informacion del Usuario</h3>
+            <h3>Informacion del Producto</h3>
             <div style="margin-bottom:10px">
-                <label for="usnombre" style="display:inline-block;width:150px;">Nombre de usuario:</label>
-                <input name="usnombre" class="easyui-validatebox usnombre" style="width:100%">
+                <label for="pronombre" style="display:inline-block;width:150px;">Nombre:</label>
+                <input name="pronombre" class="easyui-validatebox pronombre" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <label for="contrasenia" style="display:inline-block;width:150px;">Contraseña:</label>
-                <input name="contrasenia" class="easyui-validatebox uspass" style="width:100%">
+                <label for="prodetalle" style="display:inline-block;width:150px;">Detalle:</label>
+                <input name="prodetalle" class="easyui-validatebox prodetalle" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <label for="usmail" style="display:inline-block;width:150px;">Email:</label>
-                <input name="usmail" class="easyui-validatebox usmail" style="width:100%">
+                <label for="procantstock" style="display:inline-block;width:150px;">Stock:</label>
+                <input name="procantstock" class="easyui-validatebox procantstock" style="width:100%">
             </div>
         </form>
     </div>
@@ -60,20 +58,20 @@
         <form id="fm-edit" method="post" novalidate style="margin:0;padding:20px 50px">
             <h3>Informacion del Usuario</h3>
             <div style="margin-bottom:10px">
-                <label for="idusuario" style="display:inline-block;width:150px;">ID:</label>
-                <input name="idusuario" class="easyui-validatebox idusuario" style="width:100%" readonly>
+                <label for="idproducto" style="display:inline-block;width:150px;">ID:</label>
+                <input name="idproducto" class="easyui-validatebox idproducto" style="width:100%" readonly>
             </div>
             <div style="margin-bottom:10px">
-                <label for="usnombre" style="display:inline-block;width:150px;">Nombre:</label>
-                <input name="usnombre" class="easyui-validatebox usnombre" style="width:100%">
+                <label for="pronombre" style="display:inline-block;width:150px;">Nombre del producto:</label>
+                <input name="pronombre" class="easyui-validatebox pronombre" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <label for="uspass" style="display:inline-block;width:150px;">Contraseña:</label>
-                <input name="uspass" class="easyui-validatebox" style="width:100%" readonly>
+                <label for="prodetalle" style="display:inline-block;width:150px;">Detalle:</label>
+                <input name="prodetalle" class="easyui-validatebox prodetalle" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <label for="usmail" style="display:inline-block;width:150px;">Email:</label>
-                <input name="usmail" class="easyui-validatebox" style="width:100%">
+                <label for="procantstock" style="display:inline-block;width:150px;">Cantidad en stock:</label>
+                <input name="procantstock" class="easyui-validatebox procantstock" style="width:100%">
             </div>
         </form>
     </div>
@@ -86,17 +84,17 @@
         var url;
         var action;
         function add(){
-            $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo Usuario');
+            $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo Producto');
             $('#fm-new').form('clear');
-            url = "<?php echo base_url('admin/usuarios/crear')?>";;
+            url = "<?php echo base_url('admin/productos/crear')?>";;
             action = "new";
         }
         function edit(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
+                $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Producto');
                 $('#fm-edit').form('load',row);
-                url = "<?php echo base_url('admin/usuarios/editar')?>";
+                url = "<?php echo base_url('admin/productos/editar')?>";
             }
             action = "edit";
         }
@@ -107,10 +105,6 @@
                         url: url,
                         iframe: false,
                         onSubmit: function(){
-                            var contrasenia = $('#contrasenia').val();
-                            var hash = CryptoJS.SHA256(contrasenia).toString(CryptoJS.enc.base64);
-                            $('#fm-new').append('<input type="hidden" name="uspass" value="' + hash + '" />');
-                            $('#contrasenia').val('xxxxxxxx');
                             return $(this).form('validate');
                         },
                         success: function(result){
@@ -159,9 +153,9 @@
         function destroy(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $.messager.confirm('Confirmar','¿Esta seguro que quiere eliminar a este usuario?',function(r){
+                $.messager.confirm('Confirmar','¿Estas seguro que quieres eliminar este producto?',function(r){
                     if (r){
-                        $.post('<?php echo base_url('admin/usuarios/eliminar')?>',{id:row.idusuario},function(result){
+                        $.post('<?php echo base_url('admin/productos/eliminar')?>',{idproducto:row.idproducto},function(result){
                             if (result.success){
                                 $('#dg').datagrid('reload');
                             } else {
@@ -177,16 +171,6 @@
         }
 
         $.extend($.fn.validatebox.defaults.rules, {
-            alphanumeric: {
-                validator: function(value){
-                    var regex =  /^[a-zA-Z0-9]+$/
-                    return regex.test(value);
-                },
-                message: 'Only letters and numbers are allowed.'
-            }
-        });
-
-        $.extend($.fn.validatebox.defaults.rules, {
             number: {
                 validator: function(value){
                     var regex =  /^[0-9]+$/
@@ -196,24 +180,24 @@
             }
         });
 
-        $('.idusuario').validatebox({
+        $('.idproducto').validatebox({
             required: true,
             validType: ['number']
         });
 
-        $('.usnombre').validatebox({
+        $('.pronombre').validatebox({
             required: true,
-            validType: ['length[1,50]','alphanumeric']
+            validType: ['length[1,100]']
         });
 
-        $('.contrasenia').validatebox({
+        $('.prodetalle').validatebox({
             required: true,
-            validType: ['length[8,50]','alphanumeric']
+            validType: ['length[1,512]']
         });
 
-        $('.usmail').validatebox({
+        $('.procantstock').validatebox({
             required: true,
-            validType: ['email','length[1,50]']
+            validType: ['number']
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>

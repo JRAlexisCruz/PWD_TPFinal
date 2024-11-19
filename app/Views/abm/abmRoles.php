@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Administracion de Usuarios</title>
+    <title>Administracion de Roles</title>
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/themes/default/easyui.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/themes/icon.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/demo/demo.css')?>">
@@ -12,18 +12,14 @@
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
 </head>
 <body>
-    <table id="dg" title="Usuarios" class="easyui-datagrid" style="width:1000px;height:250px"
-            url="<?=base_url('admin/usuarios/listar')?>"
+    <table id="dg" title="Roles" class="easyui-datagrid" style="width:1000px;height:250px"
+            url="<?=base_url('admin/roles/listar')?>"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">
         <thead>
             <tr>
-                <th field="idusuario" width="50">ID</th>
-                <th field="usnombre" width="50">Nombre de Usuario</th>
-                <th field="uspass" width="50">Contraseña</th>
-                <th field="usmail" width="50">Email</th>
-                <th field="roles" width="50">Roles</th>
-                <th field="usdeshabilitado" width="50">Fecha Deshabilitado</th>
+                <th field="idrol" width="50">ID</th>
+                <th field="rodescripcion" width="50">Descripcion</th>
             </tr>
         </thead>
     </table>
@@ -36,18 +32,10 @@
     
     <div id="dlg-new" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons-new'">
         <form id="fm-new" method="post" style="margin:0;padding:20px 50px">
-            <h3>Informacion del Usuario</h3>
+            <h3>Informacion del Rol</h3>
             <div style="margin-bottom:10px">
-                <label for="usnombre" style="display:inline-block;width:150px;">Nombre de usuario:</label>
-                <input name="usnombre" class="easyui-validatebox usnombre" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-                <label for="contrasenia" style="display:inline-block;width:150px;">Contraseña:</label>
-                <input name="contrasenia" class="easyui-validatebox uspass" style="width:100%">
-            </div>
-            <div style="margin-bottom:10px">
-                <label for="usmail" style="display:inline-block;width:150px;">Email:</label>
-                <input name="usmail" class="easyui-validatebox usmail" style="width:100%">
+                <label for="rodescripcion" style="display:inline-block;width:150px;">Descripcion: </label>
+                <input name="rodescripcion" class="easyui-validatebox descripcion" style="width:100%">
             </div>
         </form>
     </div>
@@ -58,22 +46,15 @@
 
     <div id="dlg-edit" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons-edit'">
         <form id="fm-edit" method="post" novalidate style="margin:0;padding:20px 50px">
-            <h3>Informacion del Usuario</h3>
+            <h3>Informacion del Rol</h3>
             <div style="margin-bottom:10px">
-                <label for="idusuario" style="display:inline-block;width:150px;">ID:</label>
-                <input name="idusuario" class="easyui-validatebox idusuario" style="width:100%" readonly>
+                <label for="idrol" style="display:inline-block;width:150px;">ID:</label>
+                <input name="idrol" class="easyui-validatebox idrol" style="width:100%" readonly>
             </div>
             <div style="margin-bottom:10px">
-                <label for="usnombre" style="display:inline-block;width:150px;">Nombre:</label>
-                <input name="usnombre" class="easyui-validatebox usnombre" style="width:100%">
+                <label for="rodescripcion" style="display:inline-block;width:150px;">Descripcion:</label>
+                <input name="rodescripcion" class="easyui-validatebox descripcion" style="width:100%">
             </div>
-            <div style="margin-bottom:10px">
-                <label for="uspass" style="display:inline-block;width:150px;">Contraseña:</label>
-                <input name="uspass" class="easyui-validatebox" style="width:100%" readonly>
-            </div>
-            <div style="margin-bottom:10px">
-                <label for="usmail" style="display:inline-block;width:150px;">Email:</label>
-                <input name="usmail" class="easyui-validatebox" style="width:100%">
             </div>
         </form>
     </div>
@@ -86,17 +67,17 @@
         var url;
         var action;
         function add(){
-            $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo Usuario');
+            $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo Rol');
             $('#fm-new').form('clear');
-            url = "<?php echo base_url('admin/usuarios/crear')?>";;
+            url = "<?php echo base_url('admin/roles/crear')?>";;
             action = "new";
         }
         function edit(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
+                $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Rol');
                 $('#fm-edit').form('load',row);
-                url = "<?php echo base_url('admin/usuarios/editar')?>";
+                url = "<?php echo base_url('admin/roles/editar')?>";
             }
             action = "edit";
         }
@@ -107,10 +88,6 @@
                         url: url,
                         iframe: false,
                         onSubmit: function(){
-                            var contrasenia = $('#contrasenia').val();
-                            var hash = CryptoJS.SHA256(contrasenia).toString(CryptoJS.enc.base64);
-                            $('#fm-new').append('<input type="hidden" name="uspass" value="' + hash + '" />');
-                            $('#contrasenia').val('xxxxxxxx');
                             return $(this).form('validate');
                         },
                         success: function(result){
@@ -159,13 +136,13 @@
         function destroy(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $.messager.confirm('Confirmar','¿Esta seguro que quiere eliminar a este usuario?',function(r){
+                $.messager.confirm('Confirmar','¿Estas seguro que quieres eliminar este rol?',function(r){
                     if (r){
-                        $.post('<?php echo base_url('admin/usuarios/eliminar')?>',{id:row.idusuario},function(result){
+                        $.post('<?php echo base_url('admin/roles/eliminar')?>',{idrol:row.idrol},function(result){
                             if (result.success){
-                                $('#dg').datagrid('reload');
+                                $('#dg').datagrid('reload');    
                             } else {
-                                $.messager.show({  
+                                $.messager.show({    
                                     title: 'Error',
                                     msg: result.errorMsg
                                 });
@@ -177,16 +154,6 @@
         }
 
         $.extend($.fn.validatebox.defaults.rules, {
-            alphanumeric: {
-                validator: function(value){
-                    var regex =  /^[a-zA-Z0-9]+$/
-                    return regex.test(value);
-                },
-                message: 'Only letters and numbers are allowed.'
-            }
-        });
-
-        $.extend($.fn.validatebox.defaults.rules, {
             number: {
                 validator: function(value){
                     var regex =  /^[0-9]+$/
@@ -196,25 +163,16 @@
             }
         });
 
-        $('.idusuario').validatebox({
+        $('.idrol').validatebox({
             required: true,
             validType: ['number']
         });
 
-        $('.usnombre').validatebox({
+        $('.descripcion').validatebox({
             required: true,
-            validType: ['length[1,50]','alphanumeric']
+            validType: ['length[1,50]']
         });
 
-        $('.contrasenia').validatebox({
-            required: true,
-            validType: ['length[8,50]','alphanumeric']
-        });
-
-        $('.usmail').validatebox({
-            required: true,
-            validType: ['email','length[1,50]']
-        });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js"></script>

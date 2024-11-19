@@ -99,4 +99,59 @@ class ProductController extends BaseController
         // Pasar los datos del producto a la vista
         return view('products/detailProduct.php', ['product' => $product]);
     }
+
+    public function administrar(){
+        return view('abm/abmProductos');
+    }
+
+    public function list(){
+        $products = $this->productModel->findAll();
+        echo json_encode($products);
+    }
+
+    public function editar(){
+        $data = $this->request->getPost();
+        $retorno= ['success' => false];
+        if(isset($data['idproducto'])){
+            $id = $data['idproducto'];
+            $producto = $this->productModel->find($id);
+            if($producto){
+                if($this->productModel->update($id, $data)){
+                    $retorno['success'] = true;
+                }else{
+                    $retorno['errorMsg'] = 'Error al editar el producto';
+                }
+            }else{
+                $retorno['errorMsg'] = 'Producto no encontrado';
+            }
+        }
+        echo json_encode($retorno);
+    }
+
+    public function crear(){
+        $data = $this->request->getPost();
+        $retorno= ['success' => false];
+        if($this->productModel->insert($data)){
+            $retorno['success'] = true;
+        }else{
+            $retorno['errorMsg'] = 'Error al crear el usuario';
+        }
+        echo json_encode($retorno);
+    }
+
+    public function eliminar(){
+        $data = $this->request->getPost();
+        $retorno= ['success' => false];
+        if(isset($data['idproducto'])){
+            $id = $data['idproducto'];
+            $producto = $this->productModel->find($id);
+            if($producto){
+                $this->productModel->delete($id);
+                $retorno['success'] = true;
+            }else{
+                $retorno['errorMsg'] = 'Producto no encontrado'; 
+            }
+        }
+        echo json_encode($retorno);
+    }
 }

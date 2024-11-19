@@ -3,6 +3,8 @@
 namespace App\Controllers;
 
 use App\Models\UsuarioModel;
+use App\Models\UsuarioRolModel;
+use App\Models\RolModel;
 
 class UsuarioController extends BaseController{
     protected $usuarioModel;
@@ -11,15 +13,28 @@ class UsuarioController extends BaseController{
         $this->usuarioModel = new UsuarioModel();
     }
 
-    // Método para listar los usuarios
     public function administrar(){
-        $usuarios = $this->usuarioModel->findAll(); // Obtener todos los usuarios
-        return view('abm/abmUsuarios', ['usuarios' => $usuarios]);
+        return view('abm/abmUsuarios');
     }
 
     public function listar(){
         $usuarios = $this->usuarioModel->findAll();
-        echo json_encode($usuarios);
+        $aux = [];
+        foreach($usuarios as $usuario){
+            $idUsuario = $usuario['idusuario'];
+            $usuarioRolModel = new UsuarioRolModel();
+            $usuarioRol = $usuarioRolModel->where('idusuario', $idUsuario)->findAll();
+            $roles = '';
+            foreach($usuarioRol as $rol){
+                $rolModel = new RolModel();
+                $rol = $rolModel->find($rol['idrol']);
+                $roles .= $rol['rodescripcion'].', ';
+            }
+            $roles = substr($roles, 0, -2);
+            $usuario['roles'] = $roles;
+            $aux[] = $usuario;
+        }
+        echo json_encode($aux);
     }
 
     public function editar(){
@@ -31,16 +46,14 @@ class UsuarioController extends BaseController{
             if($usuario){
                 if($this->usuarioModel->update($id, $data)){
                     $retorno['success'] = true;
-                    echo json_encode($retorno);
                 }else{
                     $retorno['errorMsg'] = 'Error al editar el usuario';
-                    echo json_encode($retorno);
                 }
             }else{
                 $retorno['errorMsg'] = 'Usuario no encontrado';
-                echo json_encode($retorno);
             }
         }
+        echo json_encode($retorno);
     }
 
     public function crear(){
@@ -48,11 +61,10 @@ class UsuarioController extends BaseController{
         $retorno= ['success' => false];
         if($this->usuarioModel->insert($data)){
             $retorno['success'] = true;
-            echo json_encode($retorno);
         }else{
             $retorno['errorMsg'] = 'Error al crear el usuario';
-            echo json_encode($retorno);
         }
+        echo json_encode($retorno);
     }
 
     public function eliminar(){
@@ -64,12 +76,11 @@ class UsuarioController extends BaseController{
             if($usuario){
                 $this->usuarioModel->delete($id);
                 $retorno['success'] = true;
-                echo json_encode($retorno);
             }else{
-                $retorno['errorMsg'] = 'Usuario no encontrado';
-                echo json_encode($retorno);
+                $retorno['errorMsg'] = 'Usuario no encontrado'; 
             }
         }
+        echo json_encode($retorno);
     }
 }
 

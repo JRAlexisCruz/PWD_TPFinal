@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Administracion de Usuarios</title>
+    <title>Administracion de Menu</title>
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/themes/default/easyui.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/themes/icon.css')?>">
     <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/demo/demo.css')?>">
@@ -12,18 +12,17 @@
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
 </head>
 <body>
-    <table id="dg" title="Usuarios" class="easyui-datagrid" style="width:1000px;height:250px"
-            url="<?=base_url('admin/usuarios/listar')?>"
+    <table id="dg" title="Menu" class="easyui-datagrid" style="width:1000px;height:250px"
+            url="<?=base_url('admin/menus/listar')?>"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">
         <thead>
             <tr>
-                <th field="idusuario" width="50">ID</th>
-                <th field="usnombre" width="50">Nombre de Usuario</th>
-                <th field="uspass" width="50">Contraseña</th>
-                <th field="usmail" width="50">Email</th>
-                <th field="roles" width="50">Roles</th>
-                <th field="usdeshabilitado" width="50">Fecha Deshabilitado</th>
+                <th field="idmenu" width="50">ID</th>
+                <th field="menombre" width="50">Nombre</th>
+                <th field="medescripcion" width="50">Descripcion</th>
+                <th field="idpadre" width="50">Menu Padre</th>
+                <th field="medeshabilitado" width="50">Fecha Deshabilitado</th>
             </tr>
         </thead>
     </table>
@@ -36,18 +35,18 @@
     
     <div id="dlg-new" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons-new'">
         <form id="fm-new" method="post" style="margin:0;padding:20px 50px">
-            <h3>Informacion del Usuario</h3>
+            <h3>Informacion del Menu</h3>
             <div style="margin-bottom:10px">
-                <label for="usnombre" style="display:inline-block;width:150px;">Nombre de usuario:</label>
-                <input name="usnombre" class="easyui-validatebox usnombre" style="width:100%">
+                <label for="menombre" style="display:inline-block;width:150px;">Nombre del menu:</label>
+                <input name="menombre" class="easyui-validatebox menombre" style="width:100%" id="menombre">
             </div>
             <div style="margin-bottom:10px">
-                <label for="contrasenia" style="display:inline-block;width:150px;">Contraseña:</label>
-                <input name="contrasenia" class="easyui-validatebox uspass" style="width:100%">
+                <label for="medescripcion" style="display:inline-block;width:150px;">Descripcion:</label>
+                <input name="medescripcion" class="easyui-validatebox medescripcion" style="width:100%" id="medescripcion">
             </div>
             <div style="margin-bottom:10px">
-                <label for="usmail" style="display:inline-block;width:150px;">Email:</label>
-                <input name="usmail" class="easyui-validatebox usmail" style="width:100%">
+                <label for="menuPadre" style="display:inline-block;width:150px;">Menu Padre:</label>
+                <input id="cc" class="easyui-combobox idpadre" name="idpadre" data-options="valueField:'idmenu',textField:'menombre',url:'<?=base_url('admin/menus/listar')?>'">
             </div>
         </form>
     </div>
@@ -58,22 +57,22 @@
 
     <div id="dlg-edit" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons-edit'">
         <form id="fm-edit" method="post" novalidate style="margin:0;padding:20px 50px">
-            <h3>Informacion del Usuario</h3>
+            <h3>Informacion del Menu</h3>
             <div style="margin-bottom:10px">
-                <label for="idusuario" style="display:inline-block;width:150px;">ID:</label>
-                <input name="idusuario" class="easyui-validatebox idusuario" style="width:100%" readonly>
+                <label for="idmenu" style="display:inline-block;width:150px;">ID:</label>
+                <input name="idmenu" class="easyui-validatebox idmenu" style="width:100%" readonly>
             </div>
             <div style="margin-bottom:10px">
-                <label for="usnombre" style="display:inline-block;width:150px;">Nombre:</label>
-                <input name="usnombre" class="easyui-validatebox usnombre" style="width:100%">
+                <label for="menombre" style="display:inline-block;width:150px;">Nombre del menu:</label>
+                <input name="menombre" class="easyui-validatebox menombre" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <label for="uspass" style="display:inline-block;width:150px;">Contraseña:</label>
-                <input name="uspass" class="easyui-validatebox" style="width:100%" readonly>
+                <label for="medescripcion" style="display:inline-block;width:150px;">Descripcion:</label>
+                <input name="medescripcion" class="easyui-validatebox medescripcion" style="width:100%" id="medescripcion">
             </div>
             <div style="margin-bottom:10px">
-                <label for="usmail" style="display:inline-block;width:150px;">Email:</label>
-                <input name="usmail" class="easyui-validatebox" style="width:100%">
+                <label for="menuPadre" style="display:inline-block;width:150px;">Menu Padre:</label>
+                <input id="cc" class="easyui-combobox idpadre" name="idpadre" data-options="valueField:'idmenu',textField:'menombre',url:'<?=base_url('admin/menus/listar')?>'">
             </div>
         </form>
     </div>
@@ -86,9 +85,9 @@
         var url;
         var action;
         function add(){
-            $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo Usuario');
+            $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo User');
             $('#fm-new').form('clear');
-            url = "<?php echo base_url('admin/usuarios/crear')?>";;
+            url = "<?php echo base_url('admin/menus/crear')?>";;
             action = "new";
         }
         function edit(){
@@ -96,7 +95,7 @@
             if (row){
                 $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
                 $('#fm-edit').form('load',row);
-                url = "<?php echo base_url('admin/usuarios/editar')?>";
+                url = "<?php echo base_url('admin/menus/editar')?>";
             }
             action = "edit";
         }
@@ -107,10 +106,6 @@
                         url: url,
                         iframe: false,
                         onSubmit: function(){
-                            var contrasenia = $('#contrasenia').val();
-                            var hash = CryptoJS.SHA256(contrasenia).toString(CryptoJS.enc.base64);
-                            $('#fm-new').append('<input type="hidden" name="uspass" value="' + hash + '" />');
-                            $('#contrasenia').val('xxxxxxxx');
                             return $(this).form('validate');
                         },
                         success: function(result){
@@ -159,11 +154,11 @@
         function destroy(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $.messager.confirm('Confirmar','¿Esta seguro que quiere eliminar a este usuario?',function(r){
+                $.messager.confirm('Confirmar','¿Estas seguro que quieres eliminar este menu?',function(r){
                     if (r){
-                        $.post('<?php echo base_url('admin/usuarios/eliminar')?>',{id:row.idusuario},function(result){
+                        $.post('<?php echo base_url('admin/menus/eliminar')?>',{idmenu:row.idmenu},function(result){
                             if (result.success){
-                                $('#dg').datagrid('reload');
+                                $('#dg').datagrid('reload'); 
                             } else {
                                 $.messager.show({  
                                     title: 'Error',
@@ -176,44 +171,19 @@
             }
         }
 
-        $.extend($.fn.validatebox.defaults.rules, {
-            alphanumeric: {
-                validator: function(value){
-                    var regex =  /^[a-zA-Z0-9]+$/
-                    return regex.test(value);
-                },
-                message: 'Only letters and numbers are allowed.'
-            }
+        $('.menombre').validatebox({
+            required: true,
+            validType: ['length[1,50]']
         });
 
-        $.extend($.fn.validatebox.defaults.rules, {
-            number: {
-                validator: function(value){
-                    var regex =  /^[0-9]+$/
-                    return regex.test(value);
-                },
-                message: 'Only numbers are allowed.'
-            }
+        $('.medescripcion').validatebox({
+            required: true,
+            validType: ['length[1,124]']
         });
 
-        $('.idusuario').validatebox({
+        $('.idmenu').validatebox({
             required: true,
             validType: ['number']
-        });
-
-        $('.usnombre').validatebox({
-            required: true,
-            validType: ['length[1,50]','alphanumeric']
-        });
-
-        $('.contrasenia').validatebox({
-            required: true,
-            validType: ['length[8,50]','alphanumeric']
-        });
-
-        $('.usmail').validatebox({
-            required: true,
-            validType: ['email','length[1,50]']
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>

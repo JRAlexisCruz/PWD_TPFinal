@@ -4,17 +4,17 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 
-class UsuarioModel extends Model
+class CompraEstadoTipoModel extends Model
 {
-    protected $table = 'usuario';
-    protected $primaryKey = 'idusuario';
+    protected $table = 'compraestadotipo';
+    protected $primaryKey = 'idcompraestadotipo';
 
     protected $useAutoIncrement = true;
 
     protected $returnType = 'array';
-    protected $useSoftDeletes = true;
+    protected $useSoftDeletes = false;
 
-    protected $allowedFields = ['idusuario', 'usnombre', 'uspass', 'usmail', 'usdeshabilitado'];
+    protected $allowedFields = ['idcompraestadotipo', 'cetdescripcion','cetdetalle'];
 
     protected bool $allowEmptyInserts = false;
     protected bool $updateOnlyChanged = true;
@@ -24,7 +24,7 @@ class UsuarioModel extends Model
     protected $dateFormat = 'datetime';
     protected $createdField = '';
     protected $updatedField = '';
-    protected $deletedField = 'usdeshabilitado';
+    protected $deletedField = '';
 
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
