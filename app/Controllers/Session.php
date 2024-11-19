@@ -10,7 +10,7 @@ class Session extends BaseController{
     public function index(){
         $iniciado = $this->validar();
         if($iniciado){
-            return view('home_prueba_seguro');
+            return view('public/home');
         }else{
             return view('home_prueba_no_seguro');
         }
