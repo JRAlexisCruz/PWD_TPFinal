@@ -18,37 +18,17 @@ class UsuarioController extends BaseController{
     }
 
     public function listar(){
-        $usuarios = $this->usuarioModel->findAll();
-        $aux = [];
-        foreach($usuarios as $usuario){
-            $idUsuario = $usuario['idusuario'];
-            $usuarioRolModel = new UsuarioRolModel();
-            $usuarioRol = $usuarioRolModel->where('idusuario', $idUsuario)->findAll();
-            $roles = '';
-            foreach($usuarioRol as $rol){
-                $rolModel = new RolModel();
-                $rol = $rolModel->find($rol['idrol']);
-                $roles .= $rol['rodescripcion'].', ';
-            }
-            $roles = substr($roles, 0, -2);
-            $usuario['roles'] = $roles;
-            $aux[] = $usuario;
-        }
-        echo json_encode($aux);
+        $usuarios = $this->usuarioModel->listar();
+        echo json_encode($usuarios);
     }
 
     public function editar(){
         $data = $this->request->getPost();
         $retorno= ['success' => false];
         if(isset($data['idusuario'])){
-            $id = $data['idusuario'];
-            $usuario = $this->usuarioModel->find($id);
-            if($usuario){
-                if($this->usuarioModel->update($id, $data)){
-                    $retorno['success'] = true;
-                }else{
-                    $retorno['errorMsg'] = 'Error al editar el usuario';
-                }
+            $modificado = $this->usuarioModel->modificar($data);
+            if($modificado){
+                $retorno['success'] = true;
             }else{
                 $retorno['errorMsg'] = 'Usuario no encontrado';
             }
@@ -59,7 +39,7 @@ class UsuarioController extends BaseController{
     public function crear(){
         $data = $this->request->getPost();
         $retorno= ['success' => false];
-        if($this->usuarioModel->insert($data)){
+        if($this->usuarioModel->insertar($data)){
             $retorno['success'] = true;
         }else{
             $retorno['errorMsg'] = 'Error al crear el usuario';

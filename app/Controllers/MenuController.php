@@ -17,7 +17,7 @@ class MenuController extends BaseController
     }
 
     public function listar(){
-        $menus = $this->menuModel->findAll();
+        $menus = $this->menuModel->listar();
         echo json_encode($menus);
     }
 
@@ -42,10 +42,10 @@ class MenuController extends BaseController
                 if($this->menuModel->update($id, $data)){
                     $retorno['success'] = true;
                 }else{
-                    $retorno['errorMsg'] = 'Error al editar el rol';
+                    $retorno['errorMsg'] = 'Error al editar el menu';
                 }
             }else{
-                $retorno['errorMsg'] = 'Rol no encontrado';
+                $retorno['errorMsg'] = 'Menu no encontrado';
             }
         }
         echo json_encode($retorno);
@@ -56,10 +56,13 @@ class MenuController extends BaseController
         $retorno= ['success' => false];
         if(isset($data['idmenu'])){
             $id = $data['idmenu'];
-            $rol = $this->menuModel->find($id);
-            if($rol){
-                $this->menuModel->delete($id);
-                $retorno['success'] = true;
+            $menu = $this->menuModel->find($id);
+            if($menu){
+                if($this->menuModel->eliminar($id)){
+                    $retorno['success'] = true;
+                }else{
+                    $retorno['errorMsg'] = 'Error al eliminar el menu';
+                }
             }else{
                 $retorno['errorMsg'] = 'Menu no encontrado';
             }

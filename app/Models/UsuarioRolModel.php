@@ -7,7 +7,7 @@ use CodeIgniter\Model;
 class UsuarioRolModel extends Model
 {
     protected $table = 'usuariorol';
-    protected $primaryKey = ['idrol', 'idusuario'];
+    protected $primaryKey = 'idusuario';
 
     protected $useAutoIncrement = false;
 

@@ -10,7 +10,7 @@ class Session extends BaseController{
     public function index(){
         $iniciado = $this->validar();
         if($iniciado){
-            return view('public/home');
+            return view('privado/admin');
         }else{
             return view('home_prueba_no_seguro');
         }
@@ -60,14 +60,15 @@ class Session extends BaseController{
 
     public function registrar(){
         $data = $this->request->getPost(['usnombre','uspass','usmail']);
-        
         $usuarioModelo = new UsuarioModel();
         $usuario = $usuarioModelo->where(['usnombre'=>$data['usnombre']])->first();
         if($usuario){
             return redirect()->back()->withInput()->with('error','El nombre de usuario ya existe');
         }else{
-            $idusuario=$usuarioModelo->insert($data);
+            $usuarioModelo->insertar($data);
+            $idusuario = $usuarioModelo->getInsertID();
             $this->session->set('idusuario',$idusuario);
+            $this->session->set('rol','usuario');
             return redirect()->to(base_url('home')); //Cambiar por pagina principal
         }
     }

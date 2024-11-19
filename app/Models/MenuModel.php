@@ -29,5 +29,27 @@ class MenuModel extends Model
     protected $skipValidation = false;
     protected $cleanValidationRules = true;
 
+    public function listar(){
+        $menus = $this->withDeleted()->findAll();
+        $aux = [];
+        foreach($menus as $menu){
+            if($menu['idpadre'] != null){
+                $menuPadre = $this->find($menu['idpadre']);
+                $menu['menupadre'] = $menuPadre['menombre'];
+            }
+            $aux[] = $menu;
+        }
+        return $aux;
+    }
+
+    public function eliminar($idMenu){
+        $eliminado=false;
+        $esPadre=$this->where('idpadre',$idMenu)->first();
+        if($esPadre!=null){
+            $this->delete($idMenu);
+            $eliminado=true;
+        }
+        return $eliminado;
+    }
 
 }
