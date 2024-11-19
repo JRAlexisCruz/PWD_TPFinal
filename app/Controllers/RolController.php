@@ -58,8 +58,11 @@ class RolController extends BaseController{
             $id = $data['idrol'];
             $rol = $this->rolModel->find($id);
             if($rol){
-                $this->rolModel->delete($id);
-                $retorno['success'] = true;
+                if($this->rolModel->eliminar($id)){
+                    $retorno['success'] = true;
+                }else{
+                    $retorno['errorMsg'] = 'Error al eliminar el rol';
+                }
             }else{
                 $retorno['errorMsg'] = 'Rol no encontrado';
             }

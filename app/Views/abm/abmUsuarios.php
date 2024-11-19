@@ -12,7 +12,7 @@
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
 </head>
 <body>
-    <table id="dg" title="Usuarios" class="easyui-datagrid" style="width:1000px;height:250px"
+    <table id="dg" title="Usuarios" class="easyui-datagrid" style="width:100%;height:250px"
             url="<?=base_url('admin/usuarios/listar')?>"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">
@@ -43,11 +43,21 @@
             </div>
             <div style="margin-bottom:10px">
                 <label for="contrasenia" style="display:inline-block;width:150px;">Contraseña:</label>
-                <input name="contrasenia" class="easyui-validatebox uspass" style="width:100%">
+                <input name="contrasenia" class="easyui-validatebox contrasenia" style="width:100%" id="contrasenia">
             </div>
             <div style="margin-bottom:10px">
                 <label for="usmail" style="display:inline-block;width:150px;">Email:</label>
                 <input name="usmail" class="easyui-validatebox usmail" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <label for="roles[]" style="display:inline-block;width:150px;">Roles:</label>
+                <br>
+                <label for=""><input type="checkbox" name="roles[]" id="admin" value="3">Usuario</label>
+                <br>
+                <label for=""><input type="checkbox" name="roles[]" id="admin" value="2">Desposito</label>
+                <br>
+                <label for=""><input type="checkbox" name="roles[]" id="admin" value="1">Administrador</label>
+                <br>
             </div>
         </form>
     </div>
@@ -74,6 +84,16 @@
             <div style="margin-bottom:10px">
                 <label for="usmail" style="display:inline-block;width:150px;">Email:</label>
                 <input name="usmail" class="easyui-validatebox" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <label for="roles[]" style="display:inline-block;width:150px;">Roles:</label>
+                <br>
+                <label for=""><input type="checkbox" name="roles[]" id="admin" value="3">Usuario</label>
+                <br>
+                <label for=""><input type="checkbox" name="roles[]" id="admin" value="2">Desposito</label>
+                <br>
+                <label for=""><input type="checkbox" name="roles[]" id="admin" value="1">Administrador</label>
+                <br>
             </div>
         </form>
     </div>
@@ -107,11 +127,14 @@
                         url: url,
                         iframe: false,
                         onSubmit: function(){
-                            var contrasenia = $('#contrasenia').val();
-                            var hash = CryptoJS.SHA256(contrasenia).toString(CryptoJS.enc.base64);
-                            $('#fm-new').append('<input type="hidden" name="uspass" value="' + hash + '" />');
-                            $('#contrasenia').val('xxxxxxxx');
-                            return $(this).form('validate');
+                            $valido=$(this).form('validate');
+                            if($valido){
+                                var contrasenia = $('#contrasenia').val();
+                                var hash = CryptoJS.SHA256(contrasenia).toString(CryptoJS.enc.base64);
+                                $('#fm-new').append('<input type="hidden" name="uspass" value="' + hash + '" />');
+                                $('#contrasenia').val('');
+                            }
+                            return $valido;
                         },
                         success: function(result){
                             var result = eval('(' + result + ')');

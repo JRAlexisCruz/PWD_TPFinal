@@ -21,7 +21,7 @@
                 <th field="idmenu" width="50">ID</th>
                 <th field="menombre" width="50">Nombre</th>
                 <th field="medescripcion" width="50">Descripcion</th>
-                <th field="idpadre" width="50">Menu Padre</th>
+                <th field="menupadre" width="50">Menu Padre</th>
                 <th field="medeshabilitado" width="50">Fecha Deshabilitado</th>
             </tr>
         </thead>
