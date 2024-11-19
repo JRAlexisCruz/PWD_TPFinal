@@ -26,11 +26,11 @@
          <!-- Menú a la izquierda -->
          <div class="collapse navbar-collapse ms-auto" id="navbarNav">
             <ul class="navbar-nav ms-auto">
-               <li class="nav-item"><a class="nav-link text-white fs-4" href="../public/home.php"><i class="fa-solid fa-house"></i> Inicio  </a></li>
+               <li class="nav-item"><a class="nav-link text-white fs-4" href="<?=base_url('home')?>"><i class="fa-solid fa-house"></i> Inicio  </a></li>
                 <li class="nav-item"><a class="nav-link text-white fs-4" href="#products"><i class="fa-solid fa-bag-shopping"></i> Productos  </a></li>
                 <li class="nav-item"><a class="nav-link text-white fs-4" href="../public/nosotros.php"><i class="fa-solid fa-handshake"></i> Nosotros  </a></li>
                 <li class="nav-item">
-                    <a class="nav-link text-white fs-4" href="login.php"><i class="fas fa-user"></i> Iniciar Sesión  </a>
+                    <a class="nav-link text-white fs-4" href="<?=base_url('login')?>" ><i class="fas fa-user"></i> Iniciar Sesión  </a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link text-white fs-4" href="cart.php"><i class="fas fa-shopping-cart"></i> Carrito</a>

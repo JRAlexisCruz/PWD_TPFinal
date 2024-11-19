@@ -34,6 +34,10 @@ $(document).ready(function() {
             var hash = CryptoJS.SHA256(contrasenia).toString(CryptoJS.enc.base64);
             $('#uspass').val(hash);
             form.submit();
+        },errorPlacement: function(error, element) {
+            idElemento = element.attr('id');
+            divError = $('#error-' + idElemento);
+            error.appendTo(divError);
         }
     });
 
@@ -77,6 +81,10 @@ $(document).ready(function() {
             var hash = CryptoJS.SHA256(contrasenia).toString(CryptoJS.enc.base64);
             $('#uspass').val(hash);
             form.submit();
+        },errorPlacement: function(error, element) {
+            idElemento = element.attr('id');
+            divError = $('#error-' + idElemento);
+            error.appendTo(divError);
         }
     });
 });

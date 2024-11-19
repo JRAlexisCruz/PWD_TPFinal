@@ -42,3 +42,7 @@
     --bs-btn-active-bg: #734426; /* Fondo al hacer clic */
     --bs-btn-active-border-color: #734426; /* Borde al hacer clic */
 }
+
+.error{
+    color: red;
+}

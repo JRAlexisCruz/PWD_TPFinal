@@ -18,12 +18,12 @@
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">
         <thead>
             <tr>
-                <th field="idusuario" width="50">ID</th>
-                <th field="usnombre" width="50">Nombre de Usuario</th>
-                <th field="uspass" width="50">Contraseña</th>
-                <th field="usmail" width="50">Email</th>
-                <th field="roles" width="50">Roles</th>
-                <th field="usdeshabilitado" width="50">Fecha Deshabilitado</th>
+                <th field="idusuario" width="10">ID</th>
+                <th field="usnombre" width="10">Nombre de Usuario</th>
+                <th field="uspass" width="10">Contraseña</th>
+                <th field="usmail" width="10">Email</th>
+                <th field="roles" width="10">Roles</th>
+                <th field="usdeshabilitado" width="10">Fecha Deshabilitado</th>
             </tr>
         </thead>
     </table>
