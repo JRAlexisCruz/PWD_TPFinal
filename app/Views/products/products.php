@@ -12,6 +12,10 @@
 </head>
 
 <body>
+
+<?= view('estructura/header'); ?>
+
+
   <div class="container mt-4 mb-6">
 
     <!-- Filtros, búsqueda y botón de administración -->
@@ -58,6 +62,8 @@
   <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
   <script src="<?= base_url('javascript/jquery.min.js'); ?>"></script>
   <script src="<?= base_url('javascript/products.js'); ?>"></script>
+
+  <?= view('estructura/footer'); ?>
 </body>
 
 </html>

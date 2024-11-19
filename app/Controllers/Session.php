@@ -7,12 +7,13 @@ use App\Models\UsuarioModel;
 class Session extends BaseController{
 
     protected $helpers = ['form'];
+
     public function index(){
         $iniciado = $this->validar();
         if($iniciado){
             return view('privado/admin');
         }else{
-            return view('home_prueba_no_seguro');
+            return view('estructura/home.php');
         }
     }
 
@@ -76,5 +77,15 @@ class Session extends BaseController{
     public function cerrar(){
         $this->session->destroy();
         return redirect()->to(base_url('home')); //Cambiar por pagina principal
+    }
+
+
+    public function nosotros() {
+        return view('estructura/nosotros.php');
+    }
+
+
+    public function menuAdministracion() {
+        return view('privado/admin.php');
     }
 }

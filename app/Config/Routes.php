@@ -25,14 +25,19 @@ $routes->get('/login', 'Session::login');
 $routes->post('/login', 'Session::autenticar');
 $routes->get('/logout', 'Session::cerrar');
 
+
+
 /* REGISTRO */
 $routes->get('/registro','Session::registro');
 $routes->post('/registro','Session::registrar');
 
 /* HOME PRUEBA */
 $routes->get('/home', 'Session::index');
+$routes->get('/nosotros', 'Session::nosotros');
 
 /*ADMIN*/
+$routes->get('/admin', 'Session::menuAdministracion');
+
 $routes->group('admin',['filter'=>'autenticacion'],function($routes){
     /* ADMIN USUARIOS */
     $routes->group('usuarios',function($routes){
