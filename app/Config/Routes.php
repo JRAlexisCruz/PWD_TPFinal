@@ -23,7 +23,8 @@ $routes->get('/cart', 'CartController::index');
 /* LOGIN */
 $routes->get('/login', 'Session::login');
 $routes->post('/login', 'Session::autenticar');
-$routes->get('/logout', 'Session::cerrar');
+$routes->get('/logout', 'Session::logout');
+$routes->get('/cerrarsesion', 'Session::cerrar');
 
 /* REGISTRO */
 $routes->get('/registro','Session::registro');

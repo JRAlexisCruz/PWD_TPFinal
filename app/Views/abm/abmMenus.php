@@ -12,7 +12,7 @@
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
 </head>
 <body>
-    <table id="dg" title="Menu" class="easyui-datagrid" style="width:1000px;height:250px"
+    <table id="dg" title="Menu" class="easyui-datagrid" style="width:100%;height:250px"
             url="<?=base_url('admin/menus/listar')?>"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">

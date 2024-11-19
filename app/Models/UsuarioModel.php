@@ -42,7 +42,7 @@ class UsuarioModel extends Model
                 foreach($rolesUsuario as $rolUsuario){
                     $rol = $rolModel->find($rolUsuario['idrol']);
                     if($rol){
-                        $roles[] = $rol;
+                        $roles[] = $rol['idrol'];
                     }
                 }
             }

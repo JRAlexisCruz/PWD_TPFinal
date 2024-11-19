@@ -10,14 +10,26 @@ class Session extends BaseController{
     public function index(){
         $iniciado = $this->validar();
         if($iniciado){
-            return view('privado/admin');
+            return view('public/home');
         }else{
             return view('home_prueba_no_seguro');
         }
     }
 
     public function login(){
-        return view('login/index.php');
+        if($this->validar()){
+            return redirect()->to(base_url('home'));
+        }else{
+            return view('login/index.php');
+        }
+    }
+
+    public function logout(){
+        if($this->validar()){
+            return view('login/logout.php');
+        }else{
+            return redirect()->to(base_url('home'));
+        }
     }
 
     public function autenticar(){
@@ -26,7 +38,9 @@ class Session extends BaseController{
         $usuarioModelo = new UsuarioModel();
         $usuario = $usuarioModelo->where(['usnombre'=>$data['usnombre'],'uspass'=>$data['uspass']])->first();
         if($usuario){
+            $roles=$usuarioModelo->darRoles($usuario['idusuario']);
             $this->session->set('idusuario',$usuario['idusuario']);
+            $this->session->set('roles',$roles);
             return redirect()->to(base_url('home')); //Cambiar por pagina principal
         }else{
             return redirect()->back()->withInput()->with('error','Usuario o contraseña incorrectos');
@@ -55,7 +69,11 @@ class Session extends BaseController{
     }
 
     public function registro(){
-        return view('registro/index.php');
+        if($this->validar()){
+            return redirect()->to(base_url('home'));
+        }else{
+            return view('registro/index.php');
+        }
     }
 
     public function registrar(){
