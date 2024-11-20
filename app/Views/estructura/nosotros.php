@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Nosotros</title>
+  <title>Acerca de Nosotros</title>
   <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('/css/styles.css') ?>">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
@@ -16,7 +16,7 @@
         </br>
         <div class="d-flex justify-content-center my-4">
             <h2 class="text-center"> <strong>¿Quiénes Somos?</strong></br>
-                En CebandoMates, somos apasionados por la tradición matera.</br>
+                En #CebandoHistorias, somos apasionados por la tradición matera.</br>
                 Ofrecemos una amplia variedad de mates, bombillas, y sets completos para disfrutar o regalar en cualquier ocasión.</br>
                 Además de vender a particulares, trabajamos con empresas y organizaciones para crear regalos personalizados y artículos promocionales únicos.</br>
                 También somos expertos en souvenirs para eventos sociales, desde cumpleaños hasta bodas y eventos corporativos como conferencias o ferias.</br>
