@@ -9,7 +9,7 @@ class ProductModel extends Model
     protected $table      = 'producto';
     protected $primaryKey = 'idproducto';
     protected $returnType = 'array';
-    protected $allowedFields = ['pronombre', 'tipoproducto', 'prodetalle', 'recioproducto', 'procantstock', 'proimagen'];
+    protected $allowedFields = ['idproducto','pronombre', 'tipoproducto', 'prodetalle', 'precioproducto', 'procantstock', 'proimagen'];
 
 
     public function getAllProducts()

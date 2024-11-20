@@ -21,7 +21,10 @@
                 <th field="idproducto" width="50">ID</th>
                 <th field="pronombre" width="50">Nombre</th>
                 <th field="prodetalle" width="50">Detalle</th>
+                <th field="tipoproducto" width="50">Tipo</th>
                 <th field="procantstock" width="50">Stock</th>
+                <th field="precioproducto" width="50">Precio</th>
+                <th field="proimagen" width="50">Imagen</th>
             </tr>
         </thead>
     </table>
@@ -44,8 +47,23 @@
                 <input name="prodetalle" class="easyui-validatebox prodetalle" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
+                <label for="tipoproducto" style="display:inline-block;width:150px;">Tipo:</label>
+                <select class="easyui-combobox" style="width:200px">
+                    <option value="mate" selected>Mate</option>
+                    <option value="bombilla">Bombilla</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
                 <label for="procantstock" style="display:inline-block;width:150px;">Stock:</label>
                 <input name="procantstock" class="easyui-validatebox procantstock" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <label for="precioproducto" style="display:inline-block;width:150px;">Precio:</label>
+                <input class="easyui-numberbox precioproducto" name="precioproducto" style="width:200px" data-options="min:0, precision:2">
+            </div>
+            <div style="margin-bottom:10px">
+                <label for="proimagen" style="display:inline-block;width:150px;">Imagen:</label>
+                <input name="proimagen" class="easyui-validatebox proimagen" style="width:100%">
             </div>
         </form>
     </div>
@@ -70,8 +88,23 @@
                 <input name="prodetalle" class="easyui-validatebox prodetalle" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
+                <label for="tipoproducto" style="display:inline-block;width:150px;">Tipo:</label>
+                <select class="easyui-combobox" style="width:200px">
+                    <option value="mate" selected>Mate</option>
+                    <option value="bombilla">Bombilla</option>
+                </select>
+            </div>
+            <div style="margin-bottom:10px">
                 <label for="procantstock" style="display:inline-block;width:150px;">Cantidad en stock:</label>
                 <input name="procantstock" class="easyui-validatebox procantstock" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <label for="precioproducto" style="display:inline-block;width:150px;">Precio:</label>
+                <input class="easyui-numberbox precioproducto" name="precioproducto" style="width:200px" data-options="min:0, precision:2">
+            </div>
+            <div style="margin-bottom:10px">
+                <label for="proimagen" style="display:inline-block;width:150px;">Imagen:</label>
+                <input name="proimagen" class="easyui-validatebox proimagen" style="width:100%">
             </div>
         </form>
     </div>
@@ -180,6 +213,18 @@
             }
         });
 
+        $(function(){
+            $('.easyui-combobox').combobox({
+                valueField: 'tipo',   
+                textField: 'text',     
+                data: [
+                    {tipo: 'mate', text: 'mate'},
+                    {tipo: 'bombilla', text: 'bombilla'}
+                ],
+                panelHeight: 'auto'
+            });
+        });
+
         $('.idproducto').validatebox({
             required: true,
             validType: ['number']
@@ -199,6 +244,16 @@
             required: true,
             validType: ['number']
         });
+
+        $('.precioproducto').numberbox({
+            precision: 2
+        });
+
+        $('.proimagen').validatebox({
+            required: true,
+            validType: ['length[1,512]']
+        });
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js"></script>

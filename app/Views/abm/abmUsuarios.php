@@ -88,18 +88,15 @@
             <div style="margin-bottom:10px">
                 <label for="roles[]" style="display:inline-block;width:150px;">Roles:</label>
                 <br>
-                <label for=""><input type="checkbox" name="roles[]" id="admin" value="3">Usuario</label>
-                <br>
-                <label for=""><input type="checkbox" name="roles[]" id="admin" value="2">Desposito</label>
-                <br>
-                <label for=""><input type="checkbox" name="roles[]" id="admin" value="1">Administrador</label>
-                <br>
+                <div id="checkboxes">
+
+                </div>
             </div>
         </form>
     </div>
     <div id="dlg-buttons-edit">
         <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Guardar</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-edit').dialog('close')" style="width:90px">Cancelar</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="close()" style="width:90px">Cancelar</a>
     </div>
 
     <script type="text/javascript">
@@ -111,9 +108,29 @@
             url = "<?php echo base_url('admin/usuarios/crear')?>";;
             action = "new";
         }
+        function close(){
+            $('#dlg-edit').dialog('close');
+            $('#checkboxes').empty();
+        }
         function edit(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
+                $.ajax({
+                    url: '<?=base_url('roles/listar')?>', 
+                    method: 'GET',
+                    success: function(data) {
+                        var row = $('#dg').datagrid('getSelected');
+                        data = JSON.parse(data);
+                        data.forEach(function(rol){
+                            if(row.roles.includes(rol.rodescripcion)){
+                                var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}" checked> ${rol.rodescripcion} <br>`;
+                            }else{
+                                var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}"> ${rol.rodescripcion} <br>`;
+                            }
+                            $('#checkboxes').append(checkboxHtml);    
+                        });
+                    }
+                });
                 $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
                 $('#fm-edit').form('load',row);
                 url = "<?php echo base_url('admin/usuarios/editar')?>";
@@ -151,6 +168,7 @@
                     });
                     break;
                 case "edit":
+                    $('#checkboxes').empty();
                     $('#fm-edit').form('submit',{
                         url: url,
                         iframe: false,
@@ -238,6 +256,7 @@
             required: true,
             validType: ['email','length[1,50]']
         });
+
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js"></script>

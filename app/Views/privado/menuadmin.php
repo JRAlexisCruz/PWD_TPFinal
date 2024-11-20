@@ -1,15 +1,17 @@
-<?php include 'header.php'; ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administración</title>
+    <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('/css/styles.css') ?>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <title>Menu Administración</title>
 </head>
 
 <body>
+    <?= view('estructura/header'); ?>
     <div class="d-flex justify-content-center align-items-center flex-wrap" style="min-height: 80vh;">
         <!-- Admin Usuario -->
         <div class="card m-3" style="width: 18rem; height: 18rem;">
@@ -37,10 +39,8 @@
             </div>
         </div>
     </div>
-
-
-
+    <?= view('estructura/footer'); ?>
+    <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
+    <script src="<?= base_url('javascript/jquery.min.js'); ?>"></script>
 </body>
-
 </html>
-<?php //include '../public/footer.php'; ?>

@@ -8,12 +8,7 @@ class Session extends BaseController{
 
     protected $helpers = ['form'];
     public function index(){
-        $iniciado = $this->validar();
-        if($iniciado){
-            return view('public/home');
-        }else{
-            return view('home_prueba_no_seguro');
-        }
+        return view('estructura/home');
     }
 
     public function login(){

@@ -12,6 +12,7 @@
 </head>
 
 <body>
+  <?= view('estructura/header'); ?>
   <div class="container mt-4 mb-6">
 
     <!-- Filtros, búsqueda y botón de administración -->
@@ -48,6 +49,7 @@
       <ul class="pagination justify-content-center" id="pagination"></ul>
     </nav>
   </div>
+  <?= view('estructura/footer'); ?>
 
   <!-- Datos de productos en JSON -->
   <script>

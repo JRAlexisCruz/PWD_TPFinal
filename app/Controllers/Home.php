@@ -8,4 +8,8 @@ class Home extends BaseController
     {
         return view('welcome_message');
     }
+
+    public function nosotros() {
+        return view('estructura/nosotros.php');
+    }
 }

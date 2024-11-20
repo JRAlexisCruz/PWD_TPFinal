@@ -32,8 +32,11 @@ $routes->post('/registro','Session::registrar');
 
 /* HOME PRUEBA */
 $routes->get('/home', 'Session::index');
+$routes->get('/nosotros', 'Home::nosotros');
+$routes->get('roles/listar', 'RolController::listar');
 
 /*ADMIN*/
+$routes->get('/admin', 'Session::menuAdministracion');
 $routes->group('admin',['filter'=>'autenticacion'],function($routes){
     /* ADMIN USUARIOS */
     $routes->group('usuarios',function($routes){
