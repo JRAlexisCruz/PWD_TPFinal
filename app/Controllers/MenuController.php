@@ -24,7 +24,7 @@ class MenuController extends BaseController
     public function crear(){
         $data = $this->request->getPost();
         $retorno= ['success' => false];
-        if($this->menuModel->insert($data)){
+        if($this->menuModel->insertar($data)){
             $retorno['success'] = true;
         }else{
             $retorno['errorMsg'] = 'Error al crear el menu';
@@ -36,16 +36,10 @@ class MenuController extends BaseController
         $data = $this->request->getPost();
         $retorno= ['success' => false];
         if(isset($data['idmenu'])){
-            $id = $data['idmenu'];
-            $rol = $this->menuModel->find($id);
-            if($rol){
-                if($this->menuModel->update($id, $data)){
-                    $retorno['success'] = true;
-                }else{
-                    $retorno['errorMsg'] = 'Error al editar el menu';
-                }
+            if($this->menuModel->editar( $data)){
+                $retorno['success'] = true;
             }else{
-                $retorno['errorMsg'] = 'Menu no encontrado';
+                $retorno['errorMsg'] = $this->menuModel->getError();
             }
         }
         echo json_encode($retorno);
@@ -56,15 +50,10 @@ class MenuController extends BaseController
         $retorno= ['success' => false];
         if(isset($data['idmenu'])){
             $id = $data['idmenu'];
-            $menu = $this->menuModel->find($id);
-            if($menu){
-                if($this->menuModel->eliminar($id)){
-                    $retorno['success'] = true;
-                }else{
-                    $retorno['errorMsg'] = 'Error al eliminar el menu';
-                }
+            if($this->menuModel->eliminar($id)){
+                $retorno['success'] = true;
             }else{
-                $retorno['errorMsg'] = 'Menu no encontrado';
+                $retorno['errorMsg'] = 'Error al eliminar el menu';
             }
         }
         echo json_encode($retorno);

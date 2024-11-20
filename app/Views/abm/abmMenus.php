@@ -21,7 +21,8 @@
                 <th field="idmenu" width="50">ID</th>
                 <th field="menombre" width="50">Nombre</th>
                 <th field="medescripcion" width="50">Descripcion</th>
-                <th field="menupadre" width="50">Menu Padre</th>
+                <th field="script" width="50">Script</th>
+                <th field="roles" width="50">Roles</th>
                 <th field="medeshabilitado" width="50">Fecha Deshabilitado</th>
             </tr>
         </thead>
@@ -38,15 +39,22 @@
             <h3>Informacion del Menu</h3>
             <div style="margin-bottom:10px">
                 <label for="menombre" style="display:inline-block;width:150px;">Nombre del menu:</label>
-                <input name="menombre" class="easyui-validatebox menombre" style="width:100%" id="menombre">
+                <input name="menombre" class="easyui-validatebox menombre" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
                 <label for="medescripcion" style="display:inline-block;width:150px;">Descripcion:</label>
-                <input name="medescripcion" class="easyui-validatebox medescripcion" style="width:100%" id="medescripcion">
+                <input name="medescripcion" class="easyui-validatebox medescripcion" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <label for="menuPadre" style="display:inline-block;width:150px;">Menu Padre:</label>
-                <input id="cc" class="easyui-combobox idpadre" name="idpadre" data-options="valueField:'idmenu',textField:'menombre',url:'<?=base_url('admin/menus/listar')?>'">
+                <label for="script" style="display:inline-block;width:150px;">Script</label>
+                <input name="script" class="easyui-validatebox script" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <label for="roles[]" style="display:inline-block;width:150px;">Roles:</label>
+                <br>
+                <div id="checkboxes-new">
+
+                </div>
             </div>
         </form>
     </div>
@@ -68,24 +76,43 @@
             </div>
             <div style="margin-bottom:10px">
                 <label for="medescripcion" style="display:inline-block;width:150px;">Descripcion:</label>
-                <input name="medescripcion" class="easyui-validatebox medescripcion" style="width:100%" id="medescripcion">
+                <input name="medescripcion" class="easyui-validatebox medescripcion" style="width:100%">
             </div>
             <div style="margin-bottom:10px">
-                <label for="menuPadre" style="display:inline-block;width:150px;">Menu Padre:</label>
-                <input id="cc" class="easyui-combobox idpadre" name="idpadre" data-options="valueField:'idmenu',textField:'menombre',url:'<?=base_url('admin/menus/listar')?>'">
+                <label for="script" style="display:inline-block;width:150px;">Menu Padre:</label>
+                <input name="script" class="easyui-validatebox script" style="width:100%">
+            </div>
+            <div style="margin-bottom:10px">
+                <label for="roles[]" style="display:inline-block;width:150px;">Roles:</label>
+                <br>
+                <div id="checkboxes-edit">
+
+                </div>
             </div>
         </form>
     </div>
     <div id="dlg-buttons-edit">
         <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Guardar</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-edit').dialog('close')" style="width:90px">Cancelar</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-edit').dialog('close'); $('#checkboxes-new').empty(); $('#checkboxes-edit').empty()" style="width:90px">Cancelar</a>
     </div>
 
     <script type="text/javascript">
         var url;
         var action;
         function add(){
-            $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo User');
+            $.ajax({
+                    url: '<?=base_url('roles/listar')?>', 
+                    method: 'GET',
+                    success: function(data) {
+                        var row = $('#dg').datagrid('getSelected');
+                        data = JSON.parse(data);
+                        data.forEach(function(rol){
+                            var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}"> ${rol.rodescripcion} <br>`;
+                            $('#checkboxes-new').append(checkboxHtml);    
+                        });
+                    }
+                });
+            $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo Menu');
             $('#fm-new').form('clear');
             url = "<?php echo base_url('admin/menus/crear')?>";;
             action = "new";
@@ -93,7 +120,23 @@
         function edit(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
+                $.ajax({
+                    url: '<?=base_url('roles/listar')?>', 
+                    method: 'GET',
+                    success: function(data) {
+                        var row = $('#dg').datagrid('getSelected');
+                        data = JSON.parse(data);
+                        data.forEach(function(rol){
+                            if(row.roles.includes(rol.rodescripcion)){
+                                var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}" checked> ${rol.rodescripcion} <br>`;
+                            }else{
+                                var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}"> ${rol.rodescripcion} <br>`;
+                            }
+                            $('#checkboxes-edit').append(checkboxHtml);    
+                        });
+                    }
+                });
+                $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Menu');
                 $('#fm-edit').form('load',row);
                 url = "<?php echo base_url('admin/menus/editar')?>";
             }
@@ -121,6 +164,7 @@
                             }
                         }
                     });
+                    $('#checkboxes-new').empty();
                     break;
                 case "edit":
                     $('#fm-edit').form('submit',{
@@ -147,8 +191,8 @@
                             
                         }
                     });
+                    $('#checkboxes-edit').empty();
                     break;
-
             }
         }
         function destroy(){
@@ -173,7 +217,7 @@
 
         $('.menombre').validatebox({
             required: true,
-            validType: ['length[1,50]']
+            validType: ['length[1,100]']
         });
 
         $('.medescripcion').validatebox({
@@ -184,6 +228,11 @@
         $('.idmenu').validatebox({
             required: true,
             validType: ['number']
+        });
+
+        $('.script').validatebox({
+            required: true,
+            validType: ['length[1,50]']
         });
     </script>
     <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>

@@ -33,13 +33,15 @@ $routes->post('/registro','Session::registrar');
 /* HOME PRUEBA */
 $routes->get('/home', 'Session::index');
 $routes->get('/nosotros', 'Home::nosotros');
-$routes->get('roles/listar', 'RolController::listar');
+
+/* NOT_FOUND */
+$routes->get('/404', 'Home::notFound');
 
 /*ADMIN*/
-$routes->get('/admin', 'Session::menuAdministracion');
-$routes->group('admin',['filter'=>'autenticacion'],function($routes){
+$routes->group('admin',['filter'=>['autenticacion','admindeposito']], function($routes){
+    $routes->get('/', 'Home::admin');
     /* ADMIN USUARIOS */
-    $routes->group('usuarios',function($routes){
+    $routes->group('usuarios', ['filter'=>'administrador'], function($routes){
         $routes->get('/', 'UsuarioController::administrar');
         $routes->get('listar', 'UsuarioController::listar');
         $routes->post('editar', 'UsuarioController::editar');
@@ -48,7 +50,7 @@ $routes->group('admin',['filter'=>'autenticacion'],function($routes){
     });
 
     /* ADMIN PRODUCTOS */
-    $routes->group('productos',function($routes){
+    $routes->group('productos', ['filter'=>'admindeposito'] ,function($routes){
         $routes->get('/', 'ProductController::administrar');
         $routes->get('listar', 'ProductController::list');
         $routes->post('editar', 'ProductController::editar');
@@ -57,7 +59,7 @@ $routes->group('admin',['filter'=>'autenticacion'],function($routes){
     });
 
     /* ADMIN ROLES */
-    $routes->group('roles',function($routes){
+    $routes->group('roles', ['filter'=>'administrador'], function($routes){
         $routes->get('/', 'RolController::administrar');
         $routes->get('listar', 'RolController::listar');
         $routes->post('editar', 'RolController::editar');
@@ -66,7 +68,7 @@ $routes->group('admin',['filter'=>'autenticacion'],function($routes){
     });
 
     /* ADMIN MENUS */
-    $routes->group('menus',function($routes){
+    $routes->group('menus', ['filter'=>'administrador'], function($routes){
         $routes->get('/', 'MenuController::administrar');
         $routes->get('listar', 'MenuController::listar');
         $routes->post('listar', 'MenuController::listar');
@@ -76,12 +78,12 @@ $routes->group('admin',['filter'=>'autenticacion'],function($routes){
     });
 
     /* ADMIN COMPRAS */
-    $routes->group('compras',function($routes){
+    $routes->group('compras', ['filter'=>'admindeposito'] ,function($routes){
         $routes->post('listar', 'CompraController::listar');
     });
 
     /* ADMIN ESTADO DE COMPRAS */
-    $routes->group('estados',function($routes){
+    $routes->group('estados', ['filter'=>'admindeposito'] ,function($routes){
         $routes->get('/', 'CompraEstadoController::administrar');
         $routes->get('listar', 'CompraEstadoController::listar');
         $routes->post('editar', 'CompraEstadoController::editar');
@@ -90,7 +92,7 @@ $routes->group('admin',['filter'=>'autenticacion'],function($routes){
     });
 
     /* ADMIN ESTADO TIPO */
-    $routes->group('estadotipo',function($routes){
+    $routes->group('estadotipo', ['fliter'=>'admindeposito'], function($routes){
         $routes->post('listar', 'CompraEstadoTipoController::listar');
     });
 });

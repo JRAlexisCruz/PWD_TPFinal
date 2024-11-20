@@ -13,7 +13,7 @@ class Session extends BaseController{
 
     public function login(){
         if($this->validar()){
-            return redirect()->to(base_url('home'));
+            return redirect()->to(base_url('logout'));
         }else{
             return view('login/index.php');
         }
@@ -36,6 +36,8 @@ class Session extends BaseController{
             $roles=$usuarioModelo->darRoles($usuario['idusuario']);
             $this->session->set('idusuario',$usuario['idusuario']);
             $this->session->set('roles',$roles);
+            $this->session->set('rol',$roles[0]);
+            $_COOKIE['usnombre']=$usuario['usnombre'];
             return redirect()->to(base_url('home')); //Cambiar por pagina principal
         }else{
             return redirect()->back()->withInput()->with('error','Usuario o contraseña incorrectos');
@@ -65,7 +67,7 @@ class Session extends BaseController{
 
     public function registro(){
         if($this->validar()){
-            return redirect()->to(base_url('home'));
+            return redirect()->to(base_url('logout'));
         }else{
             return view('registro/index.php');
         }

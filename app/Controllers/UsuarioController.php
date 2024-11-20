@@ -3,8 +3,6 @@
 namespace App\Controllers;
 
 use App\Models\UsuarioModel;
-use App\Models\UsuarioRolModel;
-use App\Models\RolModel;
 
 class UsuarioController extends BaseController{
     protected $usuarioModel;
