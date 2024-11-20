@@ -37,6 +37,9 @@ $routes->get('/nosotros', 'Home::nosotros');
 /* NOT_FOUND */
 $routes->get('/404', 'Home::notFound');
 
+/* CAMBIO ROL */
+$routes->get('/cambioRol', 'Session::cambioRol', ['filter'=>'multirol']);
+
 /*ADMIN*/
 $routes->group('admin',['filter'=>['autenticacion','admindeposito']], function($routes){
     $routes->get('/', 'Home::admin');

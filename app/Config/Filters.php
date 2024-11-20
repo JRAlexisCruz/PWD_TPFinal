@@ -37,6 +37,7 @@ class Filters extends BaseFilters
         'autenticacion' => \App\Filters\Autenticacion::class,
         'administrador' => \App\Filters\Administrador::class,
         'admindeposito' => \App\Filters\AdminDeposito::class,
+        'multirol'      => \App\Filters\Multirol::class,
     ];
 
     /**

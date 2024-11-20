@@ -36,12 +36,20 @@ class Session extends BaseController{
             $roles=$usuarioModelo->darRoles($usuario['idusuario']);
             $this->session->set('idusuario',$usuario['idusuario']);
             $this->session->set('roles',$roles);
-            $this->session->set('rol',$roles[0]);
+            $this->session->set('rol',$roles[0]['idrol']);
             $_COOKIE['usnombre']=$usuario['usnombre'];
-            return redirect()->to(base_url('home')); //Cambiar por pagina principal
+            return redirect()->to(base_url('home'));
         }else{
             return redirect()->back()->withInput()->with('error','Usuario o contraseña incorrectos');
         }
+    }
+
+    public function cambioRol(){
+        $data = $this->request->getGet();
+        if(isset($data['idrol'])){
+            $this->session->set('rol',$data['idrol']);
+        }
+        return redirect()->to(base_url('home'));
     }
 
     public function activa(){
