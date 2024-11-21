@@ -40,6 +40,10 @@ $routes->get('/404', 'Home::notFound');
 /* CAMBIO ROL */
 $routes->get('/cambioRol', 'Session::cambioRol', ['filter'=>'multirol']);
 
+/* EDITAR PERFIL */
+$routes->get('/perfil/editar', 'Session::editarPerfil', ['filter'=>'autenticacion']);
+$routes->post('/perfil/editar', 'Session::editar', ['filter'=>'autenticacion']);
+
 /*ADMIN*/
 $routes->group('admin',['filter'=>['autenticacion','admindeposito']], function($routes){
     $routes->get('/', 'Home::admin');

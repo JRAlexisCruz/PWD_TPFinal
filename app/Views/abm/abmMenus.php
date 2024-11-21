@@ -101,17 +101,17 @@
         var action;
         function add(){
             $.ajax({
-                    url: '<?=base_url('roles/listar')?>', 
-                    method: 'GET',
-                    success: function(data) {
-                        var row = $('#dg').datagrid('getSelected');
-                        data = JSON.parse(data);
-                        data.forEach(function(rol){
-                            var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}"> ${rol.rodescripcion} <br>`;
-                            $('#checkboxes-new').append(checkboxHtml);    
-                        });
-                    }
-                });
+                url: '<?=base_url('roles/listar')?>', 
+                method: 'GET',
+                success: function(data) {
+                    var row = $('#dg').datagrid('getSelected');
+                    data = JSON.parse(data);
+                    data.forEach(function(rol){
+                        var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}"> ${rol.rodescripcion} <br>`;
+                        $('#checkboxes-new').append(checkboxHtml);    
+                    });
+                }
+            });
             $('#dlg-new').dialog('open').dialog('center').dialog('setTitle','Nuevo Menu');
             $('#fm-new').form('clear');
             url = "<?php echo base_url('admin/menus/crear')?>";;
