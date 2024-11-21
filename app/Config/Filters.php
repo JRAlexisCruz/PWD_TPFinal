@@ -35,6 +35,9 @@ class Filters extends BaseFilters
         'pagecache'     => PageCache::class,
         'performance'   => PerformanceMetrics::class,
         'autenticacion' => \App\Filters\Autenticacion::class,
+        'administrador' => \App\Filters\Administrador::class,
+        'admindeposito' => \App\Filters\AdminDeposito::class,
+        'multirol'      => \App\Filters\Multirol::class,
     ];
 
     /**
@@ -104,5 +107,7 @@ class Filters extends BaseFilters
      *
      * @var array<string, array<string, list<string>>>
      */
-    public array $filters = [];
+    public array $filters = [
+
+    ];
 }

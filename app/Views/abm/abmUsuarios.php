@@ -96,7 +96,7 @@
     </div>
     <div id="dlg-buttons-edit">
         <a href="javascript:void(0)" class="easyui-linkbutton c6" iconCls="icon-ok" onclick="save()" style="width:90px">Guardar</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="close()" style="width:90px">Cancelar</a>
+        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-cancel" onclick="javascript:$('#dlg-edit').dialog('close');$('#checkboxes').empty();" style="width:90px">Cancelar</a>
     </div>
 
     <script type="text/javascript">
@@ -107,10 +107,6 @@
             $('#fm-new').form('clear');
             url = "<?php echo base_url('admin/usuarios/crear')?>";;
             action = "new";
-        }
-        function close(){
-            $('#dlg-edit').dialog('close');
-            $('#checkboxes').empty();
         }
         function edit(){
             var row = $('#dg').datagrid('getSelected');
@@ -168,7 +164,6 @@
                     });
                     break;
                 case "edit":
-                    $('#checkboxes').empty();
                     $('#fm-edit').form('submit',{
                         url: url,
                         iframe: false,
@@ -176,23 +171,19 @@
                             return $(this).form('validate');
                         },
                         success: function(result){
-                            try{
-                                var result = eval('(' + result + ')');
-                                if (!result.success){
-                                    $.messager.show({
-                                        title: 'Error',
-                                        msg: result.errorMsg
-                                    });
-                                } else {
-                                    $('#dlg-edit').dialog('close');       
-                                    $('#dg').datagrid('reload');    
-                                }
-                            }catch(e){
-                                console.log(e);
+                            var result = eval('(' + result + ')');
+                            if (!result.success){
+                                $.messager.show({
+                                    title: 'Error',
+                                    msg: result.errorMsg
+                                });
+                            } else {
+                                $('#dlg-edit').dialog('close');       
+                                $('#dg').datagrid('reload');    
                             }
-                            
                         }
                     });
+                    $('#checkboxes').empty();
                     break;
 
             }

@@ -6,7 +6,7 @@
     <title>Logout</title>
 </head>
 <body>
-    <p>Estas logueado como <?=session('usnombre')?></p>
+    <p>Estas logueado como</p>
     <p>¿Estas seguro que quieres cerrar la sesion?</p>
     <form action="<?=base_url('cerrarsesion')?>" method="get">
         <input type="submit" value="Cerrar sesion">
