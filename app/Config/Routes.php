@@ -36,8 +36,6 @@ $routes->post('/cart/addToCart', 'CartController::addToCart');
 /* LOGIN */
 $routes->get('/login', 'Session::login');
 $routes->post('/login', 'Session::autenticar');
-$routes->get('/logout', 'Session::logout');
-$routes->get('/cerrarsesion', 'Session::cerrar');
 
 /* REGISTRO */
 $routes->get('/registro','Session::registro');
@@ -53,9 +51,12 @@ $routes->get('/404', 'Home::notFound');
 /* CAMBIO ROL */
 $routes->get('/cambioRol', 'Session::cambioRol', ['filter'=>'multirol']);
 
-/* EDITAR PERFIL */
+/* OPCIONES CLIENTE */
 $routes->get('/perfil/editar', 'Session::editarPerfil', ['filter'=>'autenticacion']);
 $routes->post('/perfil/editar', 'Session::editar', ['filter'=>'autenticacion']);
+$routes->get('/perfil/compras', 'Session::compras', ['filter'=>'autenticacion']);
+$routes->get('/logout', 'Session::logout');
+$routes->get('/cerrarsesion', 'Session::cerrar');
 
 /*ADMIN*/
 $routes->group('admin',['filter'=>['autenticacion','admindeposito']], function($routes){

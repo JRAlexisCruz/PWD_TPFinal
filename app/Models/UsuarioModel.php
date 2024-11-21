@@ -69,6 +69,26 @@ class UsuarioModel extends Model
         return $roles;
     }
 
+    public function darCompras(){
+        $compras = [];
+        $usuario = $this->find(session('idusuario'));
+        if($usuario){
+            $compraModel = new CompraModel();
+            $comprasUsuario = $compraModel->where('idusuario', session('idusuario'))->findAll();
+            if($comprasUsuario){
+                foreach($comprasUsuario as $compraUsuario){
+                    $compraRetorno = ['idcompra' => $compraUsuario['idcompra'], 'cofecha' => $compraUsuario['cofecha']];
+                    $productos = $compraModel->darProductos($compraUsuario['idcompra']);
+                    $compraRetorno['productos'] = $productos;
+                    $estado = $compraModel->darEstado($compraUsuario['idcompra']);
+                    $compraRetorno['estado'] = $estado;
+                    $compras[] = $compraRetorno;
+                }
+            }
+        }
+        return $compras;
+    }
+
     public function listar(){
         $usuarios = $this->withDeleted()->findAll();
         $aux = [];

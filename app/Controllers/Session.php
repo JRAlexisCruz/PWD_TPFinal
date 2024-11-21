@@ -37,7 +37,7 @@ class Session extends BaseController{
             $this->session->set('idusuario',$usuario['idusuario']);
             $this->session->set('roles',$roles);
             $this->session->set('rol',$roles[0]['idrol']);
-            $_COOKIE['usnombre']=$usuario['usnombre'];
+            setcookie('usnombre',$usuario['usnombre']);
             return redirect()->to(base_url('home'));
         }else{
             return redirect()->back()->withInput()->with('error','Usuario o contraseña incorrectos');
@@ -69,10 +69,17 @@ class Session extends BaseController{
         if($usuarioModelo->update(session('idusuario'),$data)){
             $retorno['success']=true;
             $retorno['msg']='Usuario modificado';
+            setcookie('usnombre',$data['usnombre']);
         }else{
             $retorno['msg']='Error al modificar';
         }
         return view('usuario/respuesta.php',$retorno);
+    }
+
+    public function compras(){
+        $usuarioModelo = new UsuarioModel();
+        $compras = $usuarioModelo->darCompras();
+        return view('usuario/compras.php',['compras'=>$compras]);
     }
 
 
