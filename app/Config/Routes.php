@@ -41,7 +41,6 @@ $routes->get('/cambioRol', 'Session::cambioRol', ['filter'=>'multirol']);
 $routes->get('/perfil/editar', 'Session::editarPerfil', ['filter'=>'autenticacion']);
 $routes->post('/perfil/editar', 'Session::editar', ['filter'=>'autenticacion']);
 
-
 /*ADMIN*/
 $routes->group('admin',['filter'=>['autenticacion','admindeposito']], function($routes){
     $routes->get('/', 'Home::admin');
