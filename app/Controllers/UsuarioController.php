@@ -11,6 +11,64 @@ class UsuarioController extends BaseController{
         $this->usuarioModel = new UsuarioModel();
     }
 
+    public function editarPerfil(){
+        $idUsuario=session('idusuario');
+        $usuarioModelo = new UsuarioModel();
+        $usuario = $usuarioModelo->find($idUsuario);
+        return view('usuario/editar.php');
+    }
+
+    public function modificar(){
+        $data = $this->request->getPost();
+        $modificar=[];
+        if(isset($data['usnombre']) && $data['usnombre']!=""){
+            $modificar['usnombre']=$data['usnombre'];
+        }
+        if(isset($data['usmail']) && $data['usmail']!=""){
+            $modificar['usmail']=$data['usmail'];
+        }
+        if(isset($data['uspass']) && $data['uspass']!=""){
+            $modificar['uspass']=$data['uspass'];
+        }
+        $retorno['success']=false;
+        $usuarioModelo = new UsuarioModel();
+        if($usuarioModelo->update(session('idusuario'),$modificar)){
+            $retorno['success']=true;
+            $retorno['msg']='Usuario modificado';
+            setcookie('usnombre',$data['usnombre']);
+        }else{
+            $retorno['msg']='Error al modificar';
+        }
+        echo json_encode($retorno);
+    }
+
+    public function verificar(){
+        $data=$this->request->getPost();
+        $idUsuario=session('idusuario');
+        $retorno['success']=false;
+        if(isset($data['uspass']) && $data['uspass']!=""){
+            $usuarioModelo = new UsuarioModel();
+            $usuario = $usuarioModelo->where('idusuario',$idUsuario)->where('uspass',$data['uspass'])->first();
+            if($usuario){
+                $retorno['success']=true;
+            }else{
+                $retorno['msg']='Contraseña incorrecta';
+            }
+        }
+        echo json_encode($retorno);
+    }
+
+    public function buscar(){
+        $data = $this->request->getGet();
+        $usuarioModelo = new UsuarioModel();
+        $usuario = $usuarioModelo->find($data['idusuario']);
+        $data=[
+            'usnombre'=>$usuario['usnombre'],
+            'usmail'=>$usuario['usmail']
+        ];
+        echo json_encode($data);
+    }
+
     public function administrar(){
         return view('abm/abmUsuarios');
     }

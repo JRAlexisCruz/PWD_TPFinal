@@ -52,36 +52,6 @@ class Session extends BaseController{
         return redirect()->to(base_url('home'));
     }
 
-    public function editarPerfil(){
-        $idUsuario=session('idusuario');
-        $usuarioModelo = new UsuarioModel();
-        $usuario = $usuarioModelo->find($idUsuario);
-        $data['usnombre']=$usuario['usnombre'];
-        $data['usmail']=$usuario['usmail'];
-        $data['uspass']=$usuario['uspass'];
-        return view('usuario/editar.php',$data);
-    }
-
-    public function editar(){
-        $data = $this->request->getPost(['usnombre','uspass','usmail']);
-        $retorno['success']=false;
-        $usuarioModelo = new UsuarioModel();
-        if($usuarioModelo->update(session('idusuario'),$data)){
-            $retorno['success']=true;
-            $retorno['msg']='Usuario modificado';
-            setcookie('usnombre',$data['usnombre']);
-        }else{
-            $retorno['msg']='Error al modificar';
-        }
-        return view('usuario/respuesta.php',$retorno);
-    }
-
-    public function compras(){
-        $usuarioModelo = new UsuarioModel();
-        $compras = $usuarioModelo->darCompras();
-        return view('usuario/compras.php',['compras'=>$compras]);
-    }
-
 
     public function activa(){
         $resp = false;

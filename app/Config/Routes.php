@@ -52,9 +52,13 @@ $routes->get('/404', 'Home::notFound');
 $routes->get('/cambioRol', 'Session::cambioRol', ['filter'=>'multirol']);
 
 /* OPCIONES CLIENTE */
-$routes->get('/perfil/editar', 'Session::editarPerfil', ['filter'=>'autenticacion']);
-$routes->post('/perfil/editar', 'Session::editar', ['filter'=>'autenticacion']);
-$routes->get('/perfil/compras', 'Session::compras', ['filter'=>'autenticacion']);
+$routes->get('/perfil/editar', 'UsuarioController::editarPerfil', ['filter'=>'autenticacion']);
+$routes->post('/perfil/editar', 'UsuarioController::modificar', ['filter'=>'autenticacion']);
+$routes->get('/perfil/buscar', 'UsuarioController::buscar', ['filter'=>'autenticacion']);
+$routes->post('/perfil/verificar', 'UsuarioController::verificar', ['filter'=>'autenticacion']);
+$routes->get('/perfil/compras', 'CompraController::compras', ['filter'=>'autenticacion']);
+$routes->get('/perfil/compras/listarCompras', 'CompraController::listarCompras', ['filter'=>'autenticacion']);
+$routes->post('/perfil/compras/cancelar', 'CompraController::cancelar', ['filter'=>'autenticacion']);
 $routes->get('/logout', 'Session::logout');
 $routes->get('/cerrarsesion', 'Session::cerrar');
 
