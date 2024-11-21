@@ -44,10 +44,17 @@ class CartModel extends Model
             $newQuantity = $existingItem['cicantidad'] + $quantity;
 
             // Verificar si la nueva cantidad no supera el stock
-            $stock = $this->db->table('producto')->select('procantstock')->where('idproducto', $productId)->get()->getRow()->procantstock;
-            if ($newQuantity > $stock) {
+            // $stock = $this->db->table('producto')->select('procantstock')->where('idproducto', $productId)->get()->getRow()->procantstock;
+            // if ($newQuantity > $stock) {
+            //     return false; // No se puede agregar más de lo disponible
+            // }
+
+            // Verificar si la nueva cantidad no supera el stock
+            $product = $this->db->table('producto')->select('procantstock')->where('idproducto', $productId)->get()->getRow();
+            if ($product && $newQuantity > $product->procantstock) {
                 return false; // No se puede agregar más de lo disponible
             }
+
 
             // Si la cantidad es válida, actualiza el carrito
             return $this->update($existingItem['idcompraitem'], ['cicantidad' => $newQuantity]);
@@ -119,4 +126,30 @@ class CartModel extends Model
 
         return $compraId; // Retorna el ID de la compra creada
     }
+
+
+    // Función para obtener el carrito activo de un usuario
+    public function getActiveCart($userId)
+    {
+        // Inicializar la variable que almacenará el ID de la compra
+        $purchaseId = false;
+    
+        // Buscar una compra activa para el usuario, con el estado "Ingresado al carrito"
+        $purchase = $this->db->table('compra')
+                             ->join('compraestado', 'compra.idcompra = compraestado.idcompra')
+                             ->where('compra.idusuario', $userId)
+                             ->where('compraestado.idcompraestadotipo', 0) // Estado "Ingresado al carrito"
+                             ->get()
+                             ->getRowArray();
+    
+        // Si se encuentra una compra activa, almacenar su ID
+        if ($purchase != null) {
+            $purchaseId = $purchase['idcompra'];
+        }
+    
+        // Devolver el ID de la compra o false
+        return $purchaseId;
+    }
+    
+
 }

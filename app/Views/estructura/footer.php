@@ -1,4 +1,4 @@
-<footer class="p-3 text-white text-center" style="background-color: #955F36;">
+<footer class="p-3 text-white text-center mt-4" style="background-color: #955F36;">
     <!-- Beneficios -->
     <div class="d-flex flex-wrap justify-content-center align-items-center gap-3 text-white p-3 mb-5">
         <div class="bg border rounded px-3 py-2"><i class="fa-solid fa-tag"></i> 6 cuotas sin interés</div>

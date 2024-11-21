@@ -63,7 +63,7 @@
 
                         <?php endif; ?>
                         <li class="nav-item">
-                            <a class="nav-link text-white fs-4" href="cart.php"><i class="fas fa-shopping-cart"></i></a>
+                            <a class="nav-link text-white fs-4" href="<?= base_url('cart') ?>"><i class="fas fa-shopping-cart"></i></a>
                         </li>
                         <?php if (count($roles) > 1): ?>
                             <form action="<?= base_url('cambioRol') ?>">

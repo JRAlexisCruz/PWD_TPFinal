@@ -16,7 +16,7 @@
   <div class="container mt-4 mb-6">
 
     <!-- Filtros, búsqueda y botón de administración -->
-    <div class="row mb-7 align-items-center">
+    <div class="row mb-7 align-items-center justify-content-center">
       <div class="col-md-3">
         <select id="product-type" class="form-select">
           <option value="all">Todos</option>
@@ -34,11 +34,6 @@
       <div class="col-md-4">
         <input type="text" id="product-search" class="form-control" placeholder="Buscar por nombre">
       </div>
-      <div class="col-md-2 text-end">
-        <a href="<?= base_url('/admin/products'); ?>" class="btn btn-primary">
-          <i class="fas fa-cogs"></i> ADMINISTRAR
-        </a>
-      </div>
     </div>
 
     <!-- Lista de productos -->
@@ -54,6 +49,8 @@
   <!-- Datos de productos en JSON -->
   <script>
     const allProducts = <?= json_encode($products); ?>;
+    console.log(allProducts); // Verifica que la variable `allProducts` contiene los productos de tipo "bombilla"
+    console.log(type, product.tipoproducto);
   </script>
 
   <!-- JS de Bootstrap y JQuery -->
