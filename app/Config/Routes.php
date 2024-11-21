@@ -14,8 +14,24 @@ $routes->get('/products/edit/(:num)', 'ProductController::edit/$1');
 $routes->post('/products/edit/(:num)', 'ProductController::edit/$1');
 $routes->get('/products/delete/(:num)', 'ProductsController::delete/$1');
 
-/* CARRITO DE COMPRAS */
-$routes->get('/cart', 'CartController::index');
+
+/* CARRITO DE COMPRAS */ // --> REVISA POR QUE NO FUNCIONA
+// $routes->group('cart', ['filter' => 'autenticacion'], function($routes) {
+//     Ruta para obtener o crear un carrito (estado "0")
+//     $routes->get('/', 'CartController::index');
+    
+//     Ruta para agregar un producto al carrito
+//     $routes->post('/addToCart', 'CartController::addToCart');
+    
+//     Ruta para editar el carrito
+//     $routes->post('editar', 'CartController::edit'); 
+
+//     Ruta para eliminar un producto del carrito 
+//     $routes->post('eliminar', 'CartController::remove'); 
+// });
+
+$routes->get('/cart', 'CartController::index', ['filter' => 'autenticacion']);
+$routes->post('/cart/addToCart', 'CartController::addToCart');
 
 /* LOGIN */
 $routes->get('/login', 'Session::login');

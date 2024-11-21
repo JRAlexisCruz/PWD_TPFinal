@@ -1,11 +1,8 @@
 $(document).ready(function () {
-    const productsPerPage = 12; // Cantidad de productos por página
     let filteredProducts = [...allProducts]; // Productos a mostrar, inicialmente todos
-    let currentPage = 1;
 
     // Renderizar productos iniciales
-    renderProducts(filteredProducts, currentPage);
-    createPagination(filteredProducts);
+    renderProducts(filteredProducts);
 
     // Manejar cambios en filtros y búsqueda
     $('#product-type').change(filterProducts);
@@ -23,9 +20,7 @@ $(document).ready(function () {
             return matchesType && matchesSearch;
         });
 
-        currentPage = 1; // Reiniciar a la primera página
-        renderProducts(filteredProducts, currentPage);
-        createPagination(filteredProducts);
+        renderProducts(filteredProducts);
     }
 
     // Ordenar productos
@@ -38,23 +33,20 @@ $(document).ready(function () {
             filteredProducts.sort((a, b) => b.precioproducto - a.precioproducto);
         }
 
-        renderProducts(filteredProducts, currentPage);
+        renderProducts(filteredProducts);
     }
 
-    // Renderizar productos
-    function renderProducts(products, page) {
-        const start = (page - 1) * productsPerPage;
-        const end = start + productsPerPage;
-        const productsToShow = products.slice(start, end);
-
+    // Renderizar productos (sin paginación)
+    function renderProducts(products) {
         const productList = $('#product-list');
         productList.empty();
 
-        if (productsToShow.length > 0) {
-            productsToShow.forEach(product => {
+        if (products.length > 0) {
+            products.forEach(product => {
+                console.log('Producto:', product);
                 const productCard = `
           <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
-    <div class="card h-100 card-hover"> <!-- Se agrega la clase card-hover aquí -->
+        <div class="card h-100 card-hover">
         <!-- Imagen del producto -->
         <img src="images/${product.proimagen}.jpg" class="card-img-top" alt="${product.pronombre}">
         
@@ -71,22 +63,22 @@ $(document).ready(function () {
 
             <!-- Descripción acortada -->
             <div class="product-description">
-                <p class="card-text">${product.prodetalle.slice(0, 120)}...</p> <!-- Muestra los primeros 100 caracteres de la descripción -->
+                <p class="card-text">${product.prodetalle.slice(0, 120)}...</p>
                 
-                <!-- Enlace "Ver detalle" en la esquina inferior izquierda -->
                 <div class="link-ver-detalle">
                     <a href="http://localhost/PWD/PWD_TPFinal/public/products/detail/${product.idproducto}" class="btn btn-link">Ver detalle <i class="fa-solid fa-arrow-up-right-from-square"></i></a>
                 </div>
             </div>
         </div>
 
-        <!-- Nueva sección para el botón de agregar al carrito -->
-        <div class="card-footer">
-                <a href="#" class="btn btn-bd-primary w-100">Agregar al carrito
-                    <i class="fa-solid fa-cart-plus"></i>
-                </a>
-        </div>    
+          <!-- Nueva sección para el botón de agregar al carrito -->
+<div class="card-footer">
+    <button class="btn btn-bd-primary w-100 add-to-cart" data-id="${product.idproducto}" data-name="${product.pronombre}" data-price="${product.precioproducto}">
+        Agregar al carrito
+        <i class="fa-solid fa-cart-plus"></i>
+    </button>
 </div>
+        </div>
                 `;
                 productList.append(productCard);
             });
@@ -95,27 +87,29 @@ $(document).ready(function () {
         }
     }
 
-    // Crear paginación
-    function createPagination(products) {
-        const totalPages = Math.ceil(products.length / productsPerPage);
-        const pagination = $('#pagination');
-        pagination.empty();
+    // Agregar al carrito
+    $('#product-list').on('click', '.add-to-cart', function () {
+        const productId = $(this).data('id');
+        const quantity = 1; // Por defecto, agregamos 1 producto
 
-        for (let i = 1; i <= totalPages; i++) {
-            const pageItem = `
-                <li class="page-item ${i === currentPage ? 'active' : ''}">
-                    <a class="page-link" href="#">${i}</a>
-                </li>
-            `;
-            pagination.append(pageItem);
-        }
-
-        // Manejar clics en paginación
-        $('.page-link').click(function (e) {
-            e.preventDefault();
-            currentPage = parseInt($(this).text());
-            renderProducts(filteredProducts, currentPage);
-            createPagination(filteredProducts);
+        console.log('Producto a agregar:', productId);
+        $.ajax({
+            url: 'http://localhost/PWD/PWD_TPFinal/public/cart/addToCart',
+            type: 'POST',
+            data: {
+                product_id: productId,
+                quantity: quantity
+            },
+            success: function (response) {
+                if (response.success) {
+                    alert('Producto agregado al carrito');
+                } else {
+                    alert('Error al agregar el producto al carrito');
+                }
+            },
+            error: function () {
+                alert('Hubo un error al agregar el producto');
+            }
         });
-    }
+    });
 });

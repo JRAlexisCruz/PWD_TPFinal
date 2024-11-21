@@ -1,0 +1,145 @@
+ERROR - 2024-11-21 00:18:55 --> mysqli_sql_exception: Column 'idusuario' cannot be null in C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:312
+Stack trace:
+#0 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(312): mysqli->query('INSERT INTO `co...', 0)
+#1 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\BaseConnection.php(734): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `co...')
+#2 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\BaseConnection.php(648): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `co...')
+#3 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2340): CodeIgniter\Database\BaseConnection->query('INSERT INTO `co...', Array, false)
+#4 C:\xampp\htdocs\PWD\PWD_TPFinal\app\Models\CartModel.php(117): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\PWD\PWD_TPFinal\app\Controllers\CartController.php(83): App\Models\CartModel->createCart(NULL)
+#6 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\CartController->addToCart()
+#7 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+#8 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Boot.php(325): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\PWD\PWD_TPFinal\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2024-11-21 00:18:55 --> CodeIgniter\Database\Exceptions\DatabaseException: Column 'idusuario' cannot be null
+[Method: POST, Route: cart/addToCart]
+in SYSTEMPATH\Database\BaseConnection.php on line 688.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2340): CodeIgniter\Database\BaseConnection->query('INSERT INTO `compra` (`idusuario`) VALUES (:idusuario:)', [...], false)
+ 2 APPPATH\Models\CartModel.php(117): CodeIgniter\Database\BaseBuilder->insert([...])
+ 3 APPPATH\Controllers\CartController.php(83): App\Models\CartModel->createCart(null)
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->addToCart()
+ 5 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 6 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-21 00:18:55 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Column 'idusuario' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 317.
+ 1 SYSTEMPATH\Database\BaseConnection.php(734): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `compra` (`idusuario`) VALUES (NULL)')
+ 2 SYSTEMPATH\Database\BaseConnection.php(648): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `compra` (`idusuario`) VALUES (NULL)')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2340): CodeIgniter\Database\BaseConnection->query('INSERT INTO `compra` (`idusuario`) VALUES (:idusuario:)', [...], false)
+ 4 APPPATH\Models\CartModel.php(117): CodeIgniter\Database\BaseBuilder->insert([...])
+ 5 APPPATH\Controllers\CartController.php(83): App\Models\CartModel->createCart(null)
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->addToCart()
+ 7 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 8 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-21 00:18:55 --> [Caused by] mysqli_sql_exception: Column 'idusuario' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 312.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(312): mysqli->query('INSERT INTO `compra` (`idusuario`) VALUES (NULL)', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(734): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `compra` (`idusuario`) VALUES (NULL)')
+ 3 SYSTEMPATH\Database\BaseConnection.php(648): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `compra` (`idusuario`) VALUES (NULL)')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2340): CodeIgniter\Database\BaseConnection->query('INSERT INTO `compra` (`idusuario`) VALUES (:idusuario:)', [...], false)
+ 5 APPPATH\Models\CartModel.php(117): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 APPPATH\Controllers\CartController.php(83): App\Models\CartModel->createCart(null)
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->addToCart()
+ 8 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 9 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2024-11-21 00:19:08 --> mysqli_sql_exception: Column 'idusuario' cannot be null in C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php:312
+Stack trace:
+#0 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\MySQLi\Connection.php(312): mysqli->query('INSERT INTO `co...', 0)
+#1 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\BaseConnection.php(734): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `co...')
+#2 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\BaseConnection.php(648): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `co...')
+#3 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Database\BaseBuilder.php(2340): CodeIgniter\Database\BaseConnection->query('INSERT INTO `co...', Array, false)
+#4 C:\xampp\htdocs\PWD\PWD_TPFinal\app\Models\CartModel.php(117): CodeIgniter\Database\BaseBuilder->insert(Array)
+#5 C:\xampp\htdocs\PWD\PWD_TPFinal\app\Controllers\CartController.php(83): App\Models\CartModel->createCart(NULL)
+#6 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\CodeIgniter.php(933): App\Controllers\CartController->addToCart()
+#7 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+#8 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(NULL, Object(Config\Cache), false)
+#9 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Boot.php(325): CodeIgniter\CodeIgniter->run()
+#10 C:\xampp\htdocs\PWD\PWD_TPFinal\vendor\codeigniter4\framework\system\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+#11 C:\xampp\htdocs\PWD\PWD_TPFinal\public\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+#12 {main}
+CRITICAL - 2024-11-21 00:19:08 --> CodeIgniter\Database\Exceptions\DatabaseException: Column 'idusuario' cannot be null
+[Method: POST, Route: cart/addToCart]
+in SYSTEMPATH\Database\BaseConnection.php on line 688.
+ 1 SYSTEMPATH\Database\BaseBuilder.php(2340): CodeIgniter\Database\BaseConnection->query('INSERT INTO `compra` (`idusuario`) VALUES (:idusuario:)', [...], false)
+ 2 APPPATH\Models\CartModel.php(117): CodeIgniter\Database\BaseBuilder->insert([...])
+ 3 APPPATH\Controllers\CartController.php(83): App\Models\CartModel->createCart(null)
+ 4 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->addToCart()
+ 5 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 6 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 7 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 8 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 9 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-21 00:19:08 --> [Caused by] CodeIgniter\Database\Exceptions\DatabaseException: Column 'idusuario' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 317.
+ 1 SYSTEMPATH\Database\BaseConnection.php(734): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `compra` (`idusuario`) VALUES (NULL)')
+ 2 SYSTEMPATH\Database\BaseConnection.php(648): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `compra` (`idusuario`) VALUES (NULL)')
+ 3 SYSTEMPATH\Database\BaseBuilder.php(2340): CodeIgniter\Database\BaseConnection->query('INSERT INTO `compra` (`idusuario`) VALUES (:idusuario:)', [...], false)
+ 4 APPPATH\Models\CartModel.php(117): CodeIgniter\Database\BaseBuilder->insert([...])
+ 5 APPPATH\Controllers\CartController.php(83): App\Models\CartModel->createCart(null)
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->addToCart()
+ 7 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 8 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-21 00:19:08 --> [Caused by] mysqli_sql_exception: Column 'idusuario' cannot be null
+in SYSTEMPATH\Database\MySQLi\Connection.php on line 312.
+ 1 SYSTEMPATH\Database\MySQLi\Connection.php(312): mysqli->query('INSERT INTO `compra` (`idusuario`) VALUES (NULL)', 0)
+ 2 SYSTEMPATH\Database\BaseConnection.php(734): CodeIgniter\Database\MySQLi\Connection->execute('INSERT INTO `compra` (`idusuario`) VALUES (NULL)')
+ 3 SYSTEMPATH\Database\BaseConnection.php(648): CodeIgniter\Database\BaseConnection->simpleQuery('INSERT INTO `compra` (`idusuario`) VALUES (NULL)')
+ 4 SYSTEMPATH\Database\BaseBuilder.php(2340): CodeIgniter\Database\BaseConnection->query('INSERT INTO `compra` (`idusuario`) VALUES (:idusuario:)', [...], false)
+ 5 APPPATH\Models\CartModel.php(117): CodeIgniter\Database\BaseBuilder->insert([...])
+ 6 APPPATH\Controllers\CartController.php(83): App\Models\CartModel->createCart(null)
+ 7 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->addToCart()
+ 8 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 9 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+10 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+11 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+12 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-21 00:19:46 --> ErrorException: Undefined array key "cantidad"
+[Method: GET, Route: cart]
+in APPPATH\Views\shop\cart.php on line 54.
+ 1 APPPATH\Views\shop\cart.php(54): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "cantidad"', 'C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Views\\shop\\cart.php', 54)
+ 2 SYSTEMPATH\View\View.php(234): include('C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Views\\shop\\cart.php')
+ 3 SYSTEMPATH\View\View.php(237): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('shop/cart.php', [], true)
+ 5 APPPATH\Controllers\CartController.php(44): view('shop/cart.php', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 8 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-21 00:19:49 --> ErrorException: Undefined array key "cantidad"
+[Method: GET, Route: cart]
+in APPPATH\Views\shop\cart.php on line 54.
+ 1 APPPATH\Views\shop\cart.php(54): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined array key "cantidad"', 'C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Views\\shop\\cart.php', 54)
+ 2 SYSTEMPATH\View\View.php(234): include('C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Views\\shop\\cart.php')
+ 3 SYSTEMPATH\View\View.php(237): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('shop/cart.php', [], true)
+ 5 APPPATH\Controllers\CartController.php(44): view('shop/cart.php', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 8 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-21 03:10:04 --> ParseError: Unclosed '{' on line 17
+[Method: GET, Route: products]
+in APPPATH\Config\Routes.php on line 121.
+ 1 SYSTEMPATH\CodeIgniter.php(823): CodeIgniter\Router\RouteCollection->loadRoutes()
+ 2 SYSTEMPATH\CodeIgniter.php(457): CodeIgniter\CodeIgniter->tryToRouteIt(null)
+ 3 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 4 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 5 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 6 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

@@ -22,34 +22,42 @@ class CartController extends Controller
      */
     public function index()
     {
-        $userId = session()->get('user_id'); // Obtenemos el ID del usuario de la sesión
-        $purchaseId = session()->get('cart_id'); // ID del carrito en sesión
-
-        // Si no existe un carrito en la sesión, lo creamos
-        if (!$purchaseId) {
+        $userId = session()->get('idusuario'); // Obtenemos el ID del usuario de la sesión
+    
+        // Verificar si el usuario ya tiene un carrito activo
+        $purchaseId = $this->cartModel->getActiveCart($userId);
+    
+        // Si no existe un carrito activo (es decir, si $purchaseId es false),
+        // se crea uno nuevo y se guarda en la sesión
+        if ($purchaseId === false) {
             $purchaseId = $this->cartModel->createCart($userId);
-            session()->set('cart_id', $purchaseId);
+            session()->set('cart_id', $purchaseId);  // Guardamos el cart_id en la sesión
+        } else {
+            session()->set('cart_id', $purchaseId);  // Guardamos el cart_id en la sesión si ya existe
         }
-
+    
         // Obtener los productos del carrito
         $cartItems = $this->cartModel->getCartItems($purchaseId);
-
+    
         // Calcular el total del carrito
         $cartTotal = 0;
         foreach ($cartItems as $item) {
             $cartTotal += $item['precioproducto'] * $item['cicantidad'];
         }
-
+    
         // Pasamos los datos a la vista
-        return view('cart/index', ['cartItems' => $cartItems, 'cartTotal' => $cartTotal]);
+        return view('shop/cart.php', ['cartItems' => $cartItems, 'cartTotal' => $cartTotal]);
     }
+    
+
+
 
     /**
-     * Agregar un producto al carrito
+     * Agregar un producto al carrito - ALEXIS
      */
     public function addToCart()
     {
-        $userId = session()->get('user_id');
+        $userId = session()->get('idusuario');
         $purchaseId = session()->get('cart_id');
 
         // Si no existe un carrito, lo creamos
@@ -77,6 +85,7 @@ class CartController extends Controller
             return $this->response->setJSON(['error' => 'No se pudo agregar el producto al carrito']);
         }
     }
+
 
     /**
      * Actualizar la cantidad de un producto en el carrito

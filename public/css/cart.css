@@ -1,0 +1,95 @@
+.table {
+    font-size: 1rem;
+    color: #555;  /* Color del texto */
+  }
+  
+  
+  .table td, .table th {
+    vertical-align: middle;
+    text-align: center;  /* Alineación de las celdas */
+  }
+  
+  .product-name {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .item-total {
+    color: #005596; /* Un color verde para el precio total */
+  }
+
+
+.table-custom {
+    --bs-table-color: #333; /* Color del texto */
+    --bs-table-bg: #3676744f; /* Fondo principal */
+    --bs-table-border-color: #5a6437; /* Borde principal */
+    --bs-table-striped-bg: #5a6437; /* Fondo para las filas alternas */
+    --bs-table-striped-color: #f1f1f1; /* Color de texto en las filas alternas */
+    --bs-table-hover-bg: #5c6b2d; /* Fondo al pasar el mouse */
+    --bs-table-hover-color: #ffffff; /* Color del texto al pasar el mouse */
+    --bs-table-active-bg: #4f5e29; /* Fondo al hacer clic */
+    --bs-table-active-color: #ffffff; /* Color del texto al hacer clic */
+}
+
+/* Personalización del encabezado de la tabla */
+.table-custom thead {
+    --bs-table-thead-bg: #426665; /* Fondo para el encabezado */
+    --bs-table-thead-color: #ffffff; /* Color del texto en el encabezado */
+    text-align: center; /* Centrar el texto */
+}
+
+.table-custom thead th {
+    background-color: var(--bs-table-thead-bg);
+    color: var(--bs-table-thead-color);
+    text-align: center; /* Centrar el texto */
+}
+
+.total-container {
+    display: flex; /* Usa flexbox para alinear los elementos */
+    justify-content: flex-end; /* Alinea el contenido al final (derecha) */
+    width: 100%; /* Se asegura de que ocupe todo el ancho disponible */
+}
+
+.total-box {
+    background-color: #697833; /* Rojo suave */
+    color: #ffffff; /* Color del texto en blanco */
+    padding: 15px; /* Espacio interno */
+    border-radius: 8px; /* Bordes redondeados */
+    font-weight: bold; /* Texto más destacado */
+    width: fit-content; /* Ajusta el ancho al contenido */
+}
+
+.fa-trash {
+  color:#426665;
+  transition: color 0.3s ease;
+}
+
+.fa-trash:hover {
+  color:#955F36;
+}
+
+
+
+
+/* .table-custom th,
+.table-custom td {
+    color: var(--bs-table-color);
+    background-color: var(--bs-table-bg);
+    border-color: var(--bs-table-border-color);
+}
+
+.table-custom tbody tr:hover {
+    background-color: var(--bs-table-hover-bg);
+    color: var(--bs-table-hover-color);
+}
+
+.table-custom tbody tr.active,
+.table-custom tbody tr.active:hover {
+    background-color: var(--bs-table-active-bg);
+    color: var(--bs-table-active-color);
+}
+
+.table-custom tbody tr:nth-child(odd) {
+    background-color: var(--bs-table-striped-bg);
+    color: var(--bs-table-striped-color);
+} */

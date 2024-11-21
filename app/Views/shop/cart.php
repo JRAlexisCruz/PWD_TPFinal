@@ -7,35 +7,37 @@
   <title>Carrito de Compras</title>
   <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet">
   <link rel="stylesheet" href="<?= base_url('/css/styles.css') ?>">
-  <link rel="stylesheet" href="<?= base_url('/css/cart.css') ?>"> <!-- Archivo CSS adicional si necesitas -->
+  <link rel="stylesheet" href="<?= base_url('/css/cart.css') ?>">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
 </head>
 
 <body>
-  <div class="container mt-4">
-    <h1 class="text-center mb-4">Carrito de Compras</h1>
 
-    <table class="table table-bordered table-striped">
-      <thead class="table-dark">
+  <?= view('estructura/header'); ?>
+
+  <div class="container mt-4">
+    <h1 class="text-center mb-4">Carrito de Compras <i class="fa-solid fa-cart-shopping"></i></h1>
+
+    <table class="table table-striped">
+      <thead class="table">
         <tr>
           <th>Imagen</th>
-          <th>Nombre</th>
+          <th>Nombre del Producto</th>
           <th>Cantidad</th>
           <th>Precio Unitario</th>
           <th>Precio Total</th>
-          <th>Acciones</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="table-group-divider">
         <?php if (!empty($cartItems)): ?>
           <?php foreach ($cartItems as $item): ?>
             <tr>
               <!-- Imagen en miniatura -->
               <td class="text-center">
-                <img src="<?= base_url('images/' . esc($item['proimagen'])) ?>" 
-                     alt="<?= esc($item['pronombre']) ?>" 
-                     class="img-thumbnail" 
-                     style="width: 80px; height: 80px; object-fit: cover;">
+                <img src="<?= base_url('images/' . esc($item['proimagen'])) ?>.jpg"
+                  alt="<?= esc($item['pronombre']) ?>"
+                  class="rounded-circle"
+                  style="width: 80px; height: 80px; object-fit: cover;">
               </td>
 
               <!-- Nombre del producto -->
@@ -44,18 +46,16 @@
               <!-- Cantidad con botones -->
               <td class="text-center">
                 <div class="input-group">
-                  <button class="btn btn-outline-secondary btn-sm decrease-quantity" 
-                          data-id="<?= $item['idproducto'] ?>">-</button>
-                  <input type="number" 
-                         class="form-control form-control-sm text-center quantity-input" 
-                         value="<?= $item['cantidad'] ?>" 
-                         min="1" 
-                         max="<?= $item['procantstock'] ?>" 
-                         data-id="<?= $item['idproducto'] ?>">
-                  <button class="btn btn-outline-secondary btn-sm increase-quantity" 
-                          data-id="<?= $item['idproducto'] ?>">+</button>
+                 
+                  <input type="number"
+                    class="form-control form-control-sm text-center quantity-input"
+                    value="<?= esc($item['cicantidad']) ?>"
+                    min="1"
+                    max="<?= esc($item['procantstock']) ?>"
+                    data-id="<?= $item['idproducto'] ?>">
+                  
                 </div>
-                <small class="text-muted">Stock: <?= $item['procantstock'] ?></small>
+                <small class="fw-bold">Stock: <?= esc($item['procantstock']) ?></small>
               </td>
 
               <!-- Precio unitario -->
@@ -63,13 +63,13 @@
 
               <!-- Precio total -->
               <td class="text-center">
-                $<span class="item-total"><?= number_format($item['cantidad'] * $item['precioproducto'], 2, ',', '.') ?></span>
+                <span class="item-total">$<?= number_format($item['precioproducto'] * $item['cicantidad'], 2, ',', '.') ?></span> <!-- Cambié 'cantidad' por 'cicantidad' -->
               </td>
 
               <!-- Botón eliminar -->
               <td class="text-center">
-                <button class="btn btn-danger btn-sm delete-item" data-id="<?= $item['idproducto'] ?>">
-                  <i class="fas fa-trash"></i> Eliminar
+                <button class="btn btn-sm " data-id="<?= $item['idproducto'] ?>" title="Eliminar producto del carrito">
+                  <i class="fas fa-trash"></i>
                 </button>
               </td>
             </tr>
@@ -82,17 +82,19 @@
       </tbody>
     </table>
 
-    <!-- Total general -->
-    <div class="text-end">
-      <h3>Total: $<span id="cart-total"><?= number_format($cartTotal, 2, ',', '.') ?></span></h3>
+    <!-- Contenedor total -->
+    <div class="total-container mb-5">
+      <div class="total-box">
+        <h3>Total: $<span id="cart-total"><?= number_format($cartTotal, 2, ',', '.') ?></span></h3>
+      </div>
     </div>
 
     <!-- Botones de acción -->
     <div class="d-flex justify-content-between mt-4">
-      <a href="<?= base_url('/products') ?>" class="btn btn-secondary">
+      <a href="<?= base_url('/products') ?>" class="btn btn-bd-primary">
         <i class="fas fa-arrow-left"></i> Seguir comprando
       </a>
-      <a href="<?= base_url('/checkout') ?>" class="btn btn-primary">
+      <a href="<?= base_url('/checkout') ?>" class="btn btn-danger">
         Comprar <i class="fas fa-shopping-cart"></i>
       </a>
     </div>
@@ -102,7 +104,8 @@
   <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
   <script src="<?= base_url('javascript/cart.js'); ?>"></script>
 
-  
+  <?= view('estructura/footer'); ?>
+
 </body>
 
 </html>
