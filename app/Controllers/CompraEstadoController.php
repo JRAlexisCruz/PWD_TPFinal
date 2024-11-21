@@ -4,6 +4,7 @@ namespace App\Controllers;
 
 use App\Models\CompraEstadoModel;
 use App\Models\CompraEstadoTipoModel;
+use App\Models\CompraModel;
 
 class CompraEstadoController extends BaseController
 {  
@@ -18,16 +19,16 @@ class CompraEstadoController extends BaseController
     }
 
     // Original de alexis
-    // public function listar(){
-    //     $estadoCompras = $this->estadoCompraModel->findAll();
-    //     foreach($estadoCompras as $estadoCompra){
-    //         $idEstado= $estadoCompra['idcompraestadotipo'];
-    //         $compraEstadoTipoModel = new CompraEstadoTipoModel();
-    //         $estadoCompraTipo = $compraEstadoTipoModel->find($idEstado);
-    //         $estadoCompra['estado'] = $estadoCompraTipo['cetdescripcion'];
-    //     }
-    //     echo json_encode($estadoCompras);
-    // }
+     public function listarProductos(){
+        $compraModel= new CompraModel();
+        $compras=$compraModel->findAll();
+        $retorno = [];
+        foreach($compras as $compra){
+            $estadoCompraTipo = $this->estadoCompraModel->where('idcompra', $compra['idcompra'])->join('compraestadotipo', 'compraestado.idcompraestadotipo = compraestadotipo.idcompraestadotipo')->select('compraestado.*, compraestadotipo.cetdescripcion as estado')->orderBy('compraestado.idcompraestado', 'DESC')->first();
+            $retorno[] = $estadoCompraTipo;
+        }
+        echo json_encode($retorno);
+    }
 
     public function listar()
     {
@@ -38,50 +39,34 @@ class CompraEstadoController extends BaseController
         echo json_encode($estadoCompras);
     }
 
-    public function crear(){
+    public function actualizar(){
         $data = $this->request->getPost();
-        $retorno= ['success' => false];
-        if($this->estadoCompraModel->insert($data)){
-            $retorno['success'] = true;
-        }else{
-            $retorno['errorMsg'] = 'Error al crear el estado de compra';
-        }
-        echo json_encode($retorno);
-    }
-
-    public function editar(){
-        $data = $this->request->getPost();
-        $retorno= ['success' => false];
-        if(isset($data['idcompraestado'])){
-            $id = $data['idcompraestado'];
-            $rol = $this->estadoCompraModel->find($id);
-            if($rol){
-                if($this->estadoCompraModel->update($id, $data)){
-                    $retorno['success'] = true;
-                }else{
-                    $retorno['errorMsg'] = 'Error al editar el estado de compra';
-                }
+        $mensaje= ['success' => false];
+        if(isset($data['idcompra'])){
+            $id = $data['idcompra'];
+            $actualizado=$this->estadoCompraModel->actualizar($id);
+            if($actualizado){
+                $mensaje['success'] = true;
             }else{
-                $retorno['errorMsg'] = 'Estado de compra no encontrado';
+                $mensaje['errorMsg'] = $this->estadoCompraModel->getError();
             }
         }
-        echo json_encode($retorno);
+        $this->response->setJSON($mensaje);
     }
 
-    public function eliminar(){
+    public function cancelar(){
         $data = $this->request->getPost();
-        $retorno= ['success' => false];
-        if(isset($data['idcompraestado'])){
-            $id = $data['idcompraestado'];
-            $rol = $this->estadoCompraModel->find($id);
-            if($rol){
-                $this->estadoCompraModel->delete($id);
-                $retorno['success'] = true;
+        $mensaje= ['success' => false];
+        if(isset($data['idcompra'])){
+            $id = $data['idcompra'];
+            $actualizado=$this->estadoCompraModel->cancelar($id);
+            if($actualizado){
+                $mensaje['success'] = true;
             }else{
-                $retorno['errorMsg'] = 'Estado de compra no encontrado';
+                $mensaje['errorMsg'] = $this->estadoCompraModel->getError();
             }
         }
-        echo json_encode($retorno);
+        $this->response->setJSON($mensaje);
     }
 
 

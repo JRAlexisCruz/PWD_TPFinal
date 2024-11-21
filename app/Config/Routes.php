@@ -110,10 +110,9 @@ $routes->group('admin',['filter'=>['autenticacion','admindeposito']], function($
     /* ADMIN ESTADO DE COMPRAS */
     $routes->group('estados', ['filter'=>'admindeposito'] ,function($routes){
         $routes->get('/', 'CompraEstadoController::administrar');
-        $routes->get('listar', 'CompraEstadoController::listar');
-        $routes->post('editar', 'CompraEstadoController::editar');
-        $routes->post('crear', 'CompraEstadoController::crear');
-        $routes->post('eliminar', 'CompraEstadoController::eliminar');
+        $routes->get('listar', 'CompraEstadoController::listarProductos');
+        $routes->post('actualizar', 'CompraEstadoController::actualizar');
+        $routes->post('cancelar', 'CompraEstadoController::cancelar');
     });
 
     /* ADMIN ESTADO TIPO */

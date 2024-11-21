@@ -20,7 +20,7 @@
             <p id="compra-fecha">12/12/2012</p>
             <p id="compra-estado">Confirmada</p>
         </div>
-        <div class="card-body d-flex" style="gap:10px" id="compra-body">
+        <div class="card-body d-flex justify-content-center" style="gap:10px" id="compra-body">
 
         </div>
         <div class="card-footer d-flex justify-content-between" id="compra-footer">
@@ -77,24 +77,27 @@
 
         function crearCardCompra(compra) {
             let compraCard = $("#compra-example").clone();
+            compraCard.attr("id", "compra-" + compra.idcompra);
             compraCard.find("#compra-fecha").text(compra.cofecha);
             compraCard.find("#compra-estado").text(compra.estado);
-            compraCard.find("#compra-total").text("Total: $" + 0);
             compraCard.find("#idcompra").val(compra.idcompra);
             if (compra.estado === "confirmada") {
                 compraCard.find("#cancelar").show();
             } else {
                 compraCard.find("#cancelar").hide();
             }
+            let total=0;
             $.each(compra.productos, function(index, producto) {
                 let productoCard = $("#producto-example").clone();
                 productoCard.find("#producto-nombre").text(producto.pronombre);
                 productoCard.find("#producto-precio").text("Precio unitario: $" + producto.precioproducto);
                 productoCard.find("#producto-cantidad").text("Cantidad: " + producto.cicantidad);
-
+                productoCard.find("#producto-imagen").attr("src", "http://localhost/PWD/PWD_TPFinal/public/" + producto.proimagen);
+                total+=producto.precioproducto*producto.cicantidad;
                 productoCard.show();
                 compraCard.find("#compra-body").append(productoCard);
             });
+            compraCard.find("#compra-total").text("Total: $" + total);
             compraCard.show();
             $("main").append(compraCard);
         }

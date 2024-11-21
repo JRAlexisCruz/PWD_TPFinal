@@ -3,12 +3,15 @@
 namespace App\Models;
 
 use CodeIgniter\Model;
+use App\Models\CompraModel;
 
 class CompraEstadoModel extends Model
 {
     protected $table = 'compraestado';
     protected $primaryKey = 'idcompraestado';
     protected $allowedFields = ['idcompra', 'idcompraestadotipo', 'cefechaini', 'cefechafin'];
+
+    protected $error='';
 
     /**
      * Obtener todos los estados de una compra específica
@@ -48,5 +51,64 @@ class CompraEstadoModel extends Model
             'idcompraestadotipo'  => $idcompraestadotipo,
             'cefechaini'          => date('Y-m-d H:i:s'),
         ]);
+    }
+
+    public function actualizar($idCompra){
+        $compraModel= new CompraModel();
+        $compra=$compraModel->find($idCompra);
+        $actualizado = false;
+        if($compra){
+            $ultimoEstadoCompra=$this->where('idcompra', $idCompra)
+                 ->orderBy('idcompraestado', 'DESC')
+                 ->first();
+            $idUltimoEstadoCompra = $ultimoEstadoCompra['idcompraestadotipo'];
+            $finalizar=['cefechafin'=>date('Y-m-d H:i:s')];
+            $this->update($idUltimoEstadoCompra, $finalizar);
+            $ultimoEstado = $ultimoEstadoCompra['idcompraestadotipo'];
+            $data['idcompra']=$idCompra;
+            $data['idcompraestadotipo']=$ultimoEstado+1;
+            $data['cefechaini']=date('Y-m-d H:i:s');
+            if($idUltimoEstadoCompra==5){
+                $data['cefechafin']=date('Y-m-d H:i:s');
+            }
+            if($this->insert($data)){
+                $actualizado = true;
+            }else{
+                $this->error = 'Error al actualizar el estado de la compra';
+            }
+        }else{
+            $this->error = 'Compra no encontrada';
+        }
+        return $actualizado;
+    }
+
+    public function cancelar($idCompra){
+        $compraModel= new CompraModel();
+        $compra=$compraModel->find($idCompra);
+        $actualizado = false;
+        if($compra){
+            $ultimoEstadoCompra=$this->where('idcompra', $idCompra)
+                 ->orderBy('idcompraestado', 'DESC')
+                 ->first();
+            $idUltimoEstadoCompra = $ultimoEstadoCompra['idcompraestadotipo'];
+            $finalizar=['cefechafin'=>date('Y-m-d H:i:s')];
+            $this->update($idUltimoEstadoCompra, $finalizar);
+            $data['idcompra']=$idCompra;
+            $data['idcompraestadotipo']=6;
+            $data['cefechaini']=date('Y-m-d H:i:s');
+            $data['cefechafin']=date('Y-m-d H:i:s');
+            if($this->insert($data)){
+                $actualizado = true;
+            }else{
+                $this->error = 'Error al cancelar la compra';
+            }
+        }else{
+            $this->error = 'Compra no encontrada';
+        }
+        return $actualizado;
+    }
+
+    public function getError(){
+        return $this->error;
     }
 }

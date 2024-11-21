@@ -28,43 +28,44 @@
                 <!-- Menú a la izquierda -->
                 <div class="collapse navbar-collapse ms-auto" id="navbarNav">
                     <ul class="navbar-nav ms-auto">
-                        <li class="nav-item"><a class="nav-link text-white fs-4" href="<?= base_url('products') ?>"><i class="fa-solid fa-bag-shopping"></i> Productos </a></li>
-                        <li class="nav-item"><a class="nav-link text-white fs-4" href="<?= base_url('nosotros') ?>"><i class="fa-solid fa-users"></i> Nosotros </a></li>
                         <?php if ($esAdmin): ?>
                             <li class="nav-item">
-                                <a class="nav-link text-white fs-4" href="<?= base_url('admin') ?>"><i class="fas fa-cogs"></i> Administración </a>
+                                <a class="nav-link text-white fs-6" href="<?= base_url('admin') ?>"><i class="fas fa-cogs"></i> Administración </a>
+                            </li>
+                        <?php else: ?>
+                            <li class="nav-item"><a class="nav-link text-white fs-6" href="<?= base_url('products') ?>"><i class="fa-solid fa-bag-shopping"></i> Productos </a></li>
+                            <li class="nav-item"><a class="nav-link text-white fs-6" href="<?= base_url('nosotros') ?>"><i class="fa-solid fa-users"></i> Nosotros </a></li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white fs-6" href="<?= base_url('cart') ?>"><i class="fas fa-shopping-cart"></i></a>
                             </li>
                         <?php endif; ?>
                         <?php if ($loggedIn): ?>
                             <li>
-                            <div class="dropdown">
-                                <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-circle-user"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#"><?= $_COOKIE['usnombre'] ?></a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="<?= base_url('perfil/editar') ?>">Editar perfil</a></li>
-                                    <li><a class="dropdown-item" href="<?= base_url('perfil/compras') ?>">Mis compras</a></li>
-                                    <li>
-                                        <hr class="dropdown-divider">
-                                    </li>
-                                    <li><a class="dropdown-item" href="<?= base_url('logout') ?>">Cerrar sesion</a></li>
-                                </ul>
-                            </div>
+                                <div class="dropdown">
+                                    <button class="btn dropdown-toggle" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-circle-user"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="#"><?= $_COOKIE['usnombre'] ?></a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="<?= base_url('perfil/editar') ?>">Editar perfil</a></li>
+                                        <li><a class="dropdown-item" href="<?= base_url('perfil/compras') ?>">Mis compras</a></li>
+                                        <li>
+                                            <hr class="dropdown-divider">
+                                        </li>
+                                        <li><a class="dropdown-item" href="<?= base_url('logout') ?>">Cerrar sesion</a></li>
+                                    </ul>
+                                </div>
                             </li>
-                            
+
                         <?php else: ?>
                             <li class="nav-item">
-                                <a class="nav-link text-white fs-4" href="<?= base_url('login') ?>"><i class="fa-solid fa-user"></i> Iniciar Sesión </a>
+                                <a class="nav-link text-white fs-6" href="<?= base_url('login') ?>"><i class="fa-solid fa-user"></i> Iniciar Sesión </a>
                             </li>
 
                         <?php endif; ?>
-                        <li class="nav-item">
-                            <a class="nav-link text-white fs-4" href="<?= base_url('cart') ?>"><i class="fas fa-shopping-cart"></i></a>
-                        </li>
                         <?php if (count($roles) > 1): ?>
                             <form action="<?= base_url('cambioRol') ?>">
                                 <select name="idrol" id="idrol" class="form-select" onchange="this.form.submit()">

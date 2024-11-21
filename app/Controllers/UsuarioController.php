@@ -12,9 +12,6 @@ class UsuarioController extends BaseController{
     }
 
     public function editarPerfil(){
-        $idUsuario=session('idusuario');
-        $usuarioModelo = new UsuarioModel();
-        $usuario = $usuarioModelo->find($idUsuario);
         return view('usuario/editar.php');
     }
 

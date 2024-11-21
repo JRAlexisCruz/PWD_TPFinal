@@ -38,7 +38,11 @@ class Session extends BaseController{
             $this->session->set('roles',$roles);
             $this->session->set('rol',$roles[0]['idrol']);
             setcookie('usnombre',$usuario['usnombre']);
-            return redirect()->to(base_url('home'));
+            if($this->session->get('rol')==3){
+                return redirect()->to(base_url('home'));
+            }else{
+                return redirect()->to(base_url('admin'));
+            }
         }else{
             return redirect()->back()->withInput()->with('error','Usuario o contraseña incorrectos');
         }
@@ -49,7 +53,11 @@ class Session extends BaseController{
         if(isset($data['idrol'])){
             $this->session->set('rol',$data['idrol']);
         }
-        return redirect()->to(base_url('home'));
+        if($data['idrol']==3){
+            return redirect()->to(base_url('home'));
+        }else{
+            return redirect()->to(base_url('admin'));
+        }
     }
 
 
