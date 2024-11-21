@@ -8,25 +8,45 @@ class CompraEstadoModel extends Model
 {
     protected $table = 'compraestado';
     protected $primaryKey = 'idcompraestado';
+    protected $allowedFields = ['idcompra', 'idcompraestadotipo', 'cefechaini', 'cefechafin'];
 
-    protected $useAutoIncrement = true;
+    /**
+     * Obtener todos los estados de una compra específica
+     *
+     * @param int $purchaseId
+     * @return array|null
+     */
+    public function getEstadosByCompra($purchaseId)
+    {
+        return $this->where('idcompra', $purchaseId)
+                    ->join('compraestadotipo', 'compraestado.idcompraestadotipo = compraestadotipo.idcompraestadotipo')
+                    ->select('compraestado.*, compraestadotipo.cetdescripcion')
+                    ->orderBy('cefechaini', 'DESC')
+                    ->findAll();
+    }
 
-    protected $returnType = 'array';
-    protected $useSoftDeletes = false;
+    /**
+     * Finalizar el estado anterior y asignar un nuevo estado
+     *
+     * @param int $idcompra
+     * @param int $idcompraestadotipo
+     * @return bool
+     */
+    public function actualizarEstado($idcompra, $idcompraestadotipo)
+    {
+        $db = \Config\Database::connect();
+        $builder = $db->table('compraestado');
 
-    protected $allowedFields = ['idcompraestado', 'idcompra','idcompraestadotipo','cefechaini','cefechafin','ceobservacion'];
+        // Finalizar estado anterior
+        $builder->where('idcompra', $idcompra)
+                ->where('cefechafin IS NULL')
+                ->update(['cefechafin' => date('Y-m-d H:i:s')]);
 
-    protected bool $allowEmptyInserts = false;
-    protected bool $updateOnlyChanged = true;
-
-    // Dates
-    protected $useTimestamps = true;
-    protected $dateFormat = 'datetime';
-    protected $createdField = '';
-    protected $updatedField = '';
-    protected $deletedField = '';
-
-    protected $skipValidation = false;
-    protected $cleanValidationRules = true;
-
+        // Crear el nuevo estado
+        return $this->insert([
+            'idcompra'            => $idcompra,
+            'idcompraestadotipo'  => $idcompraestadotipo,
+            'cefechaini'          => date('Y-m-d H:i:s'),
+        ]);
+    }
 }

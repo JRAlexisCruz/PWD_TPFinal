@@ -4,47 +4,148 @@ namespace App\Controllers;
 
 use App\Models\CartModel;
 use App\Models\ProductModel;
+use CodeIgniter\Controller;
 
-class CartController extends BaseController
+class CartController extends Controller
 {
+    protected $cartModel;
+    protected $productModel;
+
+    public function __construct()
+    {
+        $this->cartModel = new CartModel();
+        $this->productModel = new ProductModel();
+    }
+
+    /**
+     * Mostrar el carrito de compras
+     */
     public function index()
     {
-        $userId = session()->get('user_id'); // Supongamos que tienes el ID del usuario en la sesión
-        $cartModel = new CartModel();
-        $cartItems = $cartModel->getCartItems($userId);
+        $userId = session()->get('user_id'); // Obtenemos el ID del usuario de la sesión
+        $purchaseId = session()->get('cart_id'); // ID del carrito en sesión
 
-        $data = [
-            'cartItems' => $cartItems
-        ];
+        // Si no existe un carrito en la sesión, lo creamos
+        if (!$purchaseId) {
+            $purchaseId = $this->cartModel->createCart($userId);
+            session()->set('cart_id', $purchaseId);
+        }
 
-        return view('shop/cart.php', $data); // Carga la vista del carrito
+        // Obtener los productos del carrito
+        $cartItems = $this->cartModel->getCartItems($purchaseId);
+
+        // Calcular el total del carrito
+        $cartTotal = 0;
+        foreach ($cartItems as $item) {
+            $cartTotal += $item['precioproducto'] * $item['cicantidad'];
+        }
+
+        // Pasamos los datos a la vista
+        return view('cart/index', ['cartItems' => $cartItems, 'cartTotal' => $cartTotal]);
     }
 
-    public function add($productId)
+    /**
+     * Agregar un producto al carrito
+     */
+    public function addToCart()
     {
-        $quantity = $this->request->getVar('quantity');
-        $userId = session()->get('user_id'); // El ID del usuario debe ser almacenado en sesión
+        $userId = session()->get('user_id');
+        $purchaseId = session()->get('cart_id');
 
-        $cartModel = new CartModel();
-        $cartModel->addItem($userId, $productId, $quantity);
+        // Si no existe un carrito, lo creamos
+        if (!$purchaseId) {
+            $purchaseId = $this->cartModel->createCart($userId);
+            session()->set('cart_id', $purchaseId);
+        }
 
-        return redirect()->to('/cart'); // Redirige al carrito
+        // Obtener el ID del producto y la cantidad desde la solicitud
+        $productId = $this->request->getPost('product_id');
+        $quantity = $this->request->getPost('quantity');
+
+        // Verificar que se recibieron los datos correctamente
+        if (!$productId || !$quantity) {
+            return $this->response->setJSON(['error' => 'Datos incompletos']);
+        }
+
+        // Llamar al modelo para agregar el producto al carrito
+        $result = $this->cartModel->addItem($purchaseId, $productId, $quantity);
+
+        // Devolver una respuesta en formato JSON
+        if ($result) {
+            return $this->response->setJSON(['success' => 'Producto agregado al carrito']);
+        } else {
+            return $this->response->setJSON(['error' => 'No se pudo agregar el producto al carrito']);
+        }
     }
 
-    public function update($cartItemId)
+    /**
+     * Actualizar la cantidad de un producto en el carrito
+     */
+    public function updateQuantity()
     {
-        $quantity = $this->request->getVar('quantity');
-        $cartModel = new CartModel();
-        $cartModel->updateQuantity($cartItemId, $quantity);
+        $cartItemId = $this->request->getPost('cart_item_id');
+        $quantity = $this->request->getPost('quantity');
 
-        return redirect()->to('/cart');
+        // Verificar que se recibieron los datos correctamente
+        if (!$cartItemId || !$quantity) {
+            return $this->response->setJSON(['error' => 'Datos incompletos']);
+        }
+
+        // Llamar al modelo para actualizar la cantidad
+        $result = $this->cartModel->updateQuantity($cartItemId, $quantity);
+
+        // Devolver una respuesta en formato JSON
+        if ($result) {
+            return $this->response->setJSON(['success' => 'Cantidad actualizada']);
+        } else {
+            return $this->response->setJSON(['error' => 'No se pudo actualizar la cantidad']);
+        }
     }
 
-    public function remove($cartItemId)
+    /**
+     * Eliminar un producto del carrito
+     */
+    public function removeFromCart()
     {
-        $cartModel = new CartModel();
-        $cartModel->removeItem($cartItemId);
+        $cartItemId = $this->request->getPost('cart_item_id');
 
-        return redirect()->to('/cart');
+        // Verificar que se proporcionó el ID del producto
+        if (!$cartItemId) {
+            return $this->response->setJSON(['error' => 'ID de producto no proporcionado']);
+        }
+
+        // Llamar al modelo para eliminar el producto
+        $result = $this->cartModel->removeItem($cartItemId);
+
+        // Devolver una respuesta en formato JSON
+        if ($result) {
+            return $this->response->setJSON(['success' => 'Producto eliminado del carrito']);
+        } else {
+            return $this->response->setJSON(['error' => 'No se pudo eliminar el producto']);
+        }
+    }
+
+    /**
+     * Confirmar la compra y cambiar el estado de la compra
+     */
+    public function confirmPurchase()
+    {
+        $purchaseId = session()->get('cart_id');
+
+        // Verificar que existe un carrito
+        if (!$purchaseId) {
+            return $this->response->setJSON(['error' => 'No hay carrito asociado']);
+        }
+
+        // Cambiar el estado de la compra a "Confirmada"
+        $result = $this->cartModel->confirmPurchase($purchaseId);
+
+        // Devolver una respuesta en formato JSON
+        if ($result) {
+            session()->remove('cart_id'); // Limpiar el carrito actual
+            return $this->response->setJSON(['success' => 'Compra confirmada']);
+        } else {
+            return $this->response->setJSON(['error' => 'No se pudo confirmar la compra']);
+        }
     }
 }

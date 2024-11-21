@@ -10,34 +10,113 @@ class CartModel extends Model
     protected $primaryKey = 'idcompraitem';
     protected $allowedFields = ['idcompra', 'idproducto', 'cicantidad'];
 
-    public function getCartItems($userId)
+    /**
+     * Obtener los items del carrito de una compra (idCompra).
+     *
+     * @param int $idCompra
+     * @return array
+     */
+    public function getCartItems($idCompra)
     {
         return $this->db->table('compraitem')
-                        ->join('producto', 'compraitem.idproducto = producto.idproducto')
-                        ->where('compraitem.idcompra', $userId) // Asumimos que el carrito está relacionado al usuario
-                        ->get()->getResultArray();
+            ->select('compraitem.*, producto.pronombre, producto.precioproducto, producto.proimagen, producto.procantstock')
+            ->join('producto', 'compraitem.idproducto = producto.idproducto')
+            ->where('compraitem.idcompra', $idCompra)
+            ->get()
+            ->getResultArray();
     }
 
+    /**
+     * Agregar un producto al carrito de compras.
+     *
+     * @param int $idCompra
+     * @param int $productId
+     * @param int $quantity
+     * @return bool
+     */
+    public function addItem($idCompra, $productId, $quantity)
+    {
+        // Verifica si el producto ya está en el carrito
+        $existingItem = $this->where(['idcompra' => $idCompra, 'idproducto' => $productId])->first();
+
+        if ($existingItem) {
+            // Si el producto ya está en el carrito, actualiza la cantidad
+            $newQuantity = $existingItem['cicantidad'] + $quantity;
+
+            // Verificar si la nueva cantidad no supera el stock
+            $stock = $this->db->table('producto')->select('procantstock')->where('idproducto', $productId)->get()->getRow()->procantstock;
+            if ($newQuantity > $stock) {
+                return false; // No se puede agregar más de lo disponible
+            }
+
+            // Si la cantidad es válida, actualiza el carrito
+            return $this->update($existingItem['idcompraitem'], ['cicantidad' => $newQuantity]);
+        } else {
+            // Si el producto no está en el carrito, agrégalo
+            return $this->insert([
+                'idcompra'   => $idCompra,
+                'idproducto' => $productId,
+                'cicantidad' => $quantity
+            ]);
+        }
+    }
+
+    /**
+     * Actualizar la cantidad de un producto en el carrito.
+     *
+     * @param int $cartItemId
+     * @param int $quantity
+     * @return bool
+     */
     public function updateQuantity($cartItemId, $quantity)
     {
+        // Verificar que la cantidad no exceda el stock disponible
+        $item = $this->find($cartItemId);
+        $stock = $this->db->table('producto')->select('procantstock')->where('idproducto', $item['idproducto'])->get()->getRow()->procantstock;
+
+        if ($quantity > $stock) {
+            return false; // No se puede actualizar más de lo disponible
+        }
+
+        // Actualiza la cantidad
         return $this->update($cartItemId, ['cicantidad' => $quantity]);
     }
 
+    /**
+     * Eliminar un producto del carrito de compras.
+     *
+     * @param int $cartItemId
+     * @return bool
+     */
     public function removeItem($cartItemId)
     {
         return $this->delete($cartItemId);
     }
 
-    public function addItem($userId, $productId, $quantity)
+    /**
+     * Crear un carrito de compras para un usuario.
+     * Se crea una nueva compra en la tabla `compra` y un estado inicial en `compraestado`.
+     *
+     * @param int $userId
+     * @return int $compraId
+     */
+    public function createCart($userId)
     {
-        // Verifica si ya existe el producto en el carrito
-        $existingItem = $this->where(['idcompra' => $userId, 'idproducto' => $productId])->first();
-        if ($existingItem) {
-            // Si existe, actualiza la cantidad
-            return $this->update($existingItem['idcompraitem'], ['cicantidad' => $existingItem['cicantidad'] + $quantity]);
-        } else {
-            // Si no existe, agrega el nuevo producto
-            return $this->insert(['idcompra' => $userId, 'idproducto' => $productId, 'cicantidad' => $quantity]);
-        }
+        // Inserta la compra en la tabla `compra` con estado inicial
+        $compraData = [
+            'idusuario' => $userId
+        ];
+
+        $this->db->table('compra')->insert($compraData);
+        $compraId = $this->db->insertID(); // Obtener el ID de la nueva compra insertada
+
+        // Insertar el estado inicial de la compra en la tabla `compraestado`
+        $this->db->table('compraestado')->insert([
+            'idcompra' => $compraId,
+            'idcompraestadotipo' => 0, // Ingresado al carrito
+            'cefechaini' => date('Y-m-d H:i:s')
+        ]);
+
+        return $compraId; // Retorna el ID de la compra creada
     }
 }

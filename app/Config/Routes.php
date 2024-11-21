@@ -5,9 +5,6 @@ use CodeIgniter\Router\RouteCollection;
 /**
  * @var RouteCollection $routes
  */
-$routes->get('/', 'Home::index');
-
-
 /* PRODUCTOS */
 $routes->get('/products', 'ProductController::listar');
 $routes->get('/products/detail/(:num)', 'ProductController::detail/$1');
@@ -39,6 +36,11 @@ $routes->get('/404', 'Home::notFound');
 
 /* CAMBIO ROL */
 $routes->get('/cambioRol', 'Session::cambioRol', ['filter'=>'multirol']);
+
+/* EDITAR PERFIL */
+$routes->get('/perfil/editar', 'Session::editarPerfil', ['filter'=>'autenticacion']);
+$routes->post('/perfil/editar', 'Session::editar', ['filter'=>'autenticacion']);
+
 
 /*ADMIN*/
 $routes->group('admin',['filter'=>['autenticacion','admindeposito']], function($routes){
@@ -99,5 +101,3 @@ $routes->group('admin',['filter'=>['autenticacion','admindeposito']], function($
         $routes->post('listar', 'CompraEstadoTipoController::listar');
     });
 });
-
-

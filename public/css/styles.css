@@ -46,3 +46,8 @@
 .error{
     color: red;
 }
+
+
+.justified-text {
+    text-align: justify;
+}
