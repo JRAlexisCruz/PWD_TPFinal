@@ -52,7 +52,7 @@
                     value="<?= esc($item['cicantidad']) ?>"
                     min="1"
                     max="<?= esc($item['procantstock']) ?>"
-                
+
                     data-id="<?= $item['idcompraitem'] ?>">
 
                 </div>
@@ -96,10 +96,11 @@
       <a href="<?= base_url('/products') ?>" class="btn btn-bd-primary">
         <i class="fas fa-arrow-left"></i> Seguir comprando
       </a>
-      <a href="<?= base_url('/checkout') ?>" class="btn btn-danger">
+      <button id="confirm-purchase" class="btn btn-danger">
         Comprar <i class="fas fa-shopping-cart"></i>
-      </a>
+      </button>
     </div>
+
   </div>
 
 

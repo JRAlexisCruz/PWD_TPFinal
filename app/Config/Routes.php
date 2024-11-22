@@ -33,6 +33,7 @@ $routes->get('/products/detail/(:num)', 'ProductController::detail/$1');
 $routes->get('/cart', 'CartController::index', ['filter' => 'autenticacion']);
 $routes->post('/cart/addToCart', 'CartController::addToCart');
 $routes->post('/cart/removeFromCart', 'CartController::removeFromCart');
+$routes->post('/cart/confirmPurchase', 'CartController::confirmPurchase');
 
 /* LOGIN */
 $routes->get('/login', 'Session::login');

@@ -1,0 +1,286 @@
+CRITICAL - 2024-11-22 01:36:00 --> TypeError: str_contains(): Argument #1 ($haystack) must be of type string, null given
+[Method: POST, Route: cart/confirmPurchase]
+in SYSTEMPATH\Email\Email.php on line 753.
+ 1 SYSTEMPATH\Email\Email.php(753): str_contains(null, ',')
+ 2 SYSTEMPATH\Email\Email.php(556): CodeIgniter\Email\Email->stringToArray(null)
+ 3 APPPATH\Controllers\CartController.php(192): CodeIgniter\Email\Email->setTo(null)
+ 4 APPPATH\Controllers\CartController.php(174): App\Controllers\CartController->sendConfirmationEmail(null)
+ 5 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 6 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 7 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 8 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 9 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+10 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-22 02:01:10 --> BadMethodCallException: Call to undefined method App\Models\CartModel::confirmPurchase
+[Method: POST, Route: cart/confirmPurchase]
+in SYSTEMPATH\Model.php on line 932.
+ 1 APPPATH\Controllers\CartController.php(165): CodeIgniter\Model->__call('confirmPurchase', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 3 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 4 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-22 02:01:59 --> BadMethodCallException: Call to undefined method App\Models\CartModel::confirmPurchase
+[Method: POST, Route: cart/confirmPurchase]
+in SYSTEMPATH\Model.php on line 932.
+ 1 APPPATH\Controllers\CartController.php(165): CodeIgniter\Model->__call('confirmPurchase', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 3 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 4 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-22 02:02:33 --> BadMethodCallException: Call to undefined method App\Models\CartModel::confirmPurchase
+[Method: POST, Route: cart/confirmPurchase]
+in SYSTEMPATH\Model.php on line 932.
+ 1 APPPATH\Controllers\CartController.php(165): CodeIgniter\Model->__call('confirmPurchase', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 3 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 4 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-22 02:08:58 --> BadMethodCallException: Call to undefined method App\Models\CompraEstadoModel::confirmPurchase
+[Method: POST, Route: cart/confirmPurchase]
+in SYSTEMPATH\Model.php on line 932.
+ 1 APPPATH\Controllers\CartController.php(167): CodeIgniter\Model->__call('confirmPurchase', [...])
+ 2 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 3 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 4 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 5 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 6 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 7 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2024-11-22 02:16:02 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2024-11-22 02:16:02 --> 220 smtp.gmail.com ESMTP d2e1a72fcca58-724de47955asm724266b3a.65 - gsmtp
+
+hello: 250-smtp.gmail.com at your service, [181.30.200.180]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+Failed to send AUTH LOGIN command. Error: 530-5.7.0 Must issue a STARTTLS command first. For more information, go to
+530-5.7.0  https://support.google.com/a/answer/3221692 and review RFC 3207
+530 5.7.0 specifications. d2e1a72fcca58-724de47955asm724266b3a.65 - gsmtp
+
+ERROR - 2024-11-22 02:16:02 --> Error al enviar el correo: 220 smtp.gmail.com ESMTP d2e1a72fcca58-724de47955asm724266b3a.65 - gsmtp
+<br><pre>hello: 250-smtp.gmail.com at your service, [181.30.200.180]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+</pre>Failed to send AUTH LOGIN command. Error: 530-5.7.0 Must issue a STARTTLS command first. For more information, go to
+530-5.7.0  https://support.google.com/a/answer/3221692 and review RFC 3207
+530 5.7.0 specifications. d2e1a72fcca58-724de47955asm724266b3a.65 - gsmtp
+<br>Unable to send email using SMTP. Your server might not be configured to send mail using this method.<br><pre>Date: Fri, 22 Nov 2024 02:16:01 -0300
+To: seba.antueno@gmail.com
+Subject: =?UTF-8?Q?Compra=20Confirmada?=
+From: &quot;Cebando Historias&quot; &lt;cebandohistorias@gmail.com&gt;
+Return-Path: &lt;cebandohistorias@gmail.com&gt;
+Reply-To: &lt;cebandohistorias@gmail.com&gt;
+User-Agent: CodeIgniter
+X-Sender: cebandohistorias@gmail.com
+X-Mailer: CodeIgniter
+X-Priority: 3 (Normal)
+Message-ID: &lt;6740139145b7b0.83393032@gmail.com&gt;
+Mime-Version: 1.0
+
+
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_6740139145c709.64917847&quot;
+
+This is a multi-part message in MIME format.
+Your email application may not support this format.
+
+--B_ALT_6740139145c709.64917847
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+¡Tu compra ha sido confirmada! Gracias por tu compra. Nos estamos
+preparando para enviarlo.
+
+
+--B_ALT_6740139145c709.64917847
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+=C2=A1Tu compra ha sido confirmada! Gracias por tu compra. Nos estamos prep=
+arando para enviarlo.
+
+--B_ALT_6740139145c709.64917847--</pre>
+ERROR - 2024-11-22 02:26:39 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2024-11-22 02:26:39 --> 220 smtp.gmail.com ESMTP d9443c01a7336-2129dbfedb7sm7449975ad.162 - gsmtp
+
+hello: 250-smtp.gmail.com at your service, [181.30.200.180]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+Failed to send AUTH LOGIN command. Error: 530-5.7.0 Must issue a STARTTLS command first. For more information, go to
+530-5.7.0  https://support.google.com/a/answer/3221692 and review RFC 3207
+530 5.7.0 specifications. d9443c01a7336-2129dbfedb7sm7449975ad.162 - gsmtp
+
+ERROR - 2024-11-22 02:26:39 --> Error al enviar el correo: 220 smtp.gmail.com ESMTP d9443c01a7336-2129dbfedb7sm7449975ad.162 - gsmtp
+<br><pre>hello: 250-smtp.gmail.com at your service, [181.30.200.180]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+</pre>Failed to send AUTH LOGIN command. Error: 530-5.7.0 Must issue a STARTTLS command first. For more information, go to
+530-5.7.0  https://support.google.com/a/answer/3221692 and review RFC 3207
+530 5.7.0 specifications. d9443c01a7336-2129dbfedb7sm7449975ad.162 - gsmtp
+<br>Unable to send email using SMTP. Your server might not be configured to send mail using this method.<br><pre>Date: Fri, 22 Nov 2024 02:26:37 -0300
+To: seba.antueno@gmail.com
+Subject: =?UTF-8?Q?Compra=20Confirmada?=
+From: &quot;Cebando Historias&quot; &lt;cebandohistorias@gmail.com&gt;
+Return-Path: &lt;cebandohistorias@gmail.com&gt;
+Reply-To: &lt;cebandohistorias@gmail.com&gt;
+User-Agent: CodeIgniter
+X-Sender: cebandohistorias@gmail.com
+X-Mailer: CodeIgniter
+X-Priority: 3 (Normal)
+Message-ID: &lt;6740160deec268.84712557@gmail.com&gt;
+Mime-Version: 1.0
+
+
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_6740160deec4a0.75368170&quot;
+
+This is a multi-part message in MIME format.
+Your email application may not support this format.
+
+--B_ALT_6740160deec4a0.75368170
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+¡Tu compra ha sido confirmada! Gracias por tu compra. Nos estamos
+preparando para enviarlo.
+
+
+--B_ALT_6740160deec4a0.75368170
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+=C2=A1Tu compra ha sido confirmada! Gracias por tu compra. Nos estamos prep=
+arando para enviarlo.
+
+--B_ALT_6740160deec4a0.75368170--</pre>
+CRITICAL - 2024-11-22 02:38:47 --> ErrorException: Undefined property: Config\Email::$cebandohistorias@gmail.com
+[Method: POST, Route: cart/confirmPurchase]
+in APPPATH\Controllers\CartController.php on line 207.
+ 1 APPPATH\Controllers\CartController.php(207): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Config\\Email::$cebandohistorias@gmail.com', 'C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Controllers\\CartController.php', 207)
+ 2 APPPATH\Controllers\CartController.php(178): App\Controllers\CartController->sendConfirmationEmail('seba.antueno@gmail.com')
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 4 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 5 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-22 02:39:19 --> ErrorException: Undefined property: Config\Email::$cebandohistorias@gmail.com
+[Method: POST, Route: cart/confirmPurchase]
+in APPPATH\Controllers\CartController.php on line 207.
+ 1 APPPATH\Controllers\CartController.php(207): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Config\\Email::$cebandohistorias@gmail.com', 'C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Controllers\\CartController.php', 207)
+ 2 APPPATH\Controllers\CartController.php(178): App\Controllers\CartController->sendConfirmationEmail('seba.antueno@gmail.com')
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 4 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 5 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-22 02:40:48 --> ErrorException: Undefined property: Config\Email::$cebandohistorias@gmail.com
+[Method: POST, Route: cart/confirmPurchase]
+in APPPATH\Controllers\CartController.php on line 207.
+ 1 APPPATH\Controllers\CartController.php(207): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Config\\Email::$cebandohistorias@gmail.com', 'C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Controllers\\CartController.php', 207)
+ 2 APPPATH\Controllers\CartController.php(178): App\Controllers\CartController->sendConfirmationEmail('seba.antueno@gmail.com')
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 4 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 5 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+CRITICAL - 2024-11-22 02:41:12 --> ErrorException: Undefined property: Config\Email::$cebandohistorias@gmail.com
+[Method: POST, Route: cart/confirmPurchase]
+in APPPATH\Controllers\CartController.php on line 207.
+ 1 APPPATH\Controllers\CartController.php(207): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined property: Config\\Email::$cebandohistorias@gmail.com', 'C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Controllers\\CartController.php', 207)
+ 2 APPPATH\Controllers\CartController.php(178): App\Controllers\CartController->sendConfirmationEmail('seba.antueno@gmail.com')
+ 3 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->confirmPurchase()
+ 4 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 5 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 6 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+ 7 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+ 8 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))
+ERROR - 2024-11-22 02:42:16 --> Email: Unable to send email using SMTP. Your server might not be configured to send mail using this method.
+ERROR - 2024-11-22 02:42:16 --> 220 smtp.gmail.com ESMTP 41be03b00d2f7-7fbcc1e2490sm769024a12.31 - gsmtp
+
+hello: 250-smtp.gmail.com at your service, [181.30.200.180]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+
+Failed to send AUTH LOGIN command. Error: 530-5.7.0 Must issue a STARTTLS command first. For more information, go to
+530-5.7.0  https://support.google.com/a/answer/3221692 and review RFC 3207
+530 5.7.0 specifications. 41be03b00d2f7-7fbcc1e2490sm769024a12.31 - gsmtp
+
+ERROR - 2024-11-22 02:42:16 --> Error al enviar el correo: 220 smtp.gmail.com ESMTP 41be03b00d2f7-7fbcc1e2490sm769024a12.31 - gsmtp
+<br><pre>hello: 250-smtp.gmail.com at your service, [181.30.200.180]
+250-SIZE 35882577
+250-8BITMIME
+250-STARTTLS
+250-ENHANCEDSTATUSCODES
+250-PIPELINING
+250-CHUNKING
+250 SMTPUTF8
+</pre>Failed to send AUTH LOGIN command. Error: 530-5.7.0 Must issue a STARTTLS command first. For more information, go to
+530-5.7.0  https://support.google.com/a/answer/3221692 and review RFC 3207
+530 5.7.0 specifications. 41be03b00d2f7-7fbcc1e2490sm769024a12.31 - gsmtp
+<br>Unable to send email using SMTP. Your server might not be configured to send mail using this method.<br><pre>Date: Fri, 22 Nov 2024 02:42:15 -0300
+To: seba.antueno@gmail.com
+Subject: =?UTF-8?Q?Compra=20Confirmada?=
+From: &quot;Cebando Historias&quot; &lt;cebandohistorias@gmail.com&gt;
+Return-Path: &lt;cebandohistorias@gmail.com&gt;
+Reply-To: &lt;cebandohistorias@gmail.com&gt;
+User-Agent: CodeIgniter
+X-Sender: cebandohistorias@gmail.com
+X-Mailer: CodeIgniter
+X-Priority: 3 (Normal)
+Message-ID: &lt;674019b738b8f5.37375889@gmail.com&gt;
+Mime-Version: 1.0
+
+
+Content-Type: multipart/alternative; boundary=&quot;B_ALT_674019b738ba73.75552221&quot;
+
+This is a multi-part message in MIME format.
+Your email application may not support this format.
+
+--B_ALT_674019b738ba73.75552221
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+¡Tu compra ha sido confirmada! Gracias por tu compra. Nos estamos
+preparando para enviarlo.
+
+
+--B_ALT_674019b738ba73.75552221
+Content-Type: text/html; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+
+=C2=A1Tu compra ha sido confirmada! Gracias por tu compra. Nos estamos prep=
+arando para enviarlo.
+
+--B_ALT_674019b738ba73.75552221--</pre>

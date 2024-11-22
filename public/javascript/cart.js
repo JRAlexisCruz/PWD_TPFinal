@@ -115,8 +115,31 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     });
 
-
     document.getElementById('cart-total').innerText = `${cartTotal.toFixed(2).replace('.', ',')}`;
   }
 
+  // Función para confirmar la compra
+  document.getElementById('confirm-purchase').addEventListener('click', function () {
+    // Confirmar compra
+    if (confirm('¿Estás seguro de que deseas confirmar la compra?')) {
+      // Hacer la solicitud AJAX para confirmar la compra
+      $.ajax({
+        url: 'http://localhost/PWD/PWD_TPFinal/public/cart/confirmPurchase', // URL de la API
+        method: 'POST', // Método HTTP
+        success: function (data) {
+          if (data.success) {
+            alert('Compra confirmada');
+            // Redirigir al usuario a la página de éxito o de resumen
+            window.location.href = '<?= base_url("/order/success"); ?>'; // Ajusta esta URL según sea necesario
+          } else {
+            alert(data.error || 'No se pudo confirmar la compra');
+          }
+        },
+        error: function (error) {
+          console.error('Error al confirmar la compra:', error);
+          alert('Hubo un error al confirmar la compra');
+        }
+      });
+    }
+  });
 });
