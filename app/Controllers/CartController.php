@@ -6,7 +6,10 @@ use App\Models\CartModel;
 use App\Models\ProductModel;
 use App\Models\CompraEstadoModel;
 use App\Models\UsuarioModel;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use CodeIgniter\Controller;
+
 
 class CartController extends Controller
 {
@@ -62,61 +65,63 @@ class CartController extends Controller
      * Agregar un producto al carrito
      */
     public function addToCart()
-    {
-        $userId = session()->get('idusuario');
-        $purchaseId = session()->get('cart_id');
+{
+    $userId = session()->get('idusuario');
+    $purchaseId = session()->get('cart_id');
 
-
-        // Si no existe un carrito, lo creamos
-        if (!$purchaseId) {
-            $purchaseId = $this->cartModel->createCart($userId);
-            session()->set('cart_id', $purchaseId);
-        }
-
-        // Obtener el ID del producto y la cantidad desde la solicitud
-        $productId = $this->request->getPost('product_id');
-        $quantity = $this->request->getPost('quantity');
-
-        // Verificar que se recibieron los datos correctamente
-        if (!$productId || !$quantity) {
-            return $this->response->setJSON(['error' => 'Datos incompletos']);
-        }
-
-        // Llamar al modelo para agregar el producto al carrito
-        $result = $this->cartModel->addItem($purchaseId, $productId, $quantity);
-
-        // Devolver una respuesta en formato JSON
-        if ($result) {
-            return $this->response->setJSON(['success' => 'Producto agregado al carrito']);
-        } else {
-            return $this->response->setJSON(['error' => 'No se pudo agregar el producto al carrito']);
-        }
+    // Si no existe un carrito, lo creamos
+    if (!$purchaseId) {
+        // Crear un nuevo carrito y guardarlo en la sesión
+        $purchaseId = $this->cartModel->createCart($userId);
+        session()->set('cart_id', $purchaseId);
     }
+
+    // Obtener el ID del producto y la cantidad desde la solicitud
+    $productId = $this->request->getPost('product_id');
+    $quantity = $this->request->getPost('quantity');
+
+    // Verificar que se recibieron los datos correctamente
+    if (!$productId || !$quantity) {
+        return $this->response->setJSON(['error' => 'Datos incompletos']);
+    }
+
+    // Llamar al modelo para agregar el producto al carrito
+    $result = $this->cartModel->addItem($purchaseId, $productId, $quantity);
+
+    // Devolver una respuesta en formato JSON
+    if ($result) {
+        return $this->response->setJSON(['success' => 'Producto agregado al carrito']);
+    } else {
+        return $this->response->setJSON(['error' => 'No se pudo agregar el producto al carrito']);
+    }
+}
+
 
 
     /**
      * Actualizar la cantidad de un producto en el carrito
      */
     public function updateQuantity()
-    {
-        $cartItemId = $this->request->getPost('cart_item_id');
-        $quantity = $this->request->getPost('quantity');
+{
+    $cartItemId = $this->request->getPost('cart_item_id');
+    $quantity = $this->request->getPost('quantity');
 
-        // Verificar que se recibieron los datos correctamente
-        if (!$cartItemId || !$quantity) {
-            return $this->response->setJSON(['error' => 'Datos incompletos']);
-        }
-
-        // Llamar al modelo para actualizar la cantidad
-        $result = $this->cartModel->updateQuantity($cartItemId, $quantity);
-
-        // Devolver una respuesta en formato JSON
-        if ($result) {
-            return $this->response->setJSON(['success' => 'Cantidad actualizada']);
-        } else {
-            return $this->response->setJSON(['error' => 'No se pudo actualizar la cantidad']);
-        }
+    // Verificar que se recibieron los datos correctamente
+    if (!$cartItemId || !$quantity) {
+        return $this->response->setJSON(['error' => 'Datos incompletos']);
     }
+
+    // Llamar al modelo para actualizar la cantidad
+    $result = $this->cartModel->updateQuantity($cartItemId, $quantity);
+
+    // Devolver una respuesta en formato JSON
+    if ($result) {
+        return $this->response->setJSON(['success' => 'Cantidad actualizada']);
+    } else {
+        return $this->response->setJSON(['error' => 'No se pudo actualizar la cantidad']);
+    }
+}
+
 
     /**
      * Eliminar un producto del carrito
@@ -156,6 +161,7 @@ class CartController extends Controller
     /**
      * Confirmar la compra y cambiar el estado de la compra
      */
+
     public function confirmPurchase()
     {
         $purchaseId = session()->get('cart_id');
@@ -174,12 +180,27 @@ class CartController extends Controller
 
                 if ($user && isset($user['usmail'])) {
                     $userEmail = $user['usmail'];  // Obtenemos el correo del usuario
-                    // Enviar el correo de confirmación
-                    $this->sendConfirmationEmail($userEmail);
+
+                    // Generar datos de la factura (reemplaza por tu lógica de obtención de datos)
+                    $invoiceData = [
+                        'purchaseId' => $purchaseId,
+                        'user' => $user,
+                        'items' => $this->cartModel->getCartItems($purchaseId),
+                        'total' => array_reduce(
+                            $this->cartModel->getCartItems($purchaseId),
+                            fn($carry, $item) => $carry + ($item['precioproducto'] * $item['cicantidad']),
+                            0
+                        ),
+                    ];
+
+                    // Generar la factura
+                    $invoicePath = $this->sendInvoice($invoiceData);
+
+                    // Enviar el correo de confirmación con la factura adjunta
+                    $this->sendConfirmationEmail($userEmail, $invoicePath);
                 }
 
                 session()->remove('cart_id'); // Limpiar el carrito actual
-
                 $response = ['success' => 'Compra confirmada']; // Se actualiza si la compra se confirma exitosamente
             }
         }
@@ -189,29 +210,105 @@ class CartController extends Controller
 
 
 
-    /**
-     * Enviar correo de confirmación
-     */
-    public function sendConfirmationEmail($userEmail)
+    public function sendInvoice($invoiceData)
+{
+    // Obtener los productos y datos del carrito
+    $purchaseId = session()->get('cart_id');
+    $cartItems = $this->cartModel->getCartItems($purchaseId);
+
+    // Obtener los datos del cliente
+    $userId = session()->get('idusuario');  // Obtener ID de usuario desde la sesión
+    $user = $this->usuarioModel->find($userId);  // Obtener datos del cliente
+
+    // Crear los datos para la factura
+    $productos = [];
+    $subtotal = 0;
+    foreach ($cartItems as $item) {
+        $totalProducto = $item['cicantidad'] * $item['precioproducto'];
+        $subtotal += $totalProducto;
+        $productos[] = [
+            "precio" => $item['precioproducto'],
+            "descripcion" => $item['pronombre'],
+            "cantidad" => $item['cicantidad'],
+        ];
+    }
+
+    // Cálculos adicionales
+    $descuento = 0;  // Si hay descuento, puedes calcularlo aquí
+    $porcentajeImpuestos = 0;  // Impuesto ahora es 0
+    $subtotalConDescuento = $subtotal - $descuento;
+    $impuestos = 0;  // Impuestos es 0
+    $total = $subtotalConDescuento + $impuestos;  // Total no se modifica con impuestos
+    $remitente = "# Cebando Historias";
+    $fecha = date("Y-m-d");
+    $numero = rand(1000, 9999);
+    $web = 'https://cebandohistorias.com.ar';
+    $cliente = $user['usnombre'];  // Nombre del cliente
+    $mensajePie = "Muchas gracias por su compra y por confiar en nuestros productos.";
+
+    // Pasar los datos a la vista
+    $data = [
+        'cliente' => $cliente,
+        'remitente' => $remitente,
+        'productos' => $productos,
+        'subtotal' => $subtotal,
+        'descuento' => $descuento,
+        'impuestos' => $impuestos,
+        'total' => $total,
+        'fecha' => $fecha,
+        'numero' => $numero,
+        'web' => $web,
+        'subtotalConDescuento' => $subtotalConDescuento,
+        'mensajePie' => $mensajePie
+    ];
+
+    // Generar el HTML para la factura
+    $html = view('templates/invoice', $data);  // Pasar los datos a la vista
+
+    // Configurar Dompdf
+    $options = new Options();
+    $options->set('defaultFont', 'Courier');
+    $dompdf = new Dompdf($options);
+    // Cargar el contenido HTML
+    $dompdf->loadHtml($html);
+    $dompdf->setPaper('A4', 'portrait');
+    $dompdf->render();
+
+    // Guardar el PDF en un archivo temporal
+    $output = $dompdf->output();
+    $filePath = WRITEPATH . 'uploads/factura_' . $invoiceData['purchaseId'] . '.pdf';
+    file_put_contents($filePath, $output);
+
+    return $filePath; // Retornamos el path del archivo generado
+}
+
+
+
+    public function sendConfirmationEmail($userEmail, $invoicePath)
     {
         // Crear una instancia del servicio de correo de CodeIgniter
         $email = \Config\Services::email();
 
-        $fromEmail= 'cebandohistorias@gmail.com';
+        $fromEmail = 'cebandohistorias@gmail.com';
         $fromName = "Cebando Historias";
 
-        // Configurar los parámetros del correo usando la configuración de Email.php . PROBAR HARCODEAR
+        // Configurar los parámetros del correo
         $email->setFrom($fromEmail, $fromName);
-        // Configurar los parámetros del correo usando la configuración de Email.php
         $email->setTo($userEmail);
         $email->setSubject('Compra Confirmada');
-        $email->setMessage('¡Tu compra ha sido confirmada! Gracias por tu compra. Adjunto a este mail encontraras la factura para descargar. Todas las actualizaciones de tu compra serán enviadas a este correo. ¡Gracias por confiar en nosotros!');
+        $email->setMessage('¡Tu compra ha sido confirmada! Gracias por tu compra. Adjunto a este mail encontrarás la factura para descargar.');
+
+        // Adjuntar la factura generada
+        $email->attach($invoicePath);
 
         $emailSent = false; // Variable para indicar si el correo fue enviado con éxito
 
         // Enviar el correo y manejar el resultado
         if ($email->send()) {
             $emailSent = true;
+
+            // Eliminar el archivo temporal
+            unlink($invoicePath);
         } else {
             log_message('error', 'Error al enviar el correo: ' . $email->printDebugger());
         }

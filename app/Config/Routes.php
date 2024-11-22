@@ -17,8 +17,10 @@ $routes->group('cart', ['filter' => 'autenticacion'], function($routes) {
     $routes->get('/', 'CartController::index');
     $routes->post('addToCart', 'CartController::addToCart');
     $routes->post('removeFromCart', 'CartController::removeFromCart');
+    $routes->post('updateQuantity', 'CartController::updateQuantity'); 
     $routes->post('confirmPurchase', 'CartController::confirmPurchase');
 });
+
 
 
 /* LOGIN */

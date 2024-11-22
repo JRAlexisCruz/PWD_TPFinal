@@ -80,14 +80,15 @@ class CartModel extends Model
         // Verificar que la cantidad no exceda el stock disponible
         $item = $this->find($cartItemId);
         $stock = $this->db->table('producto')->select('procantstock')->where('idproducto', $item['idproducto'])->get()->getRow()->procantstock;
-
+    
         if ($quantity > $stock) {
             return false; // No se puede actualizar más de lo disponible
         }
-
-        // Actualiza la cantidad
+    
+        // Actualiza la cantidad en el carrito
         return $this->update($cartItemId, ['cicantidad' => $quantity]);
     }
+    
 
 
     /**
