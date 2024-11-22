@@ -10,9 +10,13 @@
     <script type="text/javascript" src="<?=base_url('javascript/jquery.min.js')?>"></script>
     <script type="text/javascript" src="<?=base_url('javascript/jquery-easyui-1.11.0/jquery.easyui.min.js')?>"></script>
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
+    <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('/css/styles.css') ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <table id="dg" title="Productos" class="easyui-datagrid" style="width:100%;height:250px"
+    <?= view('estructura/header'); ?>
+    <table id="dg" title="Productos" class="easyui-datagrid" style="width:95%;height:250px;"
             url="<?=base_url('admin/productos/listar')?>"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">
@@ -32,7 +36,6 @@
     <div id="toolbar">
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="add()">Nuevo</a>
         <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="edit()">Editar</a>
-        <a href="javascript:void(0)" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="destroy()">Eliminar</a>
     </div>
     
     <div id="dlg-new" class="easyui-dialog" style="width:400px" data-options="closed:true,modal:true,border:'thin',buttons:'#dlg-buttons-new'">
@@ -183,25 +186,6 @@
 
             }
         }
-        function destroy(){
-            var row = $('#dg').datagrid('getSelected');
-            if (row){
-                $.messager.confirm('Confirmar','¿Estas seguro que quieres eliminar este producto?',function(r){
-                    if (r){
-                        $.post('<?php echo base_url('admin/productos/eliminar')?>',{idproducto:row.idproducto},function(result){
-                            if (result.success){
-                                $('#dg').datagrid('reload');
-                            } else {
-                                $.messager.show({  
-                                    title: 'Error',
-                                    msg: result.errorMsg
-                                });
-                            }
-                        },'json');
-                    }
-                });
-            }
-        }
 
         $.extend($.fn.validatebox.defaults.rules, {
             number: {
@@ -246,7 +230,7 @@
         });
 
         $('.precioproducto').numberbox({
-            precision: 2
+            required: true
         });
 
         $('.proimagen').validatebox({
@@ -255,8 +239,7 @@
         });
 
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js"></script>
-    <script src="<?=base_url('javascript/funciones.js')?>"></script>
+    <?= view('estructura/footer'); ?>
+    <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
 </body>
 </html>

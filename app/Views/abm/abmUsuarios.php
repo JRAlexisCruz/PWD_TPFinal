@@ -10,20 +10,24 @@
     <script type="text/javascript" src="<?=base_url('javascript/jquery.min.js')?>"></script>
     <script type="text/javascript" src="<?=base_url('javascript/jquery-easyui-1.11.0/jquery.easyui.min.js')?>"></script>
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
+    <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('/css/styles.css') ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
-<body>
-    <table id="dg" title="Usuarios" class="easyui-datagrid" style="width:100%;height:250px"
+<body style="padding:0"> 
+    <?= view('estructura/header'); ?>
+    <table id="dg" title="Usuarios" class="easyui-datagrid" style="width:95%;height:250px"
             url="<?=base_url('admin/usuarios/listar')?>"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">
         <thead>
             <tr>
-                <th field="idusuario" width="10">ID</th>
-                <th field="usnombre" width="10">Nombre de Usuario</th>
-                <th field="uspass" width="10">Contraseña</th>
-                <th field="usmail" width="10">Email</th>
-                <th field="roles" width="10">Roles</th>
-                <th field="usdeshabilitado" width="10">Fecha Deshabilitado</th>
+                <th field="idusuario">ID</th>
+                <th field="usnombre">Nombre de Usuario</th>
+                <th field="uspass">Contraseña</th>
+                <th field="usmail">Email</th>
+                <th field="roles">Roles</th>
+                <th field="usdeshabilitado">Fecha Deshabilitado</th>
             </tr>
         </thead>
     </table>
@@ -111,25 +115,33 @@
         function edit(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $.ajax({
-                    url: '<?=base_url('roles/listar')?>', 
-                    method: 'GET',
-                    success: function(data) {
-                        var row = $('#dg').datagrid('getSelected');
-                        data = JSON.parse(data);
-                        data.forEach(function(rol){
-                            if(row.roles.includes(rol.rodescripcion)){
-                                var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}" checked> ${rol.rodescripcion} <br>`;
-                            }else{
-                                var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}"> ${rol.rodescripcion} <br>`;
-                            }
-                            $('#checkboxes').append(checkboxHtml);    
-                        });
-                    }
-                });
-                $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
-                $('#fm-edit').form('load',row);
-                url = "<?php echo base_url('admin/usuarios/editar')?>";
+                if(row.usdeshabilitado != null){
+                    $.messager.show({  
+                        title: 'Error',
+                        msg: 'No se puede editar un usuario deshabilitado'
+                    });
+                }else{
+                    $.ajax({
+                        url: '<?=base_url('admin/roles/listar')?>', 
+                        method: 'GET',
+                        success: function(data) {
+                            var row = $('#dg').datagrid('getSelected');
+                            data = JSON.parse(data);
+                            data.forEach(function(rol){
+                                if(row.roles.includes(rol.rodescripcion)){
+                                    var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}" checked> ${rol.rodescripcion} <br>`;
+                                }else{
+                                    var checkboxHtml = `<input class="easyui-checkbox" type="checkbox" name="roles[]" value="${rol.idrol}"> ${rol.rodescripcion} <br>`;
+                                }
+                                $('#checkboxes').append(checkboxHtml);    
+                            });
+                        }
+                    });
+                    $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle','Editar Usuario');
+                    $('#fm-edit').form('load',row);
+                    url = "<?php echo base_url('admin/usuarios/editar')?>";
+                }
+                
             }
             action = "edit";
         }
@@ -191,20 +203,27 @@
         function destroy(){
             var row = $('#dg').datagrid('getSelected');
             if (row){
-                $.messager.confirm('Confirmar','¿Esta seguro que quiere eliminar a este usuario?',function(r){
-                    if (r){
-                        $.post('<?php echo base_url('admin/usuarios/eliminar')?>',{id:row.idusuario},function(result){
-                            if (result.success){
-                                $('#dg').datagrid('reload');
-                            } else {
-                                $.messager.show({  
-                                    title: 'Error',
-                                    msg: result.errorMsg
-                                });
-                            }
-                        },'json');
-                    }
+                if(row.usdeshabilitado != null){
+                    $.messager.show({  
+                        title: 'Error',
+                        msg: 'No se puede eliminar un usuario deshabilitado'
                 });
+                }else{
+                    $.messager.confirm('Confirmar','¿Esta seguro que quiere eliminar a este usuario?',function(r){
+                        if (r){
+                            $.post('<?php echo base_url('admin/usuarios/eliminar')?>',{id:row.idusuario},function(result){
+                                if (result.success){
+                                    $('#dg').datagrid('reload');
+                                } else {
+                                    $.messager.show({  
+                                        title: 'Error',
+                                        msg: result.errorMsg
+                                    });
+                                }
+                            },'json');
+                        }
+                    });
+                }
             }
         }
 
@@ -249,8 +268,7 @@
         });
 
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js"></script>
-    <script src="<?=base_url('javascript/funciones.js')?>"></script>
+    <?= view('estructura/footer'); ?>
+    <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
 </body>
 </html>

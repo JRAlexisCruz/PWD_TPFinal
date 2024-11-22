@@ -10,17 +10,21 @@
     <script type="text/javascript" src="<?=base_url('javascript/jquery.min.js')?>"></script>
     <script type="text/javascript" src="<?=base_url('javascript/jquery-easyui-1.11.0/jquery.easyui.min.js')?>"></script>
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
+    <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('/css/styles.css') ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
-    <table id="dg" title="Menu" class="easyui-datagrid" style="width:100%;height:250px"
+    <?= view('estructura/header'); ?>
+    <table id="dg" title="Menu" class="easyui-datagrid" style="width:95%;height:250px"
             url="<?=base_url('admin/menus/listar')?>"
             toolbar="#toolbar" pagination="true"
             rownumbers="true" fitColumns="true" singleSelect="true" method="get">
         <thead>
             <tr>
-                <th field="idmenu" width="50">ID</th>
-                <th field="menombre" width="50">Nombre</th>
-                <th field="medescripcion" width="50">Descripcion</th>
+                <th field="idmenu" width="20">ID</th>
+                <th field="menombre" width="60">Nombre</th>
+                <th field="medescripcion" width="70">Descripcion</th>
                 <th field="script" width="50">Script</th>
                 <th field="roles" width="50">Roles</th>
                 <th field="medeshabilitado" width="50">Fecha Deshabilitado</th>
@@ -101,7 +105,7 @@
         var action;
         function add(){
             $.ajax({
-                url: '<?=base_url('roles/listar')?>', 
+                url: '<?=base_url('admin/roles/listar')?>', 
                 method: 'GET',
                 success: function(data) {
                     var row = $('#dg').datagrid('getSelected');
@@ -121,7 +125,7 @@
             var row = $('#dg').datagrid('getSelected');
             if (row){
                 $.ajax({
-                    url: '<?=base_url('roles/listar')?>', 
+                    url: '<?=base_url('admin/roles/listar')?>', 
                     method: 'GET',
                     success: function(data) {
                         var row = $('#dg').datagrid('getSelected');
@@ -235,8 +239,8 @@
             validType: ['length[1,50]']
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/jquery.validate.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.19.5/dist/additional-methods.js"></script>
     <script src="<?=base_url('javascript/funciones.js')?>"></script>
+    <?= view('estructura/footer'); ?>
+    <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
 </body>
 </html>
