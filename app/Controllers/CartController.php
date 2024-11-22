@@ -4,17 +4,23 @@ namespace App\Controllers;
 
 use App\Models\CartModel;
 use App\Models\ProductModel;
+use App\Models\CompraEstadoModel;
+use App\Models\UsuarioModel;
 use CodeIgniter\Controller;
 
 class CartController extends Controller
 {
     protected $cartModel;
     protected $productModel;
+    protected $compraEstadoModel;
+    protected $usuarioModel;
 
     public function __construct()
     {
         $this->cartModel = new CartModel();
         $this->productModel = new ProductModel();
+        $this->compraEstadoModel = new CompraEstadoModel();
+        $this->usuarioModel = new UsuarioModel();
     }
 
     /**
@@ -23,10 +29,10 @@ class CartController extends Controller
     public function index()
     {
         $userId = session()->get('idusuario'); // Obtenemos el ID del usuario de la sesión
-    
+
         // Verificar si el usuario ya tiene un carrito activo
         $purchaseId = $this->cartModel->getActiveCart($userId);
-    
+
         // Si no existe un carrito activo (es decir, si $purchaseId es false),
         // se crea uno nuevo y se guarda en la sesión
         if ($purchaseId === false) {
@@ -35,31 +41,31 @@ class CartController extends Controller
         } else {
             session()->set('cart_id', $purchaseId);  // Guardamos el cart_id en la sesión si ya existe
         }
-    
+
         // Obtener los productos del carrito
         $cartItems = $this->cartModel->getCartItems($purchaseId);
-    
+
         // Calcular el total del carrito
         $cartTotal = 0;
         foreach ($cartItems as $item) {
             $cartTotal += $item['precioproducto'] * $item['cicantidad'];
         }
-    
+
         // Pasamos los datos a la vista
         return view('shop/cart.php', ['cartItems' => $cartItems, 'cartTotal' => $cartTotal]);
     }
-    
+
 
 
 
     /**
-     * Agregar un producto al carrito - ALEXIS
+     * Agregar un producto al carrito
      */
     public function addToCart()
     {
         $userId = session()->get('idusuario');
         $purchaseId = session()->get('cart_id');
-        
+
 
         // Si no existe un carrito, lo creamos
         if (!$purchaseId) {
@@ -113,41 +119,39 @@ class CartController extends Controller
     }
 
     /**
- * Eliminar un producto del carrito
- */
-public function removeFromCart()
-{
-    // Obtener los datos del POST
-    $cartItemId = $this->request->getJSON(true)['cartItemId'];
+     * Eliminar un producto del carrito
+     */
+    public function removeFromCart()
+    {
+        // Obtener los datos del POST
+        $cartItemId = $this->request->getJSON(true)['cartItemId'];
 
-    $cartId = session()->get('cart_id'); // Obtener el ID del carrito desde la sesión
+        $cartId = session()->get('cart_id'); // Obtener el ID del carrito desde la sesión
 
-    // Inicializar la respuesta con un mensaje de error por defecto
-    $response = ['error' => 'No se pudo eliminar el producto'];
+        // Inicializar la respuesta con un mensaje de error por defecto
+        $response = ['error' => 'No se pudo eliminar el producto'];
 
-    // Verificar si el cartItemId y el cartId existen
-    if (!$cartItemId) {
-        $response = ['error' => 'ID de producto no proporcionado'];
-    } elseif (!$cartId) {
-        $response = ['error' => 'ID de carrito no proporcionado'];
-    } else {
-        // Si ambos valores existen, intentamos eliminar el producto
-        $result = $this->cartModel->removeItem($cartItemId, $cartId);
-        
-        // Verificar si la eliminación fue exitosa
-        if ($result) {
-            $response = ['success' => 'Producto eliminado del carrito'];
+        // Verificar si el cartItemId y el cartId existen
+        if (!$cartItemId) {
+            $response = ['error' => 'ID de producto no proporcionado'];
+        } elseif (!$cartId) {
+            $response = ['error' => 'ID de carrito no proporcionado'];
         } else {
-            $response = ['error' => 'No se pudo eliminar el producto'];
+            // Si ambos valores existen, intentamos eliminar el producto
+            $result = $this->cartModel->removeItem($cartItemId, $cartId);
+
+            // Verificar si la eliminación fue exitosa
+            if ($result) {
+                $response = ['success' => 'Producto eliminado del carrito'];
+            } else {
+                $response = ['error' => 'No se pudo eliminar el producto'];
+            }
         }
+
+        return $this->response->setJSON($response);
     }
 
-    return $this->response->setJSON($response);
-}
 
-
-
-    
 
     /**
      * Confirmar la compra y cambiar el estado de la compra
@@ -155,21 +159,67 @@ public function removeFromCart()
     public function confirmPurchase()
     {
         $purchaseId = session()->get('cart_id');
+        $userId = session()->get('idusuario'); // Obtenemos el ID del usuario de la sesión
+
+        $response = ['error' => 'No se pudo confirmar la compra']; // Valor predeterminado
 
         // Verificar que existe un carrito
-        if (!$purchaseId) {
-            return $this->response->setJSON(['error' => 'No hay carrito asociado']);
+        if ($purchaseId) {
+            // Cambiar el estado de la compra a "Confirmada"
+            $result = $this->compraEstadoModel->actualizar($purchaseId);
+
+            if ($result) {
+                // Obtener el correo del usuario usando su ID
+                $user = $this->usuarioModel->find($userId);  // Buscar el usuario por su ID
+
+                if ($user && isset($user['usmail'])) {
+                    $userEmail = $user['usmail'];  // Obtenemos el correo del usuario
+                    // Enviar el correo de confirmación
+                    $this->sendConfirmationEmail($userEmail);
+                }
+
+                session()->remove('cart_id'); // Limpiar el carrito actual
+
+                $response = ['success' => 'Compra confirmada']; // Se actualiza si la compra se confirma exitosamente
+            }
         }
 
-        // Cambiar el estado de la compra a "Confirmada"
-        $result = $this->cartModel->confirmPurchase($purchaseId);
+        return $this->response->setJSON($response); // Retorna la respuesta al final
+    }
 
-        // Devolver una respuesta en formato JSON
-        if ($result) {
-            session()->remove('cart_id'); // Limpiar el carrito actual
-            return $this->response->setJSON(['success' => 'Compra confirmada']);
+
+
+    /**
+     * Enviar correo de confirmación
+     */
+    public function sendConfirmationEmail($userEmail)
+    {
+        // Obtener la configuración de correo desde el archivo Email.php
+        $emailConfig = config('Email');
+
+        // Crear una instancia del servicio de correo de CodeIgniter
+        $email = \Config\Services::email();
+
+        $fromEmail= 'cebandohistorias@gmail.com';
+        $fromName = "Cebando Historias";
+
+        // Configurar los parámetros del correo usando la configuración de Email.php . PROBAR HARCODEAR
+        // $email->setFrom($emailConfig->$fromEmail, $emailConfig->$fromName);
+        // $email->setTo($userEmail);
+        // Configurar los parámetros del correo usando la configuración de Email.php
+        $email->setTo($userEmail);
+        $email->setSubject('Compra Confirmada');
+        $email->setMessage('¡Tu compra ha sido confirmada! Gracias por tu compra. Nos estamos preparando para enviarlo.');
+
+        $emailSent = false; // Variable para indicar si el correo fue enviado con éxito
+
+        // Enviar el correo y manejar el resultado
+        if ($email->send()) {
+            $emailSent = true;
         } else {
-            return $this->response->setJSON(['error' => 'No se pudo confirmar la compra']);
+            log_message('error', 'Error al enviar el correo: ' . $email->printDebugger());
         }
+
+        return $emailSent; // Retorna el resultado al final de la función
     }
 }
