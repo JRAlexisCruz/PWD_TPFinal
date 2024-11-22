@@ -4,6 +4,8 @@ namespace App\Models;
 
 use CodeIgniter\Model;
 use App\Models\CompraModel;
+use App\Controllers\EmailSend;
+use App\Models\UsuarioModel;
 
 class CompraEstadoModel extends Model
 {
@@ -73,6 +75,21 @@ class CompraEstadoModel extends Model
             }
             if($this->insert($data)){
                 $actualizado = true;
+                $ultimoestadotipo = $ultimoEstado+1;
+                $emailSend = new EmailSend();
+                $usuarioModel = new UsuarioModel();
+                $usuario = $usuarioModel->find($compra['idusuario']);
+                switch($ultimoestadotipo){
+                    case 2:
+                        $emailSend->sendPreparationEmail($usuario['usmail']);
+                        break;
+                    case 3:
+                        $emailSend->sendSendingEmail($usuario['usmail']);
+                        break;
+                    case 4:
+                        $emailSend->sendReceivingEmail($usuario['usmail']);
+                        break;
+                }
             }else{
                 $this->error = 'Error al actualizar el estado de la compra';
             }
@@ -99,6 +116,10 @@ class CompraEstadoModel extends Model
             $data['cefechafin']=date('Y-m-d H:i:s');
             if($this->insert($data)){
                 $actualizado = true;
+                $emailSend = new EmailSend();
+                $usuarioModel = new UsuarioModel();
+                $usuario = $usuarioModel->find($compra['idusuario']);
+                $emailSend->sendCancellationEmail($usuario['usmail']);
             }else{
                 $this->error = 'Error al cancelar la compra';
             }

@@ -35,22 +35,6 @@
             </div>
         </div>
     </div>
-    <table class="table" id="tableExample" style="display:none">
-        <thead class="table">
-            <tr>
-                <th>Imagen</th>
-                <th>Nombre del Producto</th>
-                <th>Cantidad</th>
-                <th>Precio Unitario</th>
-                <th>Precio Total</th>
-            </tr>
-        </thead>
-        <tbody class="table-group-divider">
-
-        </tbody>
-
-    </table>
-
     <?= view('estructura/footer') ?>
     <script>
         $(document).ready(function() {
@@ -70,56 +54,93 @@
         });
 
         function crearFormCompra(compra) {
-            let nuevaTable = $('#tableExample').clone();
-            nuevaTable.attr('id', 'compra_' + compra.idcompra);
-            tableBody = nuevaTable.find('tbody');
-            let total = 0;
-            $.each(compra.productos, function(index, producto) {
-                let row = $('<tr></tr>');
-                let tdImagen = $('<td></td>').attr('class', 'text-center');
-                let img = $('<img>').attr('src', "../images/" + producto.proimagen + '.jpg').attr('alt', producto.pronombre).attr('class', 'rounded-circle').attr('style', 'width: 80px; height: 80px; object-fit: cover;');
-                tdImagen.append(img);
-                row.append(tdImagen);
-                let tdNombre = $('<td></td>').attr('class', 'text-center').text(producto.pronombre);
-                row.append(tdNombre);
-                let tdCantidad = $('<td></td>').attr('class', 'text-center').text(producto.cicantidad);
-                row.append(tdCantidad);
-                let tdUnitario = $('<td></td>').attr('class', 'text-center').text("$" + producto.precioproducto);
-                row.append(tdUnitario);
-                let tdTotal = $('<td></td>').attr('class', 'text-center').text("$" + producto.precioproducto * producto.cicantidad);
-                total += producto.precioproducto * producto.cicantidad;
-                row.append(tdTotal);
-                tableBody.append(row);
-            });
-            let estado = $('<p></p>').text(compra.estado);
-            estado.css('margin', '0');
-            estado.css('padding', '10px 0');
-            estado.css('padding-left', '30px');
-            estado.css('font-weight', 'bold');
-            let divEstado = $('<div></div>').attr('class', 'd-flex justify-content-between align-items-center');
-            divEstado.css('background-color', 'rgb(242, 242, 242)');
-            divEstado.append(estado);
-            let footer = $('<div></div>').attr('class', 'd-flex justify-content-between align-items-center');
-            footer.css('background-color', 'rgb(242, 242, 242)');
-            let pTotal = $('<p></p>').text('Total: $' + total);
-            pTotal.css('padding-left', '30px');
-            pTotal.css('margin', '0');
-            pTotal.css('font-size', '20px');
-            footer.append(pTotal);
-            if (compra.estado == 'Confirmada') {
-                let button = $('<button></button>').attr('class', 'btn btn-danger').attr('onclick', 'openModal(this)').text('Cancelar compra');
-                button.css('margin-right', '30px');
-                let input = $('<input>').attr('type', 'hidden').val(compra.idcompra);
-                footer.append(button);
-                footer.append(input);
+            if(compra.productos.length!=0){
+                let fecha = $('<p> Fecha: '+compra.cofecha.split(' ')[0]+' </p>') ;
+                fecha.css('font-weight', 'bold');
+                fecha.css('font-size', '20px');
+                let nuevaTable = $('<table> <thead> <tr> <th>Imagen</th> <th>Nombre del Producto</th> <th>Cantidad</th> <th>Precio Unitario</th> <th>Precio Total</th> </tr> </thead> <tbody> </tbody> </table>')
+                nuevaTable.addClass('table');
+                nuevaTable.attr('id', 'compra_' + compra.idcompra);
+                let thead = nuevaTable.find('thead');
+                thead.addClass('table');
+                let th = thead.find('th');
+                th.addClass('text-center');
+                tableBody = nuevaTable.find('tbody');
+                tableBody.addClass('table-group-divider');
+                let total = 0;
+                $.each(compra.productos, function(index, producto) {
+                    let row = $('<tr></tr>');
+                    let tdImagen = $('<td></td>').attr('class', 'text-center');
+                    let img = $('<img>').attr('src', "../images/" + producto.proimagen + '.jpg').attr('alt', producto.pronombre).attr('class', 'rounded-circle').attr('style', 'width: 80px; height: 80px; object-fit: cover;');
+                    tdImagen.append(img);
+                    row.append(tdImagen);
+                    let tdNombre = $('<td></td>').attr('class', 'text-center').text(producto.pronombre);
+                    row.append(tdNombre);
+                    let tdCantidad = $('<td></td>').attr('class', 'text-center').text(producto.cicantidad);
+                    row.append(tdCantidad);
+                    let tdUnitario = $('<td></td>').attr('class', 'text-center').text("$" + producto.precioproducto);
+                    row.append(tdUnitario);
+                    let tdTotal = $('<td></td>').attr('class', 'text-center').text("$" + producto.precioproducto * producto.cicantidad);
+                    total += producto.precioproducto * producto.cicantidad;
+                    row.append(tdTotal);
+                    tableBody.append(row);
+                });
+                let estado = $('<p></p>').text('Estado: '+compra.estado);
+                estado.css('font-weight', 'bold');
+                estado.css('padding', '7px 7px');
+                estado.css('margin', '0');
+                estado.css('margin-left', '30px');
+                estado.css('margin-top', '10px');
+                estado.css('margin-bottom', '5px');
+                estado.css('color','white')
+                switch (compra.estado) {
+                    case 'Ingresada al carrito':
+                        estado.css('background-color', '#6c757d');
+                        break;
+                    case 'Confirmada':
+                        estado.css('background-color', 'green');
+                        break;
+                    case 'En preparacion':
+                        estado.css('background-color', '#007bff');
+                        break;
+                    case 'Enviada a destino':
+                        estado.css('background-color', '#fd7e14');
+                        break;
+                    case 'Recibida por el cliente':
+                        estado.css('background-color', '#ffc107');
+                        break;
+                    case 'Cancelada por el cliente':
+                        estado.css('background-color', '#28a745');
+                        break;
+                    case 'Cancelada por el administrador':
+                        estado.css('background-color', '#dc3545');
+                        break;
+                }
+                let divEstado = $('<div></div>').attr('class', 'd-flex justify-content-between align-items-center');
+                divEstado.css('background-color', 'rgb(242, 242, 242)');
+                divEstado.append(estado);
+                let footer = $('<div></div>').attr('class', 'd-flex justify-content-between align-items-center');
+                footer.css('background-color', 'rgb(242, 242, 242)');
+                let pTotal = $('<p></p>').text('Total: $' + total);
+                pTotal.css('padding-left', '30px');
+                pTotal.css('margin', '0');
+                pTotal.css('font-size', '20px');
+                footer.append(pTotal);
+                if (compra.estado == 'Confirmada') {
+                    let button = $('<button></button>').attr('class', 'btn btn-danger').attr('onclick', 'openModal(this)').text('Cancelar compra');
+                    button.css('margin-right', '30px');
+                    let input = $('<input>').attr('type', 'hidden').val(compra.idcompra);
+                    footer.append(button);
+                    footer.append(input);
+                }
+                footer.css('padding-bottom', '10px');
+                let div = $('<div></div>').attr('class', 'container mt4');
+                div.append(fecha);
+                div.append(nuevaTable);
+                div.append(divEstado);
+                div.append(footer);
+                $('main').append(div);
             }
-            footer.css('padding-bottom', '10px');
-            nuevaTable.show();
-            let div = $('<div></div>').attr('class', 'container mt4');
-            div.append(nuevaTable);
-            div.append(divEstado);
-            div.append(footer);
-            $('main').append(div);
         }
 
         function openModal(boton) {

@@ -74,7 +74,7 @@ class UsuarioModel extends Model
         $usuario = $this->find(session('idusuario'));
         if($usuario){
             $compraModel = new CompraModel();
-            $comprasUsuario = $compraModel->where('idusuario', session('idusuario'))->findAll();
+            $comprasUsuario = $compraModel->where('idusuario', session('idusuario'))->orderBy('cofecha','DESC')->findAll();
             if($comprasUsuario){
                 foreach($comprasUsuario as $compraUsuario){
                     $compraRetorno = ['idcompra' => $compraUsuario['idcompra'], 'cofecha' => $compraUsuario['cofecha']];
