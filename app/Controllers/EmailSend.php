@@ -102,4 +102,28 @@ class EmailSend extends BaseController{
 
         return $emailSent; // Retorna el resultado al final de la función
     }
+
+    public function sendUserCancelEmail($userEmail)
+    {
+        // Crear una instancia del servicio de correo de CodeIgniter
+        $email = \Config\Services::email();
+
+        // Configurar los parámetros del correo usando la configuración de Email.php . PROBAR HARCODEAR
+        $email->setFrom($this->fromEmail, $this->fromName);
+        // Configurar los parámetros del correo usando la configuración de Email.php
+        $email->setTo($userEmail);
+        $email->setSubject('Compra Cancelada');
+        $email->setMessage('¡Cancelaste tu compra!');
+
+        $emailSent = false; // Variable para indicar si el correo fue enviado con éxito
+
+        // Enviar el correo y manejar el resultado
+        if ($email->send()) {
+            $emailSent = true;
+        } else {
+            log_message('error', 'Error al enviar el correo: ' . $email->printDebugger());
+        }
+
+        return $emailSent; // Retorna el resultado al final de la función
+    }
 }

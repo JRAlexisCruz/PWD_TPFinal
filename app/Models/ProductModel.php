@@ -39,10 +39,19 @@ class ProductModel extends Model
         return $builder->countAllResults();
     }
 
-
     // Método para encontrar un producto por su ID
     public function findProductById($id)
     {
         return $this->where('idproducto', $id)->first();
+    }
+
+    // Método para actualizar el stock de un producto
+    public function updateStock($productId, $quantity)
+    {
+        // Actualiza el stock restando la cantidad comprada
+        return $this->builder()
+                    ->set('procantstock', 'procantstock - ' . $quantity, false) // Usa SQL para restar la cantidad directamente
+                    ->where('idproducto', $productId)
+                    ->update();
     }
 }

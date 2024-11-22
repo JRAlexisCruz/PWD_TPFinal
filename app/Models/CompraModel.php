@@ -5,6 +5,7 @@ namespace App\Models;
 use CodeIgniter\Model;
 use App\Models\CompraItemModel;
 use App\Models\CompraEstadoModel;
+use App\Models\ProductModel; // Importar ProductModel
 
 class CompraModel extends Model
 {
@@ -56,18 +57,49 @@ class CompraModel extends Model
         return $estado;
     }
 
+    // Método para cancelar la compra y devolver el stock de los productos
     public function cancelarCompra($idCompra){
-        $compraModel=new CompraModel();
-        $compra=$compraModel->find($idCompra);
-        if($compra){
-            $nuevoEstadoCompra=[
-                'idcompra'=>$idCompra,
-                'idcompraestadotipo'=>5,
-                'cefechaini'=>date('Y-m-d H:i:s'),
-                'cefechafin'=>date('Y-m-d H:i:s')
+        $compraModel = new CompraModel();
+        $compra = $compraModel->find($idCompra);
+
+        if ($compra) {
+            // Cambiar el estado de la compra a "Cancelada" (asumo que el estado 5 es "cancelada")
+            $nuevoEstadoCompra = [
+                'idcompra' => $idCompra,
+                'idcompraestadotipo' => 5, // Estado "Cancelada"
+                'cefechaini' => date('Y-m-d H:i:s'),
+                'cefechafin' => date('Y-m-d H:i:s')
             ];
-            $compraEstadoModel=new CompraEstadoModel();
+
+            // Actualizar el estado de la compra
+            $compraEstadoModel = new CompraEstadoModel();
             $compraEstadoModel->insert($nuevoEstadoCompra);
+
+            // Llamar al método para devolver el stock de los productos
+            $this->devolverStock($idCompra);
+        }
+    }
+
+    // Método para devolver el stock de los productos
+    public function devolverStock($idCompra)
+    {
+        // Obtener los productos de la compra
+        $compraItemModel = new CompraItemModel();
+        $cartItems = $compraItemModel->darProductosCompra($idCompra);
+
+        // Instanciar el modelo de productos
+        $productModel = new ProductModel();
+
+        // Iterar sobre los productos y devolver el stock
+        foreach ($cartItems as $item) {
+            $productId = $item['idproducto'];
+            $quantityPurchased = $item['cicantidad'];
+
+            // Actualizar el stock del producto (sumar la cantidad comprada)
+            $productModel->builder()
+                         ->set('procantstock', 'procantstock + ' . $quantityPurchased, false)  // Sumar la cantidad
+                         ->where('idproducto', $productId)
+                         ->update();
         }
     }
 
@@ -94,5 +126,4 @@ class CompraModel extends Model
 
         return $retorno;
     }
-
 }

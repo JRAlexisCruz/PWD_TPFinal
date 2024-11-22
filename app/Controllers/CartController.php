@@ -65,36 +65,36 @@ class CartController extends Controller
      * Agregar un producto al carrito
      */
     public function addToCart()
-{
-    $userId = session()->get('idusuario');
-    $purchaseId = session()->get('cart_id');
+    {
+        $userId = session()->get('idusuario');
+        $purchaseId = session()->get('cart_id');
 
-    // Si no existe un carrito, lo creamos
-    if (!$purchaseId) {
-        // Crear un nuevo carrito y guardarlo en la sesión
-        $purchaseId = $this->cartModel->createCart($userId);
-        session()->set('cart_id', $purchaseId);
+        // Si no existe un carrito, lo creamos
+        if (!$purchaseId) {
+            // Crear un nuevo carrito y guardarlo en la sesión
+            $purchaseId = $this->cartModel->createCart($userId);
+            session()->set('cart_id', $purchaseId);
+        }
+
+        // Obtener el ID del producto y la cantidad desde la solicitud
+        $productId = $this->request->getPost('product_id');
+        $quantity = $this->request->getPost('quantity');
+
+        // Verificar que se recibieron los datos correctamente
+        if (!$productId || !$quantity) {
+            return $this->response->setJSON(['error' => 'Datos incompletos']);
+        }
+
+        // Llamar al modelo para agregar el producto al carrito
+        $result = $this->cartModel->addItem($purchaseId, $productId, $quantity);
+
+        // Devolver una respuesta en formato JSON
+        if ($result) {
+            return $this->response->setJSON(['success' => 'Producto agregado al carrito']);
+        } else {
+            return $this->response->setJSON(['error' => 'No se pudo agregar el producto al carrito']);
+        }
     }
-
-    // Obtener el ID del producto y la cantidad desde la solicitud
-    $productId = $this->request->getPost('product_id');
-    $quantity = $this->request->getPost('quantity');
-
-    // Verificar que se recibieron los datos correctamente
-    if (!$productId || !$quantity) {
-        return $this->response->setJSON(['error' => 'Datos incompletos']);
-    }
-
-    // Llamar al modelo para agregar el producto al carrito
-    $result = $this->cartModel->addItem($purchaseId, $productId, $quantity);
-
-    // Devolver una respuesta en formato JSON
-    if ($result) {
-        return $this->response->setJSON(['success' => 'Producto agregado al carrito']);
-    } else {
-        return $this->response->setJSON(['error' => 'No se pudo agregar el producto al carrito']);
-    }
-}
 
 
 
@@ -102,25 +102,25 @@ class CartController extends Controller
      * Actualizar la cantidad de un producto en el carrito
      */
     public function updateQuantity()
-{
-    $cartItemId = $this->request->getPost('cart_item_id');
-    $quantity = $this->request->getPost('quantity');
+    {
+        $cartItemId = $this->request->getPost('cart_item_id');
+        $quantity = $this->request->getPost('quantity');
 
-    // Verificar que se recibieron los datos correctamente
-    if (!$cartItemId || !$quantity) {
-        return $this->response->setJSON(['error' => 'Datos incompletos']);
+        // Verificar que se recibieron los datos correctamente
+        if (!$cartItemId || !$quantity) {
+            return $this->response->setJSON(['error' => 'Datos incompletos']);
+        }
+
+        // Llamar al modelo para actualizar la cantidad
+        $result = $this->cartModel->updateQuantity($cartItemId, $quantity);
+
+        // Devolver una respuesta en formato JSON
+        if ($result) {
+            return $this->response->setJSON(['success' => 'Cantidad actualizada']);
+        } else {
+            return $this->response->setJSON(['error' => 'No se pudo actualizar la cantidad']);
+        }
     }
-
-    // Llamar al modelo para actualizar la cantidad
-    $result = $this->cartModel->updateQuantity($cartItemId, $quantity);
-
-    // Devolver una respuesta en formato JSON
-    if ($result) {
-        return $this->response->setJSON(['success' => 'Cantidad actualizada']);
-    } else {
-        return $this->response->setJSON(['error' => 'No se pudo actualizar la cantidad']);
-    }
-}
 
 
     /**
@@ -175,6 +175,27 @@ class CartController extends Controller
             $result = $this->compraEstadoModel->actualizar($purchaseId);
 
             if ($result) {
+                // Obtener los productos del carrito
+                $cartItems = $this->cartModel->getCartItems($purchaseId);
+
+                // Actualizar el stock de los productos
+                foreach ($cartItems as $item) {
+                    $productId = $item['idproducto'];
+                    $quantityPurchased = $item['cicantidad'];
+
+                    // Obtener el producto desde el modelo ProductModel
+                    $product = $this->productModel->findProductById($productId);
+
+                    // Verificar si el producto existe y si hay stock suficiente
+                    if ($product && $product['procantstock'] >= $quantityPurchased) {
+                        // Llamar al método updateStock para actualizar el stock del producto
+                        $this->productModel->updateStock($productId, $quantityPurchased);
+                    } else {
+                        // Si no hay stock suficiente, devolver un error
+                        return $this->response->setJSON(['error' => 'No hay suficiente stock para completar la compra']);
+                    }
+                }
+
                 // Obtener el correo del usuario usando su ID
                 $user = $this->usuarioModel->find($userId);  // Buscar el usuario por su ID
 
@@ -185,9 +206,9 @@ class CartController extends Controller
                     $invoiceData = [
                         'purchaseId' => $purchaseId,
                         'user' => $user,
-                        'items' => $this->cartModel->getCartItems($purchaseId),
+                        'items' => $cartItems,
                         'total' => array_reduce(
-                            $this->cartModel->getCartItems($purchaseId),
+                            $cartItems,
                             fn($carry, $item) => $carry + ($item['precioproducto'] * $item['cicantidad']),
                             0
                         ),
@@ -211,76 +232,76 @@ class CartController extends Controller
 
 
     public function sendInvoice($invoiceData)
-{
-    // Obtener los productos y datos del carrito
-    $purchaseId = session()->get('cart_id');
-    $cartItems = $this->cartModel->getCartItems($purchaseId);
+    {
+        // Obtener los productos y datos del carrito
+        $purchaseId = session()->get('cart_id');
+        $cartItems = $this->cartModel->getCartItems($purchaseId);
 
-    // Obtener los datos del cliente
-    $userId = session()->get('idusuario');  // Obtener ID de usuario desde la sesión
-    $user = $this->usuarioModel->find($userId);  // Obtener datos del cliente
+        // Obtener los datos del cliente
+        $userId = session()->get('idusuario');  // Obtener ID de usuario desde la sesión
+        $user = $this->usuarioModel->find($userId);  // Obtener datos del cliente
 
-    // Crear los datos para la factura
-    $productos = [];
-    $subtotal = 0;
-    foreach ($cartItems as $item) {
-        $totalProducto = $item['cicantidad'] * $item['precioproducto'];
-        $subtotal += $totalProducto;
-        $productos[] = [
-            "precio" => $item['precioproducto'],
-            "descripcion" => $item['pronombre'],
-            "cantidad" => $item['cicantidad'],
+        // Crear los datos para la factura
+        $productos = [];
+        $subtotal = 0;
+        foreach ($cartItems as $item) {
+            $totalProducto = $item['cicantidad'] * $item['precioproducto'];
+            $subtotal += $totalProducto;
+            $productos[] = [
+                "precio" => $item['precioproducto'],
+                "descripcion" => $item['pronombre'],
+                "cantidad" => $item['cicantidad'],
+            ];
+        }
+
+        // Cálculos adicionales
+        $descuento = 0;  // Si hay descuento, puedes calcularlo aquí
+        $porcentajeImpuestos = 0;  // Impuesto ahora es 0
+        $subtotalConDescuento = $subtotal - $descuento;
+        $impuestos = 0;  // Impuestos es 0
+        $total = $subtotalConDescuento + $impuestos;  // Total no se modifica con impuestos
+        $remitente = "# Cebando Historias";
+        $fecha = date("Y-m-d");
+        $numero = rand(1000, 9999);
+        $web = 'https://cebandohistorias.com.ar';
+        $cliente = $user['usnombre'];  // Nombre del cliente
+        $mensajePie = "Muchas gracias por su compra y por confiar en nuestros productos.";
+
+        // Pasar los datos a la vista
+        $data = [
+            'cliente' => $cliente,
+            'remitente' => $remitente,
+            'productos' => $productos,
+            'subtotal' => $subtotal,
+            'descuento' => $descuento,
+            'impuestos' => $impuestos,
+            'total' => $total,
+            'fecha' => $fecha,
+            'numero' => $numero,
+            'web' => $web,
+            'subtotalConDescuento' => $subtotalConDescuento,
+            'mensajePie' => $mensajePie
         ];
+
+        // Generar el HTML para la factura
+        $html = view('templates/invoice', $data);  // Pasar los datos a la vista
+
+        // Configurar Dompdf
+        $options = new Options();
+        $options->set('defaultFont', 'Courier');
+        $dompdf = new Dompdf($options);
+        // Cargar el contenido HTML
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // Guardar el PDF en un archivo temporal
+        $output = $dompdf->output();
+        $filePath = WRITEPATH . 'uploads/factura_' . $invoiceData['purchaseId'] . '.pdf';
+        file_put_contents($filePath, $output);
+
+        return $filePath; // Retornamos el path del archivo generado
     }
-
-    // Cálculos adicionales
-    $descuento = 0;  // Si hay descuento, puedes calcularlo aquí
-    $porcentajeImpuestos = 0;  // Impuesto ahora es 0
-    $subtotalConDescuento = $subtotal - $descuento;
-    $impuestos = 0;  // Impuestos es 0
-    $total = $subtotalConDescuento + $impuestos;  // Total no se modifica con impuestos
-    $remitente = "# Cebando Historias";
-    $fecha = date("Y-m-d");
-    $numero = rand(1000, 9999);
-    $web = 'https://cebandohistorias.com.ar';
-    $cliente = $user['usnombre'];  // Nombre del cliente
-    $mensajePie = "Muchas gracias por su compra y por confiar en nuestros productos.";
-
-    // Pasar los datos a la vista
-    $data = [
-        'cliente' => $cliente,
-        'remitente' => $remitente,
-        'productos' => $productos,
-        'subtotal' => $subtotal,
-        'descuento' => $descuento,
-        'impuestos' => $impuestos,
-        'total' => $total,
-        'fecha' => $fecha,
-        'numero' => $numero,
-        'web' => $web,
-        'subtotalConDescuento' => $subtotalConDescuento,
-        'mensajePie' => $mensajePie
-    ];
-
-    // Generar el HTML para la factura
-    $html = view('templates/invoice', $data);  // Pasar los datos a la vista
-
-    // Configurar Dompdf
-    $options = new Options();
-    $options->set('defaultFont', 'Courier');
-    $dompdf = new Dompdf($options);
-    // Cargar el contenido HTML
-    $dompdf->loadHtml($html);
-    $dompdf->setPaper('A4', 'portrait');
-    $dompdf->render();
-
-    // Guardar el PDF en un archivo temporal
-    $output = $dompdf->output();
-    $filePath = WRITEPATH . 'uploads/factura_' . $invoiceData['purchaseId'] . '.pdf';
-    file_put_contents($filePath, $output);
-
-    return $filePath; // Retornamos el path del archivo generado
-}
 
 
 

@@ -116,6 +116,7 @@ class CompraEstadoModel extends Model
             $data['cefechafin']=date('Y-m-d H:i:s');
             if($this->insert($data)){
                 $actualizado = true;
+                $compraModel->devolverStock($idCompra);
                 $emailSend = new EmailSend();
                 $usuarioModel = new UsuarioModel();
                 $usuario = $usuarioModel->find($compra['idusuario']);
