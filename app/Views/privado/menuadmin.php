@@ -18,7 +18,7 @@
         <?php foreach($menus as $menu): ?>
         <div class="card m-3" style="width: 18rem; height: 25rem;">
             <div class="card-body d-flex flex-column justify-content-center align-items-center text-center">
-                <h5 class="card-title" style="font-size: 4rem;"><strong><i class="fa-solid fa-circle-user"></i></strong>
+                <h5 class="card-title" style="font-size: 4rem;"><strong><i class="fa-solid fa-gear"></i></i></strong>
                 </h5>
                 <p class="card-text" style="font-size: 2rem;"><?=$menu['menombre']?></p>
                 <p class="card-text" style="font-size: 1.2rem;"><?=$menu['medescripcion']?></p>

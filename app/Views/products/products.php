@@ -44,6 +44,26 @@
       <ul class="pagination justify-content-center" id="pagination"></ul>
     </nav>
   </div>
+
+  
+
+ <!-- Modal de Mensajes -->
+<div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="messageModalLabel">Notificación</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body" id="messageModalBody">
+        <!-- El mensaje será dinámico -->
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
   <?= view('estructura/footer'); ?>
 
   <!-- Datos de productos en JSON -->
