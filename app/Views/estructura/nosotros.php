@@ -65,7 +65,7 @@
         </br>
     </main>
     <?= view('estructura/footer'); ?>
-    <!-- <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script> -->
+    <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
     <script src="<?= base_url('javascript/jquery.min.js'); ?>"></script>
 </body>
 

@@ -60,17 +60,11 @@ class CompraModel extends Model
         $compraModel=new CompraModel();
         $compra=$compraModel->find($idCompra);
         if($compra){
-            $productos=$this->darProductos($idCompra);
-            foreach($productos as $producto){
-                $productoModel=new ProductModel();
-                $stockActual=$producto['procantstock'];
-                $nuevoStock=$stockActual+$producto['cicantidad'];
-                $productoModel->update($producto['idproducto'],['procantstock'=>$nuevoStock]);
-            }
             $nuevoEstadoCompra=[
                 'idcompra'=>$idCompra,
-                'idcompraestadotipo'=>6,
-                'cefechaini'=>date('Y-m-d H:i:s')
+                'idcompraestadotipo'=>5,
+                'cefechaini'=>date('Y-m-d H:i:s'),
+                'cefechafin'=>date('Y-m-d H:i:s')
             ];
             $compraEstadoModel=new CompraEstadoModel();
             $compraEstadoModel->insert($nuevoEstadoCompra);
