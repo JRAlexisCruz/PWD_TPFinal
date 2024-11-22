@@ -120,11 +120,16 @@ $(document).ready(function () {
                 if (response.success) {
                     showModal('Producto agregado al carrito');
                 } else {
-                    showModal('Error al agregar el producto al carrito');
+                    showModal('Inicie sesión para agregar productos al carrito'); //Hubo un error al agregar el producto
                 }
             },
-            error: function () {
-                showModal('Hubo un error al agregar el producto');
+            error: function (xhr) {
+                if (xhr.status === 303 || xhr.status === 302) {
+                    // Redirigir al usuario a la página de inicio de sesión
+                    window.location.href = xhr.getResponseHeader('Location') || '/login';
+                } else {
+                    showModal('Hubo un error al agregar el producto');
+                }
             }
         });
     });
