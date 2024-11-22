@@ -5,59 +5,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('css/styles.css') ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script type="text/javascript" src="<?= base_url('javascript/jquery.min.js') ?>"></script>
     <title>Mis compras</title>
 </head>
 
 <body>
-    <h1>Mis Compras</h1>
-    <main class="d-flex flex-column" style="gap:15px">
+    <?= view('estructura/header') ?>
+    <h1 class="text-center" style="margin:30px 0">Mis compras</h1>
+    <main class="d-flex flex-column" style="gap:50px">
 
     </main>
-
-    <div class="card" style="width:fit-content;display:none;min-width:30%" id="compra-example">
-        <div class="card-header d-flex justify-content-between">
-            <p id="compra-fecha">12/12/2012</p>
-            <p id="compra-estado">Confirmada</p>
-        </div>
-        <div class="card-body d-flex justify-content-center" style="gap:10px" id="compra-body">
-
-        </div>
-        <div class="card-footer d-flex justify-content-between" id="compra-footer">
-            <p id="compra-total">Total: $1000</p>
-            <button type="button" class="btn btn-danger" style="display:none" id="cancelar" onclick="openModal(this)">Cancelar</button>
-            <input type="hidden" name="idcompra" id="idcompra">
-        </div>
-
-    </div>
-
-    <div class="card" style="width:fit-content;display:none" id="producto-example">
-        <img src="" class="card-img-top" alt="" style="width:100%;height:120px" id="producto-imagen">
-        <div class="card-body">
-            <h5 class="card-title" id="producto-nombre">Bombilla</h5>
-            <p class="card-text" id="producto-precio">Precio unitario: $1000</p>
-            <p class="card-text" id="producto-cantidad">Cantidad: 2</p>
-        </div>
-    </div>
-
+    <!-- Modal -->
     <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Cancelar compra</h1>
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Confirmar</h1>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    ¿Está seguro que desea cancelar la compra?
+                    ¿Esta seguro que quiere cancelar la compra?
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-success" data-bs-dismiss="modal" onclick="cancel()">Si</button>
-                    <button type="button" class="btn btn-danger" onclick="closeModal()">No</button>
+                    <button type="button" class="btn btn-secondary" onclick="cancel()">Si</button>
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">No</button>
                 </div>
             </div>
         </div>
     </div>
+    <table class="table" id="tableExample" style="display:none">
+        <thead class="table">
+            <tr>
+                <th>Imagen</th>
+                <th>Nombre del Producto</th>
+                <th>Cantidad</th>
+                <th>Precio Unitario</th>
+                <th>Precio Total</th>
+            </tr>
+        </thead>
+        <tbody class="table-group-divider">
 
+        </tbody>
+
+    </table>
+
+    <?= view('estructura/footer') ?>
     <script>
         $(document).ready(function() {
             $.ajax({
@@ -67,7 +61,7 @@
                 dataType: "json",
                 success: function(response) {
                     $.each(response.compras, function(index, compra) {
-                        crearCardCompra(compra);
+                        crearFormCompra(compra);
                     });
                 }
             });
@@ -75,31 +69,57 @@
 
         });
 
-        function crearCardCompra(compra) {
-            let compraCard = $("#compra-example").clone();
-            compraCard.attr("id", "compra-" + compra.idcompra);
-            compraCard.find("#compra-fecha").text(compra.cofecha);
-            compraCard.find("#compra-estado").text(compra.estado);
-            compraCard.find("#idcompra").val(compra.idcompra);
-            if (compra.estado === "confirmada") {
-                compraCard.find("#cancelar").show();
-            } else {
-                compraCard.find("#cancelar").hide();
-            }
-            let total=0;
+        function crearFormCompra(compra) {
+            let nuevaTable = $('#tableExample').clone();
+            nuevaTable.attr('id', 'compra_' + compra.idcompra);
+            tableBody = nuevaTable.find('tbody');
+            let total = 0;
             $.each(compra.productos, function(index, producto) {
-                let productoCard = $("#producto-example").clone();
-                productoCard.find("#producto-nombre").text(producto.pronombre);
-                productoCard.find("#producto-precio").text("Precio unitario: $" + producto.precioproducto);
-                productoCard.find("#producto-cantidad").text("Cantidad: " + producto.cicantidad);
-                productoCard.find("#producto-imagen").attr("src", "http://localhost/PWD/PWD_TPFinal/public/" + producto.proimagen);
-                total+=producto.precioproducto*producto.cicantidad;
-                productoCard.show();
-                compraCard.find("#compra-body").append(productoCard);
+                let row = $('<tr></tr>');
+                let tdImagen = $('<td></td>').attr('class', 'text-center');
+                let img = $('<img>').attr('src', "../images/" + producto.proimagen + '.jpg').attr('alt', producto.pronombre).attr('class', 'rounded-circle').attr('style', 'width: 80px; height: 80px; object-fit: cover;');
+                tdImagen.append(img);
+                row.append(tdImagen);
+                let tdNombre = $('<td></td>').attr('class', 'text-center').text(producto.pronombre);
+                row.append(tdNombre);
+                let tdCantidad = $('<td></td>').attr('class', 'text-center').text(producto.cicantidad);
+                row.append(tdCantidad);
+                let tdUnitario = $('<td></td>').attr('class', 'text-center').text("$" + producto.precioproducto);
+                row.append(tdUnitario);
+                let tdTotal = $('<td></td>').attr('class', 'text-center').text("$" + producto.precioproducto * producto.cicantidad);
+                total += producto.precioproducto * producto.cicantidad;
+                row.append(tdTotal);
+                tableBody.append(row);
             });
-            compraCard.find("#compra-total").text("Total: $" + total);
-            compraCard.show();
-            $("main").append(compraCard);
+            let estado = $('<p></p>').text(compra.estado);
+            estado.css('margin', '0');
+            estado.css('padding', '10px 0');
+            estado.css('padding-left', '30px');
+            estado.css('font-weight', 'bold');
+            let divEstado = $('<div></div>').attr('class', 'd-flex justify-content-between align-items-center');
+            divEstado.css('background-color', 'rgb(242, 242, 242)');
+            divEstado.append(estado);
+            let footer = $('<div></div>').attr('class', 'd-flex justify-content-between align-items-center');
+            footer.css('background-color', 'rgb(242, 242, 242)');
+            let pTotal = $('<p></p>').text('Total: $' + total);
+            pTotal.css('padding-left', '30px');
+            pTotal.css('margin', '0');
+            pTotal.css('font-size', '20px');
+            footer.append(pTotal);
+            if (compra.estado == 'Confirmada') {
+                let button = $('<button></button>').attr('class', 'btn btn-danger').attr('onclick', 'openModal(this)').text('Cancelar compra');
+                button.css('margin-right', '30px');
+                let input = $('<input>').attr('type', 'hidden').val(compra.idcompra);
+                footer.append(button);
+                footer.append(input);
+            }
+            footer.css('padding-bottom', '10px');
+            nuevaTable.show();
+            let div = $('<div></div>').attr('class', 'container mt4');
+            div.append(nuevaTable);
+            div.append(divEstado);
+            div.append(footer);
+            $('main').append(div);
         }
 
         function openModal(boton) {
@@ -110,7 +130,6 @@
 
         function closeModal() {
             $("#staticBackdrop").modal('hide');
-            console.log(idcompramodal);
         }
 
         function cancel() {
@@ -125,12 +144,13 @@
                     if (response.success) {
                         $("main").empty();
                         $.each(response.compras, function(index, compra) {
-                            crearCardCompra(compra);
+                            crearFormCompra(compra);
                         });
+                        closeModal();
                     }
                 }
             });
-            closeModal();
+            
         }
     </script>
 </body>

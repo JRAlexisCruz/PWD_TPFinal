@@ -32,4 +32,4 @@
 <a href="https://wa.me/1234567890" target="_blank" class="btn btn-success position-fixed"
     style="bottom: 20px; right: 20px; border-radius: 50%; padding: 20px 30px; font-size: 30px;">
     <i class="fab fa-whatsapp"></i>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> -->

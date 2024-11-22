@@ -24,7 +24,7 @@ class CompraEstadoController extends BaseController
         $compras=$compraModel->findAll();
         $retorno = [];
         foreach($compras as $compra){
-            $estadoCompraTipo = $this->estadoCompraModel->where('idcompra', $compra['idcompra'])->join('compraestadotipo', 'compraestado.idcompraestadotipo = compraestadotipo.idcompraestadotipo')->select('compraestado.*, compraestadotipo.cetdescripcion as estado')->orderBy('compraestado.idcompraestado', 'DESC')->first();
+            $estadoCompraTipo = $this->estadoCompraModel->where('idcompra', $compra['idcompra'])->where('idcompraestadotipo >',0)->join('compraestadotipo', 'compraestado.idcompraestadotipo = compraestadotipo.idcompraestadotipo')->select('compraestado.*, compraestadotipo.cetdescripcion as estado')->orderBy('compraestado.idcompraestado', 'DESC')->first();
             $retorno[] = $estadoCompraTipo;
         }
         echo json_encode($retorno);
@@ -51,7 +51,7 @@ class CompraEstadoController extends BaseController
                 $mensaje['errorMsg'] = $this->estadoCompraModel->getError();
             }
         }
-        $this->response->setJSON($mensaje);
+        echo json_encode($mensaje);
     }
 
     public function cancelar(){
@@ -66,7 +66,7 @@ class CompraEstadoController extends BaseController
                 $mensaje['errorMsg'] = $this->estadoCompraModel->getError();
             }
         }
-        $this->response->setJSON($mensaje);
+        echo json_encode($mensaje);
     }
 
 

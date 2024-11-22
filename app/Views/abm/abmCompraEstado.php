@@ -40,14 +40,14 @@
             <h3>Editar Estado</h3>
             <div style="margin-bottom:10px">
                 <label for="idcompraestado" style="display:inline-block;width:150px;">ID Estado:</label>
-                <input name="idcompraestado" class="easyui-validatebox idcompraestado" style="width:100%">
+                <input name="idcompraestado" class="easyui-validatebox idcompraestado" style="width:100%" readonly>
             </div>
             <div style="margin-bottom:10px">
                 <label for="estado" style="display:inline-block;width:150px;">ID Compra:</label>
-                <input name="idcompra" class="easyui-validatebox idcompra" style="width:100%">
+                <input name="idcompra" class="easyui-validatebox idcompra" style="width:100%" readonly>
             </div>
             <div style="margin-bottom:10px">
-                <label for="fechainicio" style="display:inline-block;width:150px;">Fecha de Inicio:</label>
+                <label for="cetfechaini" style="display:inline-block;width:150px;">Fecha de Inicio:</label>
                 <input class="easyui-datetimebox fechainicio" name="fechainicio" data-options="showSeconds:false" value="<?= date('Y-m-d H:i:s'); ?>" style="width:150px" readonly>
             </div>
         </form>
@@ -90,14 +90,20 @@
                     return $(this).form('validate');
                 },
                 success: function(result) {
-                    console.log(result);
-                    var result = eval('(' + result + ')');
+                    $('#dlg-edit').dialog('close');
+                    $('#dg').datagrid('reload');
+                    try{
+                        var result = eval('(' + result + ')');
                     if (!result.success) {
                         $.messager.alert('Error', result.errorMsg, 'error');
                     } else {
                         $('#dlg-edit').dialog('close');
                         $('#dg').datagrid('reload');
                     }
+                    }catch(e){
+                        console.log(e);
+                    }
+                    console.log(result);
                 }
             });
         }
