@@ -167,5 +167,6 @@
 
     </main>
     <?= view('estructura/footer'); ?>
+    <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
 </body>
 </html>
