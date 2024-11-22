@@ -21,13 +21,8 @@ class CompraEstadoController extends BaseController
     // Original de alexis
      public function listarProductos(){
         $compraModel= new CompraModel();
-        $compras=$compraModel->findAll();
-        $retorno = [];
-        foreach($compras as $compra){
-            $estadoCompraTipo = $this->estadoCompraModel->where('idcompra', $compra['idcompra'])->where('idcompraestadotipo >',0)->join('compraestadotipo', 'compraestado.idcompraestadotipo = compraestadotipo.idcompraestadotipo')->select('compraestado.*, compraestadotipo.cetdescripcion as estado')->orderBy('compraestado.idcompraestado', 'DESC')->first();
-            $retorno[] = $estadoCompraTipo;
-        }
-        echo json_encode($retorno);
+        $compras = $compraModel->listar();
+        echo json_encode($compras);
     }
 
     public function listar()

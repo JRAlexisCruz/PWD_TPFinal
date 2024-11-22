@@ -4,18 +4,22 @@
 <head>
     <meta charset="UTF-8">
     <title>Administración de Estados de Compra</title>
-    <link rel="stylesheet" type="text/css" href="<?= base_url('javascript/jquery-easyui-1.11.0/themes/default/easyui.css') ?>">
-    <link rel="stylesheet" type="text/css" href="<?= base_url('javascript/jquery-easyui-1.11.0/themes/icon.css') ?>">
-    <link rel="stylesheet" type="text/css" href="<?= base_url('javascript/jquery-easyui-1.11.0/demo/demo.css') ?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/themes/default/easyui.css')?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/themes/icon.css')?>">
+    <link rel="stylesheet" type="text/css" href="<?=base_url('javascript/jquery-easyui-1.11.0/demo/demo.css')?>">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/4.2.0/crypto-js.min.js" integrity="sha512-a+SUDuwNzXDvz4XrIcXHuCf089/iJAoN4lmrXJg18XnduKK6YlDHNRalv4yd1N40OKI80tFidF+rqTFKGPoWFQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript" src="<?= base_url('javascript/jquery.min.js') ?>"></script>
-    <script type="text/javascript" src="<?= base_url('javascript/jquery-easyui-1.11.0/jquery.easyui.min.js') ?>"></script>
+    <script type="text/javascript" src="<?=base_url('javascript/jquery.min.js')?>"></script>
+    <script type="text/javascript" src="<?=base_url('javascript/jquery-easyui-1.11.0/jquery.easyui.min.js')?>"></script>
     <script type="text/javascript" src="https://www.jeasyui.com/easyui/datagrid-detailview.js"></script>
+    <link href="<?= base_url('css/bootstrap.min.css'); ?>" rel="stylesheet">
+    <link rel="stylesheet" href="<?= base_url('/css/styles.css') ?>">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 
 <body>
+    <?= view('estructura/header'); ?>
     <!-- Tabla principal -->
-    <table id="dg" title="Estados de Compra" class="easyui-datagrid" style="width:100%;height:250px"
+    <table id="dg" title="Estados de Compra" class="easyui-datagrid" style="width:95%;height:250px"
         url="<?= base_url('admin/estados/listar') ?>"
         toolbar="#toolbar" pagination="true"
         rownumbers="true" fitColumns="true" singleSelect="true" method="get">
@@ -63,8 +67,8 @@
         function edit() {
             var row = $('#dg').datagrid('getSelected');
             if (row) {
-                if(row.estado == 'cancelada por usuario' || row.estado == 'cancelado por administrador' || row.estado == 'recibida'){
-                    $.messager.alert('Error', 'No se puede editar un estado cancelado', 'error');
+                if(row.estado == 'Cancelada por el cliente' || row.estado == 'Cancelada por el administrador' || row.estado == 'Recibida por el cliente'){
+                    $.messager.alert('Error', 'No se puede editar un estado cancelado o recibido', 'error');
                     return;
                 }else{
                     $('#dlg-edit').dialog('open').dialog('center').dialog('setTitle', 'Editar Estado de Compra');
@@ -79,6 +83,12 @@
         }
 
         function cancel() {
+            var row = $('#dg').datagrid('getSelected');
+            if(row.estado == 'Enviada a destino' || row.estado == 'Recibida por el cliente' ){
+                $('#dlg-edit').dialog('close');
+                $.messager.alert('Error', 'No se puede cancelar esta compra', 'error');
+                return;
+            }
             url="<?= base_url('admin/estados/cancelar') ?>";
             save();
         }
@@ -90,8 +100,6 @@
                     return $(this).form('validate');
                 },
                 success: function(result) {
-                    $('#dlg-edit').dialog('close');
-                    $('#dg').datagrid('reload');
                     try{
                         var result = eval('(' + result + ')');
                     if (!result.success) {
@@ -108,6 +116,8 @@
             });
         }
     </script>
+    <?= view('estructura/footer'); ?>
+    <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
 </body>
 
 </html>
