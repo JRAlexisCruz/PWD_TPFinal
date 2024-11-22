@@ -109,9 +109,8 @@
                         $('#dg').datagrid('reload');
                     }
                     }catch(e){
-                        console.log(e);
+
                     }
-                    console.log(result);
                 }
             });
         }

@@ -71,16 +71,27 @@ class CompraModel extends Model
         }
     }
 
-    public function listar(){
-        $compras=$this->findAll();
-        $compraEstadoModel=new CompraEstadoModel();
+    public function listar()
+    {
+        $compras = $this->findAll();
+        $compraEstadoModel = new CompraEstadoModel();
         $retorno = [];
-        foreach($compras as $compra){
-            $estadoCompraTipo = $compraEstadoModel->where('idcompra', $compra['idcompra'])->join('compraestadotipo', 'compraestado.idcompraestadotipo = compraestadotipo.idcompraestadotipo')->select('compraestado.*, compraestadotipo.cetdescripcion as estado')->orderBy('compraestado.idcompraestado', 'DESC')->first();
-            if($estadoCompraTipo['idcompraestadotipo']!=0){
+
+        foreach ($compras as $compra) {
+            // Obtener el estado más reciente de la compra
+            $estadoCompraTipo = $compraEstadoModel
+                ->where('idcompra', $compra['idcompra'])
+                ->join('compraestadotipo', 'compraestado.idcompraestadotipo = compraestadotipo.idcompraestadotipo')
+                ->select('compraestado.*, compraestadotipo.cetdescripcion as estado')
+                ->orderBy('compraestado.idcompraestado', 'DESC')
+                ->first();
+
+            // Verificar que el estado no sea null antes de acceder a sus índices
+            if ($estadoCompraTipo && isset($estadoCompraTipo['idcompraestadotipo']) && $estadoCompraTipo['idcompraestadotipo'] != 0) {
                 $retorno[] = $estadoCompraTipo;
             }
         }
+
         return $retorno;
     }
 
