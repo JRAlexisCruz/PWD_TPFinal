@@ -44,7 +44,7 @@
                     </button>
                 </div>
                 <p class="text-danger" style="display:none;" id="msg"></p>
-                <button class="btn btn-primary mt-3" id="submit" style="width:100%; display:none;">Guardar</button>
+                <button class="btn btn-primary mt-3" id="submit" style="width:100%; display:none;" disabled>Guardar</button>
             </form>
 
             <!-- Modal para editar la contraseña -->
@@ -75,100 +75,74 @@
         $(document).ready(function() {
             var usnombreinicial;
             var usmailinicial;
-            var uspassinicial;
+            var uspassinicial = '';
 
             cargar();
 
             $('#usnombre').on('change', function() {
-                if ($('#usnombre').val() != usnombreinicial || $('#usmail').val() != usmailinicial || $('#uspass').val() != uspassinicial) {
+                if ($('#usnombre').val() != usnombreinicial || $('#usmail').val() != usmailinicial || ($('#uspass').val() != uspassinicial && ('#uspass').val() != "")) {
                     $('#submit').show();
+                    if (verifInputs()) {
+                        $('#submit').removeAttr('disabled');
+                    } else {
+                        $('#submit').attr('disabled', 'true');
+                    }
                 } else {
                     $('#submit').hide();
                 }
             });
 
             $('#usmail').on('change', function() {
-                if ($('#usnombre').val() != usnombreinicial || $('#usmail').val() != usmailinicial || $('#uspass').val() != uspassinicial) {
+                if ($('#usnombre').val() != usnombreinicial || $('#usmail').val() != usmailinicial || ($('#uspass').val() != uspassinicial && ('#uspass').val() != "")) {
                     $('#submit').show();
+                    if (verifInputs()) {
+                        $('#submit').removeAttr('disabled');
+                    } else {
+                        $('#submit').attr('disabled', 'true');
+                    }
                 } else {
                     $('#submit').hide();
+                    $('submit').attr('disabled', 'true');
                 }
             });
 
             $('#uspass').on('change', function() {
-                if ($('#usnombre').val() != usnombreinicial || $('#usmail').val() != usmailinicial || $('#uspass').val() != uspassinicial) {
+                if ($('#usnombre').val() != usnombreinicial || $('#usmail').val() || $('#uspass').val() != uspassinicial || ($('#uspass').val() != uspassinicial && ('#uspass').val() != "")) {
                     $('#submit').show();
                 } else {
                     $('#submit').hide();
+                    $('submit').attr('disabled', 'true');
                 }
             });
 
             $('#submit').on('click', function() {
-                let nombreValido = false;
-                let emailValido = false;
-                let passValido = false;
-                if ($('#uspass').val() == '') {
-                    pass = '';
-                } else {
-                    pass = CryptoJS.SHA256($('#uspass').val()).toString();
-                }
-                if ($('#usnombre').val() == '') {
-                    $('#error-usnombre').text('El nombre de usuario no puede estar vacío');
-                    $('#error-usnombre').show();
-
-                } else {
-                    $('#error-usnombre').hide();
-                    nombreValido = true;
-                }
-                if ($('#usmail').val() == '') {
-                    $('#error-usmail').text('El email no puede estar vacío');
-                    $('#error-usmail').show();
-                } else {
-                    if (!validarEmail($('#usmail').val())) {
-                        $('#error-usmail').text('El email no es válido');
-                        $('#error-usmail').show();
-                    } else {
-                        $('#error-usmail').hide();
-                        emailValido = true;
-                    }
-                }
-                if ($('#uspass').val() == '') {
-                    $('#error-uspass').text('La contraseña no puede estar vacía');
-                    $('#error-uspass').show();
-                } else {
-                    $('#error-uspass').hide();
-                    passValido = true;
-                }
-
-                if (nombreValido && emailValido && passValido) {
-                    $.ajax({
-                        url: '<?= base_url('perfil/editar') ?>',
-                        type: 'POST',
-                        data: {
-                            usnombre: $('#usnombre').val(),
-                            usmail: $('#usmail').val(),
-                            uspass: pass
-                        },
-                        dataType: 'json',
-                        success: function(data) {
-                            if (data.success) {
-                                $('#msg').text(data.msg);
-                                $('#msg').removeClass('alert alert-danger');
-                                $('#msg').addClass('alert alert-success');
-                                $('#msg').show();
-                                cargar();
-                            } else {
-                                $('#msg').text(data.msg);
-                                $('#msg').removeClass('alert alert-success');
-                                $('#msg').addClass('alert alert-danger');
-                                $('#msg').show();
-                            }
-                            $('#submit').hide();
-                            $('#uspass').attr('disabled', 'true');
-                            $('#edit').show();
+                $.ajax({
+                    url: '',
+                    type: 'POST',
+                    data: {
+                        usnombre: $('#usnombre').val(),
+                        usmail: $('#usmail').val(),
+                        uspass: pass
+                    },
+                    dataType: 'json',
+                    success: function(data) {
+                        if (data.success) {
+                            $('#msg').text(data.msg);
+                            $('#msg').removeClass('alert alert-danger');
+                            $('#msg').addClass('alert alert-success');
+                            $('#msg').show();
+                            cargar();
+                        } else {
+                            $('#msg').text(data.msg);
+                            $('#msg').removeClass('alert alert-success');
+                            $('#msg').addClass('alert alert-danger');
+                            $('#msg').show();
                         }
-                    });
-                }
+                        $('#submit').hide();
+                        $('#uspass').attr('disabled', 'true');
+                        $('#edit').show();
+                    }
+                });
 
             });
 
@@ -232,6 +206,38 @@
             function validarEmail(email) {
                 var regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                 return regex.test(email);
+            }
+
+            function verifInputs() {
+                let nombreValido = false;
+                let emailValido = false;
+                let passValido = false;
+                if ($('#uspass').val() == '') {
+                    pass = '';
+                } else {
+                    pass = CryptoJS.SHA256($('#uspass').val()).toString();
+                }
+                if ($('#usnombre').val() == '') {
+                    $('#error-usnombre').text('El nombre de usuario no puede estar vacío');
+                    $('#error-usnombre').show();
+
+                } else {
+                    $('#error-usnombre').hide();
+                    nombreValido = true;
+                }
+                if ($('#usmail').val() == '') {
+                    $('#error-usmail').text('El email no puede estar vacío');
+                    $('#error-usmail').show();
+                } else {
+                    if (!validarEmail($('#usmail').val())) {
+                        $('#error-usmail').text('El email no es válido');
+                        $('#error-usmail').show();
+                    } else {
+                        $('#error-usmail').hide();
+                        emailValido = true;
+                    }
+                }
+                return nombreValido && emailValido;
             }
 
         });

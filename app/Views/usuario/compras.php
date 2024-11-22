@@ -44,16 +44,27 @@
                 data: {},
                 dataType: "json",
                 success: function(response) {
-                    $.each(response.compras, function(index, compra) {
-                        crearFormCompra(compra);
-                    });
+                    if(response.compras.length==0){
+                        let subtitle=$('<h2> Usted aun no ha realizado compras </h2>');
+                        subtitle.css('text-align','center');
+                        subtitle.css('margin-top','10px');
+                        subtitle.css('margin-bottom','30px');
+                        subtitle.css('font-weight','bold');
+                        subtitle.css('font-size','30px');
+                        $('main').append(subtitle);
+                    }else{
+                        $.each(response.compras, function(index, compra) {
+                            crearTableCompra(compra);
+                        });
+                    }
+                    
                 }
             });
             var idcompramodal;
 
         });
 
-        function crearFormCompra(compra) {
+        function crearTableCompra(compra) {
             if(compra.productos.length!=0){
                 let fecha = $('<p> Fecha: '+compra.cofecha.split(' ')[0]+' </p>') ;
                 fecha.css('font-weight', 'bold');
@@ -125,6 +136,7 @@
                 pTotal.css('padding-left', '30px');
                 pTotal.css('margin', '0');
                 pTotal.css('font-size', '20px');
+                pTotal.css('font-weight', 'bold');
                 footer.append(pTotal);
                 if (compra.estado == 'Confirmada') {
                     let button = $('<button></button>').attr('class', 'btn btn-danger').attr('onclick', 'openModal(this)').text('Cancelar compra');
@@ -165,7 +177,7 @@
                     if (response.success) {
                         $("main").empty();
                         $.each(response.compras, function(index, compra) {
-                            crearFormCompra(compra);
+                            crearTableCompra(compra);
                         });
                         closeModal();
                     }
