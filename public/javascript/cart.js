@@ -40,27 +40,83 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  // Función para actualizar el carrito
   function updateCart(productId, quantity, inputElement) {
     const row = inputElement.closest('tr');
-    const unitPrice = parseFloat(row.querySelector('.text-center').innerText.replace('$', '').replace(',', '.'));
+    const unitPriceText = row.querySelector('.unit-price').innerText.replace('$', '').replace('.', '').replace(',', '.');
+    const unitPrice = parseFloat(unitPriceText);
     const totalPriceElement = row.querySelector('.item-total');
 
-    // Actualizar el precio total del producto
-    const totalPrice = unitPrice * quantity;
-    totalPriceElement.innerText = `$${totalPrice.toFixed(2).replace('.', ',')}`;
+    // Calcular el precio total por producto
+    if (!isNaN(unitPrice)) {
+      const totalPrice = unitPrice * quantity;
 
-    // Actualizar el total general del carrito
-    updateCartTotal();
+      // Actualizar el precio total por producto
+      totalPriceElement.innerText = `${totalPrice.toFixed(2).replace('.', ',')}`; // No agregar el signo $ aquí
+
+      // Actualizar el total general del carrito
+      updateCartTotal();
+    }
   }
 
+  // Eliminar producto del carrito
+  document.querySelectorAll('.delete-item').forEach(button => {
+    button.addEventListener('click', function () {
+      const cartItemId = parseInt(this.dataset.id);
+      
+      // Verificar si el cartItemId está presente
+      if (!cartItemId) {
+        console.error('cartItemId no encontrado en el botón de eliminación');
+        return;
+      }
+
+      console.log('ID del producto a eliminar:', cartItemId);
+      console.log(typeof(cartItemId));
+
+      // Confirmación de eliminación
+      if (confirm('¿Estás seguro de que deseas eliminar este producto del carrito?')) {
+        // Hacer la solicitud AJAX para eliminar el producto usando jQuery
+        $.ajax({
+          url: 'http://localhost/PWD/PWD_TPFinal/public/cart/removeFromCart', // URL de la API
+          method: 'POST', // Método HTTP
+          contentType: 'application/json', // Tipo de contenido
+          data: JSON.stringify({ cartItemId: cartItemId }), // Enviar cartItemId como JSON
+          success: function (data) {
+            if (data.success) {
+              // Eliminar el elemento de la tabla
+              button.closest('tr').remove();
+              // Actualizar el total del carrito
+              updateCartTotal();
+              alert('Producto eliminado del carrito');
+            } else {
+              alert(data.error || 'No se pudo eliminar el producto');
+            }
+          },
+          error: function (error) {
+            console.error('Error al eliminar el producto:', error);
+            alert('Hubo un error al eliminar el producto');
+          }
+        });
+      }
+    });
+  });
+
+  // Función para actualizar el total del carrito
   function updateCartTotal() {
     let cartTotal = 0;
 
     document.querySelectorAll('.item-total').forEach(totalElement => {
-      const totalPrice = parseFloat(totalElement.innerText.replace('$', '').replace(',', '.'));
-      cartTotal += totalPrice;
+      // Asegurarse de eliminar el signo $ antes de hacer las operaciones
+      const totalPriceText = totalElement.innerText.replace('$', '').replace('.', '').replace(',', '.');
+      const totalPrice = parseFloat(totalPriceText);
+
+      if (!isNaN(totalPrice)) {
+        cartTotal += totalPrice;
+      }
     });
 
-    document.getElementById('cart-total').innerText = `$${cartTotal.toFixed(2).replace('.', ',')}`;
+
+    document.getElementById('cart-total').innerText = `${cartTotal.toFixed(2).replace('.', ',')}`;
   }
+
 });

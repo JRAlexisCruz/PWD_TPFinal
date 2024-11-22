@@ -46,29 +46,31 @@
               <!-- Cantidad con botones -->
               <td class="text-center">
                 <div class="input-group">
-                 
+
                   <input type="number"
                     class="form-control form-control-sm text-center quantity-input"
                     value="<?= esc($item['cicantidad']) ?>"
                     min="1"
                     max="<?= esc($item['procantstock']) ?>"
-                    data-id="<?= $item['idproducto'] ?>">
-                  
+                
+                    data-id="<?= $item['idcompraitem'] ?>">
+
                 </div>
                 <small class="fw-bold">Stock: <?= esc($item['procantstock']) ?></small>
               </td>
 
               <!-- Precio unitario -->
-              <td class="text-center">$<?= number_format($item['precioproducto'], 2, ',', '.') ?></td>
+              <td class="text-center unit-price">$<?= number_format($item['precioproducto'], 2, ',', '.') ?></td>
 
               <!-- Precio total -->
               <td class="text-center">
-                <span class="item-total">$<?= number_format($item['precioproducto'] * $item['cicantidad'], 2, ',', '.') ?></span> <!-- Cambié 'cantidad' por 'cicantidad' -->
+                <span class="item-total">$<?= number_format($item['precioproducto'] * $item['cicantidad'], 2, ',', '.') ?></span>
               </td>
+
 
               <!-- Botón eliminar -->
               <td class="text-center">
-                <button class="btn btn-sm " data-id="<?= $item['idproducto'] ?>" title="Eliminar producto del carrito">
+                <button class="btn btn-sm delete-item" data-id="<?= $item['idcompraitem'] ?>" title="Eliminar producto del carrito">
                   <i class="fas fa-trash"></i>
                 </button>
               </td>
@@ -100,8 +102,10 @@
     </div>
   </div>
 
+
   <!-- JS de Bootstrap -->
   <script src="<?= base_url('javascript/bootstrap.bundle.min.js'); ?>"></script>
+  <script src="<?= base_url('javascript/jquery.min.js'); ?>"></script>
   <script src="<?= base_url('javascript/cart.js'); ?>"></script>
 
   <?= view('estructura/footer'); ?>

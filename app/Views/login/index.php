@@ -79,7 +79,7 @@
         </div>
         <div class="input-group mt-3">
             <span class="input-group-text"><i class="fa-solid fa-lock"></i></span>
-            <input type="text" class="form-control" placeholder="Contraseña" aria-label="Password"  name="uspass" id="uspass">
+            <input type="password" class="form-control" placeholder="Contraseña" aria-label="Password"  name="uspass" id="uspass">
         </div>
         <div id="error-uspass">
 

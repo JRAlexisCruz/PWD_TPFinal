@@ -850,3 +850,17 @@ INFO - 2024-11-21 19:21:55 --> Session: Class initialized using 'CodeIgniter\Ses
 INFO - 2024-11-21 19:21:55 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 INFO - 2024-11-21 19:21:58 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
 INFO - 2024-11-21 19:22:02 --> Session: Class initialized using 'CodeIgniter\Session\Handlers\FileHandler' driver.
+CRITICAL - 2024-11-21 23:12:41 --> ErrorException: Undefined variable $cartItemId
+[Method: GET, Route: cart]
+in APPPATH\Views\shop\cart.php on line 104.
+ 1 APPPATH\Views\shop\cart.php(104): CodeIgniter\Debug\Exceptions->errorHandler(2, 'Undefined variable $cartItemId', 'C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Views\\shop\\cart.php', 104)
+ 2 SYSTEMPATH\View\View.php(234): include('C:\\xampp\\htdocs\\PWD\\PWD_TPFinal\\app\\Views\\shop\\cart.php')
+ 3 SYSTEMPATH\View\View.php(237): CodeIgniter\View\View->CodeIgniter\View\{closure}()
+ 4 SYSTEMPATH\Common.php(1171): CodeIgniter\View\View->render('shop/cart.php', [], true)
+ 5 APPPATH\Controllers\CartController.php(49): view('shop/cart.php', [...])
+ 6 SYSTEMPATH\CodeIgniter.php(933): App\Controllers\CartController->index()
+ 7 SYSTEMPATH\CodeIgniter.php(509): CodeIgniter\CodeIgniter->runController(Object(App\Controllers\CartController))
+ 8 SYSTEMPATH\CodeIgniter.php(355): CodeIgniter\CodeIgniter->handleRequest(null, Object(Config\Cache), false)
+ 9 SYSTEMPATH\Boot.php(325): CodeIgniter\CodeIgniter->run()
+10 SYSTEMPATH\Boot.php(67): CodeIgniter\Boot::runCodeIgniter(Object(CodeIgniter\CodeIgniter))
+11 FCPATH\index.php(56): CodeIgniter\Boot::bootWeb(Object(Config\Paths))

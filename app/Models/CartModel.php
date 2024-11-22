@@ -89,16 +89,29 @@ class CartModel extends Model
         return $this->update($cartItemId, ['cicantidad' => $quantity]);
     }
 
+
     /**
      * Eliminar un producto del carrito de compras.
      *
      * @param int $cartItemId
+     * @param int $cartId
      * @return bool
      */
-    public function removeItem($cartItemId)
+    public function removeItem($cartItemId, $cartId)
     {
-        return $this->delete($cartItemId);
+        $result = false; // Inicializar la variable de retorno
+
+        // Verificar que el item pertenece al carrito correcto
+        $item = $this->where(['idcompraitem' => $cartItemId, 'idcompra' => $cartId])->first();
+
+        if ($item) {
+            // Intentar eliminar el artículo
+            $result = $this->delete($cartItemId);
+        }
+
+        return $result; // Retornar el resultado
     }
+
 
     /**
      * Crear un carrito de compras para un usuario.
@@ -133,23 +146,23 @@ class CartModel extends Model
     {
         // Inicializar la variable que almacenará el ID de la compra
         $purchaseId = false;
-    
+
         // Buscar una compra activa para el usuario, con el estado "Ingresado al carrito"
         $purchase = $this->db->table('compra')
-                             ->join('compraestado', 'compra.idcompra = compraestado.idcompra')
-                             ->where('compra.idusuario', $userId)
-                             ->where('compraestado.idcompraestadotipo', 0) // Estado "Ingresado al carrito"
-                             ->get()
-                             ->getRowArray();
-    
-        // Si se encuentra una compra activa, almacenar su ID
-        if ($purchase != null) {
+            ->join('compraestado', 'compra.idcompra = compraestado.idcompra')
+            ->where('compra.idusuario', $userId)
+            ->orderBy('compraestado.idcompraestado', 'DESC') // Ordenar por el ID más alto
+            ->limit(1) // Limitar a una sola fila, la más reciente
+            ->get()
+            ->getRowArray();
+
+        // Verificar que la compra encontrada tenga el estado "Ingresado al carrito"
+        if ($purchase != null && $purchase['idcompraestadotipo'] == 0) {
+            // Si el estado es "Ingresado al carrito" (idcompraestadotipo == 0), almacenar su ID
             $purchaseId = $purchase['idcompra'];
         }
-    
-        // Devolver el ID de la compra o false
+
+        // Devolver el ID de la compra o false si no se encuentra el estado adecuado
         return $purchaseId;
     }
-    
-
 }

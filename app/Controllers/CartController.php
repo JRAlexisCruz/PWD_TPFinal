@@ -59,6 +59,7 @@ class CartController extends Controller
     {
         $userId = session()->get('idusuario');
         $purchaseId = session()->get('cart_id');
+        
 
         // Si no existe un carrito, lo creamos
         if (!$purchaseId) {
@@ -112,27 +113,41 @@ class CartController extends Controller
     }
 
     /**
-     * Eliminar un producto del carrito
-     */
-    public function removeFromCart()
-    {
-        $cartItemId = $this->request->getPost('cart_item_id');
+ * Eliminar un producto del carrito
+ */
+public function removeFromCart()
+{
+    // Obtener los datos del POST
+    $cartItemId = $this->request->getJSON(true)['cartItemId'];
 
-        // Verificar que se proporcionó el ID del producto
-        if (!$cartItemId) {
-            return $this->response->setJSON(['error' => 'ID de producto no proporcionado']);
-        }
+    $cartId = session()->get('cart_id'); // Obtener el ID del carrito desde la sesión
 
-        // Llamar al modelo para eliminar el producto
-        $result = $this->cartModel->removeItem($cartItemId);
+    // Inicializar la respuesta con un mensaje de error por defecto
+    $response = ['error' => 'No se pudo eliminar el producto'];
 
-        // Devolver una respuesta en formato JSON
+    // Verificar si el cartItemId y el cartId existen
+    if (!$cartItemId) {
+        $response = ['error' => 'ID de producto no proporcionado'];
+    } elseif (!$cartId) {
+        $response = ['error' => 'ID de carrito no proporcionado'];
+    } else {
+        // Si ambos valores existen, intentamos eliminar el producto
+        $result = $this->cartModel->removeItem($cartItemId, $cartId);
+        
+        // Verificar si la eliminación fue exitosa
         if ($result) {
-            return $this->response->setJSON(['success' => 'Producto eliminado del carrito']);
+            $response = ['success' => 'Producto eliminado del carrito'];
         } else {
-            return $this->response->setJSON(['error' => 'No se pudo eliminar el producto']);
+            $response = ['error' => 'No se pudo eliminar el producto'];
         }
     }
+
+    return $this->response->setJSON($response);
+}
+
+
+
+    
 
     /**
      * Confirmar la compra y cambiar el estado de la compra
