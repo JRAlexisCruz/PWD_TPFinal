@@ -16,7 +16,7 @@ class Cliente implements FilterInterface
             $esCliente=true;
         }
         if(!$esCliente){
-            return redirect()->to(base_url('404'));
+            return redirect()->to(base_url('home'));
         }
     }
 

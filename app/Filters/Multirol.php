@@ -16,7 +16,7 @@ class Multirol implements FilterInterface
             $multirol=true;
         }
         if(!$multirol){
-            return redirect()->to(base_url('404'));
+            return redirect()->to(base_url('home'));
         }
     }
 

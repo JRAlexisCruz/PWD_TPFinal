@@ -16,7 +16,7 @@ class AdminDeposito implements FilterInterface
             $esAdmin=true;
         }
         if(!$esAdmin){
-            return redirect()->to(base_url('404'));
+            return redirect()->to(base_url('home'));
         }
     }
 

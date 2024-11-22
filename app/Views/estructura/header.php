@@ -52,7 +52,9 @@
                                     <hr class="dropdown-divider">
                                 </li>
                                 <li><a class="dropdown-item" href="<?= base_url('perfil/editar') ?>">Editar perfil</a></li>
-                                <li><a class="dropdown-item" href="<?= base_url('perfil/compras') ?>">Mis compras</a></li>
+                                <?php if(!$esAdmin): ?>
+                                    <li><a class="dropdown-item" href="<?= base_url('perfil/compras') ?>">Mis compras</a></li>
+                                <?php endif; ?>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
