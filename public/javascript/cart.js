@@ -130,7 +130,7 @@ document.addEventListener('DOMContentLoaded', function () {
           if (data.success) {
             alert('Compra confirmada');
             // Redirigir al usuario a la página de éxito o de resumen
-            window.location.href = '<?= base_url("/order/success"); ?>'; // Ajusta esta URL según sea necesario
+            window.location.href = 'http://localhost/PWD/PWD_TPFinal/public/perfil/compras'; // Ajusta esta URL según sea necesario
           } else {
             alert(data.error || 'No se pudo confirmar la compra');
           }

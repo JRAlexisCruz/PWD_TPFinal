@@ -194,9 +194,6 @@ class CartController extends Controller
      */
     public function sendConfirmationEmail($userEmail)
     {
-        // Obtener la configuración de correo desde el archivo Email.php
-        $emailConfig = config('Email');
-
         // Crear una instancia del servicio de correo de CodeIgniter
         $email = \Config\Services::email();
 
@@ -204,12 +201,11 @@ class CartController extends Controller
         $fromName = "Cebando Historias";
 
         // Configurar los parámetros del correo usando la configuración de Email.php . PROBAR HARCODEAR
-        // $email->setFrom($emailConfig->$fromEmail, $emailConfig->$fromName);
-        // $email->setTo($userEmail);
+        $email->setFrom($fromEmail, $fromName);
         // Configurar los parámetros del correo usando la configuración de Email.php
         $email->setTo($userEmail);
         $email->setSubject('Compra Confirmada');
-        $email->setMessage('¡Tu compra ha sido confirmada! Gracias por tu compra. Nos estamos preparando para enviarlo.');
+        $email->setMessage('¡Tu compra ha sido confirmada! Gracias por tu compra. Adjunto a este mail encontraras la factura para descargar. Todas las actualizaciones de tu compra serán enviadas a este correo. ¡Gracias por confiar en nosotros!');
 
         $emailSent = false; // Variable para indicar si el correo fue enviado con éxito
 

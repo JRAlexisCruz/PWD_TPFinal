@@ -6,34 +6,20 @@ use CodeIgniter\Router\RouteCollection;
  * @var RouteCollection $routes
  */
 /* PRODUCTOS */
-$routes->get('/products', 'ProductController::listar');
-$routes->get('/products/detail/(:num)', 'ProductController::detail/$1');
-// $routes->get('/products/create', 'ProductController::create');
-// $routes->post('/products/create', 'ProductController::create');
-// $routes->get('/products/edit/(:num)', 'ProductController::edit/$1');
-// $routes->post('/products/edit/(:num)', 'ProductController::edit/$1');
-// $routes->get('/products/delete/(:num)', 'ProductsController::delete/$1');
+$routes->group('products', function($routes) {
+    $routes->get('/', 'ProductController::listar');
+    $routes->get('/detail/(:num)', 'ProductController::detail/$1');
+});
 
 
-/* CARRITO DE COMPRAS */ // --> REVISA POR QUE NO FUNCIONA
-// $routes->group('cart', ['filter' => 'autenticacion'], function($routes) {
-//     Ruta para obtener o crear un carrito (estado "0")
-//     $routes->get('/', 'CartController::index');
-    
-//     Ruta para agregar un producto al carrito
-//     $routes->post('/addToCart', 'CartController::addToCart');
-    
-//     Ruta para editar el carrito
-//     $routes->post('editar', 'CartController::edit'); 
+/* CARRITO DE COMPRAS */
+$routes->group('cart', ['filter' => 'autenticacion'], function($routes) {
+    $routes->get('/', 'CartController::index');
+    $routes->post('addToCart', 'CartController::addToCart');
+    $routes->post('removeFromCart', 'CartController::removeFromCart');
+    $routes->post('confirmPurchase', 'CartController::confirmPurchase');
+});
 
-//     Ruta para eliminar un producto del carrito 
-//     $routes->post('eliminar', 'CartController::remove'); 
-// });
-
-$routes->get('/cart', 'CartController::index', ['filter' => 'autenticacion']);
-$routes->post('/cart/addToCart', 'CartController::addToCart');
-$routes->post('/cart/removeFromCart', 'CartController::removeFromCart');
-$routes->post('/cart/confirmPurchase', 'CartController::confirmPurchase');
 
 /* LOGIN */
 $routes->get('/login', 'Session::login');
@@ -43,7 +29,7 @@ $routes->post('/login', 'Session::autenticar');
 $routes->get('/registro','Session::registro');
 $routes->post('/registro','Session::registrar');
 
-/* HOME PRUEBA */
+/* HOME */
 $routes->get('/home', 'Session::index');
 $routes->get('/nosotros', 'Home::nosotros');
 
