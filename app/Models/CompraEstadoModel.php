@@ -61,7 +61,7 @@ class CompraEstadoModel extends Model
             $ultimoEstadoCompra=$this->where('idcompra', $idCompra)
                  ->orderBy('idcompraestado', 'DESC')
                  ->first();
-            $idUltimoEstadoCompra = $ultimoEstadoCompra['idcompraestadotipo'];
+            $idUltimoEstadoCompra = $ultimoEstadoCompra['idcompraestado'];
             $finalizar=['cefechafin'=>date('Y-m-d H:i:s')];
             $this->update($idUltimoEstadoCompra, $finalizar);
             $ultimoEstado = $ultimoEstadoCompra['idcompraestadotipo'];
@@ -90,7 +90,7 @@ class CompraEstadoModel extends Model
             $ultimoEstadoCompra=$this->where('idcompra', $idCompra)
                  ->orderBy('idcompraestado', 'DESC')
                  ->first();
-            $idUltimoEstadoCompra = $ultimoEstadoCompra['idcompraestadotipo'];
+            $idUltimoEstadoCompra = $ultimoEstadoCompra['idcompraestado'];
             $finalizar=['cefechafin'=>date('Y-m-d H:i:s')];
             $this->update($idUltimoEstadoCompra, $finalizar);
             $data['idcompra']=$idCompra;

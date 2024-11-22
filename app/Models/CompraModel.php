@@ -69,7 +69,19 @@ class CompraModel extends Model
             $compraEstadoModel=new CompraEstadoModel();
             $compraEstadoModel->insert($nuevoEstadoCompra);
         }
-        
+    }
+
+    public function listar(){
+        $compras=$this->findAll();
+        $compraEstadoModel=new CompraEstadoModel();
+        $retorno = [];
+        foreach($compras as $compra){
+            $estadoCompraTipo = $compraEstadoModel->where('idcompra', $compra['idcompra'])->join('compraestadotipo', 'compraestado.idcompraestadotipo = compraestadotipo.idcompraestadotipo')->select('compraestado.*, compraestadotipo.cetdescripcion as estado')->orderBy('compraestado.idcompraestado', 'DESC')->first();
+            if($estadoCompraTipo['idcompraestadotipo']!=0){
+                $retorno[] = $estadoCompraTipo;
+            }
+        }
+        return $retorno;
     }
 
 }
