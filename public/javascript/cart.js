@@ -49,15 +49,36 @@ document.addEventListener('DOMContentLoaded', function () {
 
     // Calcular el precio total por producto
     if (!isNaN(unitPrice)) {
-      const totalPrice = unitPrice * quantity;
+        const totalPrice = unitPrice * quantity;
 
-      // Actualizar el precio total por producto
-      totalPriceElement.innerText = `${totalPrice.toFixed(2).replace('.', ',')}`; // No agregar el signo $ aquí
+        // Actualizar el precio total por producto
+        totalPriceElement.innerText = `${totalPrice.toFixed(2).replace('.', ',')}`;
 
-      // Actualizar el total general del carrito
-      updateCartTotal();
+        // Actualizar el total general del carrito
+        updateCartTotal();
     }
-  }
+
+    // Realizamos la llamada AJAX para actualizar la cantidad en el servidor
+    $.ajax({
+        url: 'http://localhost/PWD/PWD_TPFinal/public/cart/updateQuantity', // URL para actualizar la cantidad
+        type: 'POST',
+        data: {
+            cart_item_id: productId,  // ID del item del carrito
+            quantity: quantity        // Nueva cantidad
+        },
+        success: function(response) {
+            if (response.success) {
+                alert('Cantidad actualizada');
+            } else {
+                alert('Error al actualizar la cantidad');
+            }
+        },
+        error: function() {
+            alert('Hubo un error al actualizar la cantidad');
+        }
+    });
+}
+
 
   // Eliminar producto del carrito
   document.querySelectorAll('.delete-item').forEach(button => {
