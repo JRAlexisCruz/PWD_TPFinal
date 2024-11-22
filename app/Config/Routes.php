@@ -8,12 +8,12 @@ use CodeIgniter\Router\RouteCollection;
 /* PRODUCTOS */
 $routes->group('products', function($routes) {
     $routes->get('/', 'ProductController::listar');
-    $routes->get('/detail/(:num)', 'ProductController::detail/$1');
+    $routes->get('detail/(:num)', 'ProductController::detail/$1');
 });
 
 
 /* CARRITO DE COMPRAS */
-$routes->group('cart', ['filter' => 'autenticacion'], function($routes) {
+$routes->group('cart', ['filter' => ['autenticacion','cliente']], function($routes) {
     $routes->get('/', 'CartController::index');
     $routes->post('addToCart', 'CartController::addToCart');
     $routes->post('removeFromCart', 'CartController::removeFromCart');
@@ -46,9 +46,9 @@ $routes->get('/perfil/editar', 'UsuarioController::editarPerfil', ['filter'=>'au
 $routes->post('/perfil/editar', 'UsuarioController::modificar', ['filter'=>'autenticacion']);
 $routes->get('/perfil/buscar', 'UsuarioController::buscar', ['filter'=>'autenticacion']);
 $routes->post('/perfil/verificar', 'UsuarioController::verificar', ['filter'=>'autenticacion']);
-$routes->get('/perfil/compras', 'CompraController::compras', ['filter'=>'autenticacion']);
-$routes->get('/perfil/compras/listarCompras', 'CompraController::listarCompras', ['filter'=>'autenticacion']);
-$routes->post('/perfil/compras/cancelar', 'CompraController::cancelar', ['filter'=>'autenticacion']);
+$routes->get('/perfil/compras', 'CompraController::compras', ['filter'=>['autenticacion','cliente']]);
+$routes->get('/perfil/compras/listarCompras', 'CompraController::listarCompras', ['autenticacion','cliente']);
+$routes->post('/perfil/compras/cancelar', 'CompraController::cancelar', ['autenticacion','cliente']);
 $routes->get('/logout', 'Session::logout');
 $routes->get('/cerrarsesion', 'Session::cerrar');
 

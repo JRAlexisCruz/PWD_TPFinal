@@ -39,11 +39,11 @@
                         </li>
                     <?php endif; ?>
                     <?php if ($loggedIn): ?>
-                        
-                      <div class="dropdown">
-    <button class="btn dropdown-toggle nav-hover text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
-        <i class="fa-solid fa-circle-user"></i>
-    </button>
+
+                        <div class="dropdown">
+                            <button class="btn dropdown-toggle nav-hover text-white" type="button" id="dropdownMenuButton" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="fa-solid fa-circle-user"></i>
+                            </button>
 
                             </button>
                             <ul class="dropdown-menu">
@@ -65,9 +65,12 @@
                             <a class="nav-link text-white fs-6 nav-hover" href="<?= base_url('login') ?>"><i class="fa-solid fa-user"></i> Iniciar Sesión </a>
                         </li>
                     <?php endif; ?>
-                    <li class="nav-item">
-                        <a class="nav-link text-white fs-6 nav-hover" href="<?= base_url('cart') ?>"><i class="fas fa-shopping-cart"></i></a>
-                    </li>
+                    <?php if (!$esAdmin): ?>
+                        <li class="nav-item">
+                            <a class="nav-link text-white fs-6 nav-hover" href="<?= base_url('cart') ?>"><i class="fas fa-shopping-cart"></i></a>
+                        </li>
+                    <?php endif; ?>
+
                     <?php if (count($roles) > 1): ?>
                         <form action="<?= base_url('cambioRol') ?>" class="d-flex align-items-center">
                             <select name="idrol" id="idrol" class="form-select" onchange="this.form.submit()">
@@ -89,6 +92,7 @@
         .nav-hover {
             transition: color 0.3s ease, background-color 0.3s ease;
         }
+
         .nav-hover:hover {
             color: #955F36 !important;
             background-color: #FFF !important;
@@ -98,9 +102,11 @@
         .dropdown-menu {
             background-color: #955F36;
         }
-        .dropdown-item{
+
+        .dropdown-item {
             color: white;
         }
+
         .dropdown-item:hover {
             background-color: #FFF !important;
             color: #955F36 !important;
